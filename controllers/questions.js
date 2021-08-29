@@ -111,7 +111,7 @@ MongoClient.connect(url,(err,db)=>{
 
         //login check
         if(token == null){
-            res.redirect('/login')
+            res.send('Not Logged In')
         }
         else{
             
@@ -163,7 +163,7 @@ MongoClient.connect(url,(err,db)=>{
 
         //login check
         if(token==null){
-            res.redirect('/login')
+            res.send('Not Logged In')
         }
         else{
             dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=>{
@@ -269,7 +269,7 @@ MongoClient.connect(url,(err,db)=>{
 
         //login check
         if(token==null){
-            res.redirect('/login')
+            res.send('Not Logged In')
         }
         else{
             dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=>{
@@ -372,7 +372,7 @@ MongoClient.connect(url,(err,db)=>{
 
         //login check
         if(token == null){
-            res.redirect('/login')
+            res.send('Not Logged In')
         }
         else{
             dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=>{
@@ -466,7 +466,7 @@ MongoClient.connect(url,(err,db)=>{
 
         //login check
         if(token == null){
-            res.redirect('/login')
+            res.send('Not Logged In')
         }
         else{
             dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=>{
@@ -612,7 +612,7 @@ MongoClient.connect(url,(err,db)=>{
         console.log('hi')
 
         if(token == null){
-            res.redirect('/login')
+            res.send('Not Logged In')
         }
         else{
             dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=>{
@@ -704,7 +704,7 @@ MongoClient.connect(url,(err,db)=>{
         var token = req.headers['x-access-token']
 
         if(token == null){
-            res.redirect('/login')
+            res.send('Not Logged In')
         }
         else{
             dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=>{
@@ -801,7 +801,7 @@ MongoClient.connect(url,(err,db)=>{
         var token = req.headers['x-access-token']
 
         if(token == null){
-            res.redirect('/login')
+            res.send('Not Logged In')
         }
         else{
             dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=>{

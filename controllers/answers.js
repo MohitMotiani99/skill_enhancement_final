@@ -92,7 +92,7 @@ MongoClient.connect(url,(err,db)=>{
 
         //checking logged in or not
         if(token==null){
-            res.redirect('/login')
+            res.send('Not Logged In')
         }
         else{
             //checking token existence & verifying it
@@ -183,7 +183,7 @@ MongoClient.connect(url,(err,db)=>{
 
         //login check
         if(token==null){
-            res.redirect('/login')
+            res.send('Not Logged In')
         }
         else{
             //token check & verification
@@ -251,7 +251,7 @@ MongoClient.connect(url,(err,db)=>{
 
         //login check
         if(token==null){
-            res.redirect('/login')
+            res.send('Not Logged In')
         }
         else{
             dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=>{

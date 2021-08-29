@@ -20,19 +20,7 @@ module.exports = function validate_user(token,user_obj){
             url:`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${token}`
         },(err,response,body)=>{
             if(err) throw err
-            //console.log('body:')
-            //console.log(response)
-            //console.log(response.body)
-            //console.log('bodyiiiiiiiiiiiiiiii')
-            //console.log(body)
-            //console.log(typeof body)
             body=JSON.parse(body)
-            //console.log(user_obj)
-            //console.log(body["user_id"])
-            //console.log(typeof body.user_id)
-            //console.log(user_obj.Id)
-            //console.log(typeof user_obj.Id)
-            //await
             if(body["user_id"]==user_obj.Id)
                 {
                     console.log('yes')
