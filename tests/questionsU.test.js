@@ -7,6 +7,7 @@ var url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.n
 var db_name = 'skillenhancement'
 var col_name_q = 'questionAnswer'
 var col_name_u = 'users'
+var col_name_n = 'notifications'
 
 
 let connection;
@@ -39,7 +40,16 @@ afterAll(async ()=>{
 })
 
 beforeEach(async ()=>{
-    //console.log('before each')
+    await dbo.collection(col_name_q).insertOne({
+        "Id": 9998,
+        "PostTypeId": 2,
+        "CreationDate": Date.now(),
+        "ParentId":9999,
+        "Score": 12,
+        "ViewCount": 100,
+        "OwnerUserId": 902,
+        "Body": "Answer Tests v1.0",
+    })
     await dbo.collection(col_name_q).insertOne({
         "Id": 9999,
         "PostTypeId": 1,
@@ -69,8 +79,11 @@ beforeEach(async ()=>{
     },])
 })
 afterEach(async ()=>{
+    await dbo.collection(col_name_q).deleteOne({'Id':9998,'PostTypeId':2})
     await dbo.collection(col_name_q).deleteOne({'Id':9999,'PostTypeId':1})
     await dbo.collection(col_name_u).deleteMany({'username':'tester'})
+    await dbo.collection(col_name_n).deleteMany({'UserId':901})
+    await dbo.collection(col_name_n).deleteMany({'UserId':902})
 })
 
 
