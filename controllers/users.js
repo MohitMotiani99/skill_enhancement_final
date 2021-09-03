@@ -8,6 +8,8 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.static("public"))
 //var cors = require('cors')
 //var app = express()
+const { verifyAuth } = require('./pauthorize')
+const { verifyToken } = require('./pauthorize')
 
 app.use(bodyParser.urlencoded({
     extended:true
@@ -54,28 +56,23 @@ MongoClient.connect(url,(err,db)=>{
     process.on('SIGINT',cleanup)
 
     //get complete user details from id
-    app.get('/users/:user_id',(req,res)=>{
-        var user_id = parseInt(req.params.user_id)
+    app.get('/users/:user_id', verifyAuth, (req,res)=>{
+        //fetch user id
+        var user_id = String(req.params.user_id)
         console.log(user_id)
         console.log(typeof user_id)
 
-        dbo.collection('user').find({'Id':user_id}).toArray((err,result)=>{
+        //find the user is database
+        dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
             console.log(result)
             console.log(result.length)
             if(result.length == 1)
                 {
-                    // var user = result[0]
-                    // dbo.collection(col_name_u).findOne({'Id':user_id},(err,result)=>{
-                    //     if(err) throw err
-                    //     console.log(result)
-                    //     res.send(JSON.stringify(user))
-                    // })
                     res.send(result[0])
-                    
                 }
             else
                 {
-                   res.send('Invalid Details')
+                   res.send('UnAuthorised User, Login And Continue')
                 }
         })
     })
@@ -99,12 +96,6 @@ MongoClient.connect(url,(err,db)=>{
         var un = req.body.username 
         var e = req.body.email 
         var g = req.body.gender 
-        var s = req.body.socialLink 
-
-
-        // request.post({
-
-        // })
 
         console.log(Id)
         console.log(p)
@@ -116,27 +107,28 @@ MongoClient.connect(url,(err,db)=>{
                 if (result.length==0)
                 {
                 var u_obj={
-                    role:"user",
                     Id:Number(u_counter),
                     username:un,
                     token:"abc",
-                    password:p,
+                    displayName:"None",
+                    firstName:"None",
+                    lastName:"None",
+                    password:"None",
                     grade:0,
                     email:e,
                     gender:g,
-                    socialLink:s,
-                    profilePhoto:"https://secure.gravatar.com/avatar/6123d8d55f9cc322bc7ef0f0?s=90&d=ide...",
+                    socialLink:'None',
+                    image:"https://secure.gravatar.com/avatar/6123d8d55f9cc322bc7ef0f0?s=90&d=ide...",
                     CreationDate:Date()
                 }
 
-                dbo.collection(col_name_u).insertOne(u_obj,(err,result)=>{
+                dbo.collection('users').insertOne(u_obj,(err,result)=>{
                     if(err) throw err
                     console.log(result)
-                    //console.log('User Added')
-                    //res.send('User Added')
-                    res.redirect(`/users/${u_obj.Id}`)
+                    //res.redirect(`/users/${u_obj.Id}`)
+                    res.send("User " +un +" is added succesfully")
                     //res.redirect('/login')
-                    u_counter+=1
+                    u_counter+=1;
                 })                    
             }
             else{
@@ -147,44 +139,32 @@ MongoClient.connect(url,(err,db)=>{
     })
 
     // edit user profile
-    app.patch('/api/users/:user_id/editprofile', (req,res)=>{
+    app.patch('/api/users/:user_id/editprofile', verifyAuth, (req,res)=>{
 
         //only owner
-        var user_id = parseInt(req.params.user_id)
-        var token = req.headers['x-access-token']
-
-        var p = req.body.password
+        var user_id = String(req.params.user_id)
+        //var p = req.body.password
         //var pc = req.body.passwordConformation
-        var un = req.body.username 
-        var e = req.body.email 
-        var g = req.body.gender 
-        var s = req.body.socialLink 
-
-        console.log(p)
-        //console.log(pc)    
-        console.log(g) 
+        //var e = req.body.image
+        console.log(JSON.stringify(req.body))
+        var g = (req.body.gender)
+        var s = (req.body.SocialLink)
+        console.log("Gender: "+g)
+        console.log('SocialLink: '+s)
         
-        if(token == null){
-            res.redirect('/login')
-        }
-        else{
-        dbo.collection('user').find({token:token}).toArray((err,result)=>{
-            if(result.length==1 && result[0].Id==user_id){
-                dbo.collection('user').find({'Id':user_id}).toArray((err,result)=>{
+        dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
+            if(result.length==1 ){
+                dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
                     console.log(result.length)
                     if (result.length==1)
                     {
                         var u_obj={
-                            username:(un==undefined)?result[0].username:un,
-                            password:(p==undefined)?result[0].password:p,
-                            email:(e==undefined)?result[0].email:e,
-                            gender:(g==undefined)?result[0].gender:g,
-                            socialLink:(s==undefined)?result[0].socialLink:s,
-                            profilePhoto:result[0].profilePhoto
-                            //profilePhoto:"https://secure.gravatar.com/avatar/6123d8d55f9cc322bc7ef0f0?s=90&d=ide...",
+                            //password:(p==undefined)?result[0].password:p,
+                            gender:g,
+                            SocialLink:s
                         }
-                        dbo.collection(col_name_u).updateOne({"Id":Number(user_id)},{$set:u_obj},(err,result)=>{
-                            console.log(result)
+                        dbo.collection('users').updateOne({"Id":String(user_id)},{$set:u_obj},(err,result)=>{
+                            //console.log(result)
                             res.redirect(`/users/${user_id}`)
         
                         })
@@ -200,31 +180,27 @@ MongoClient.connect(url,(err,db)=>{
                     }
                 })
             }
-            else res.send('Invalid User')
+            else{ 
+                //console.log(result[0])
+                res.send('Invalid User')}
         })
         
-    }
-        
     })
+        
 
      //delete user profile
-    app.delete('/users/:user_id/delete',(req,res)=>{
-        var user_id = parseInt(req.params.user_id)
-        var token = req.headers['x-access-token']
+    app.delete('/users/:user_id/delete', verifyAuth, (req,res)=>{
+        var user_id = String(req.params.user_id)
 
         console.log(user_id)
         console.log(typeof user_id)
 
-         if(token == null){
-            res.redirect('/login')
-        }
-        else if(token != null) {
-        dbo.collection('user').find({'Id':user_id, 'token':token}).toArray((err,result)=>{
+        dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
             console.log(result.length)
                 if (result.length==1)
                 {
                     var u = result[0]
-                    dbo.collection(col_name_u).deleteOne({'Id':user_id},(err,result)=>{
+                    dbo.collection('users').deleteOne({'Id':user_id},(err,result)=>{
                         console.log(result)
                         //res.send(JSON.stringify(result))
                         res.send('User: '+u.username +' Deleted')
@@ -236,18 +212,17 @@ MongoClient.connect(url,(err,db)=>{
                     //res.redirect('/users/:user_id/delete')
                 }
         })
-        }
     })   
 
 //redirecting
 
     //get all the questions asked by the user
-    app.get('/users/:user_id/questions',(req,res)=>{
-        var user_id = parseInt(req.params.user_id)
+    app.get('/users/:user_id/questions', verifyAuth, (req,res)=>{
+        var user_id = String(req.params.user_id)
         console.log(user_id)
         console.log(typeof user_id)
 
-        dbo.collection('user').find({Id:user_id}).toArray((err,result)=>{
+        dbo.collection('users').find({Id:user_id}).toArray((err,result)=>{
             if(result.length==1){
                 dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':1}).toArray((err,result)=>{
                     console.log(result)
@@ -270,19 +245,19 @@ MongoClient.connect(url,(err,db)=>{
                         }
                 })
             }
-            else res.send('Invalid User')
+            else res.send('UnAuthorized User, Redirecting to login page')
         })
         
     })
 
 
     //get all the comments made by the user
-    app.get('/users/:user_id/comments',(req,res)=>{
-        var user_id = parseInt(req.params.user_id)
+    app.get('/users/:user_id/comments', verifyAuth, (req,res)=>{
+        var user_id = String(req.params.user_id)
         console.log(user_id)
         console.log(typeof user_id)
 
-        dbo.collection('user').find({Id:user_id}).toArray((err,result)=>{
+        dbo.collection('users').find({Id:user_id}).toArray((err,result)=>{
             if(result.length==1){
                 //console.log(result)
                 dbo.collection('comments').find({'UserId':user_id}).toArray((err,result)=>{
@@ -290,20 +265,9 @@ MongoClient.connect(url,(err,db)=>{
                     console.log(result.length)
                     if(result.length != 0)
                     res.send(result)
-                    // if(result.length >= 1)
-                    // {
-                    //     var user = result
-                    //     dbo.collection('comments').findOne({'UserId':user_id},(err,result)=>{
-                    //         if(err) throw err
-                    //         console.log(result)
-        
-                    //         res.send(JSON.stringify(user))
-                    //     })
-                        
-                    // }
                     else if (result.length == 0)
                     {
-                       res.send('You have not commented any questions yet')
+                       res.send('You have not commented any posts yet')
                     }
                     else 
                     {
@@ -311,19 +275,19 @@ MongoClient.connect(url,(err,db)=>{
                     }
                 })
             }
-            else res.send('Invalid User')
+            else res.send('UnAuthorized User, Redirecting to login page')
         })
 
         
     })
 
     //get total number of questions posted by the user
-    app.get('/users/:user_id/totalquestions',(req,res)=>{
-        var user_id = parseInt(req.params.user_id)
+    app.get('/users/:user_id/totalquestions', verifyToken, (req,res)=>{
+        var user_id = String(req.params.user_id)
         console.log(user_id)
         console.log(typeof user_id)
 
-        dbo.collection('user').find({Id:user_id}).toArray((err,result)=>{
+        dbo.collection('users').find({Id:user_id}).toArray((err,result)=>{
             if(result.length==1){
                 dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':1}).toArray((err,result)=>{
                     console.log(result)
@@ -331,19 +295,19 @@ MongoClient.connect(url,(err,db)=>{
                     res.send(JSON.stringify(result.length))
                 })
             }
-            else res.send('Invalid User')
+            else res.send('UnAuthorized User, Redirecting to login page')
         })
 
         
     })
 
     //get total number of comments posted by the user
-    app.get('/users/:user_id/totalcomments',(req,res)=>{
-        var user_id = parseInt(req.params.user_id)
+    app.get('/users/:user_id/totalcomments', verifyToken, (req,res)=>{
+        var user_id = String(req.params.user_id)
         console.log(user_id)
         console.log(typeof user_id)
 
-        dbo.collection('user').find({Id:user_id}).toArray((err,result)=>{
+        dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
             if(result.length==1){
                 dbo.collection('comments').find({'UserId':user_id}).toArray((err,result)=>{
                     console.log(result)
@@ -351,18 +315,18 @@ MongoClient.connect(url,(err,db)=>{
                     res.send(JSON.stringify(result.length))
                 })
             }
-            else res.send('Invalid User')
+            else res.send('UnAuthorized User, redirect to login page')
         })
         
     })
         
     //get total number of answered posted by the user
-    app.get('/users/:user_id/totalanswers',(req,res)=>{
-        var user_id = parseInt(req.params.user_id)
+    app.get('/users/:user_id/totalanswers', verifyToken, (req,res)=>{
+        var user_id = String(req.params.user_id)
         console.log(user_id)
         console.log(typeof user_id)
 
-        dbo.collection('user').find({Id:user_id}).toArray((err,result)=>{
+        dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
             if(result.length==1){
                 dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':2}).toArray((err,result)=>{
                     console.log(result)
@@ -370,7 +334,7 @@ MongoClient.connect(url,(err,db)=>{
                     res.send(JSON.stringify(result.length))
                 })
             }
-            else res.send('Invalid User')
+            else res.send('UnAuthorized User, redirect to login page')
         })
         
     })
@@ -379,12 +343,12 @@ MongoClient.connect(url,(err,db)=>{
     })
 
     //get all the answers posted by the user
-    app.get('/users/:user_id/answers',(req,res)=>{
-        var user_id = parseInt(req.params.user_id)
+    app.get('/users/:user_id/answers', verifyAuth, (req,res)=>{
+        var user_id = String(req.params.user_id)
         console.log(user_id)
         console.log(typeof user_id)
 
-        dbo.collection('user').find({Id:user_id}).toArray((err,result)=>{
+        dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
             if(result.length==1){
                 dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':2}).toArray((err,result)=>{
                     console.log(result)
@@ -407,13 +371,13 @@ MongoClient.connect(url,(err,db)=>{
                         }
                 })
             }
-            else res.send('Invalid User')
+            else res.send('UnAuthorized User, redirect to login page')
         })
         
     })
 
-    app.get('/users',(req,res)=>{
-        dbo.collection('user').find().toArray((err,result)=>{
+    app.get('/users', verifyToken ,(req,res)=>{
+        dbo.collection('users').find().toArray((err,result)=>{
             if(err) throw err
             console.log(result)
             console.log(result.length)
