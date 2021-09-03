@@ -72,7 +72,7 @@ MongoClient.connect(url,(err,db)=>{
         User_Id = parseInt(User_Id)
         
         console.log(User_Id)
-        if(token == null){
+        if(token == null  || token == undefined){
             res.send('Not Logged In')
         }
         else{
@@ -109,7 +109,7 @@ MongoClient.connect(url,(err,db)=>{
         if(req.params.User_Id.length<=5)
         User_Id = parseInt(User_Id)
         
-        if(token == null){
+        if(token == null  || token == undefined){
             res.send('Not Logged In')
         }
         else{
@@ -152,7 +152,7 @@ MongoClient.connect(url,(err,db)=>{
         if(req.params.User_Id.length<=5)
         User_Id = parseInt(User_Id)
 
-        if(token == null){
+        if(token == null  || token == undefined){
             res.send('Not Logged In')
         }
         else{
@@ -191,7 +191,7 @@ MongoClient.connect(url,(err,db)=>{
         console.log('hi from noti')
         console.log(PostId)
         console.log(User_Id)
-        if(token == null){
+        if(token == null  || token == undefined){
             res.send('Not Logged In')
         }
         else{
