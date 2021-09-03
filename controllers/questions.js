@@ -631,7 +631,7 @@ MongoClient.connect(url,(err,db)=>{
 
                     var User = result[0]
 
-                    dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray((err,result)=>{
+                    dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray(async (err,result)=>{
                         if(err) throw err
                         if(result.length == 1){
                             //closed question cant accept answers
@@ -650,6 +650,8 @@ MongoClient.connect(url,(err,db)=>{
                                 'OwnerUserId':User.Id,
                                 'Tags':data.Tags,
                             }
+
+                            await cleanup()
 
                             dbo.collection(col_name_q).insertOne(a_obj,(err,result)=>{
                                 if(err) throw err

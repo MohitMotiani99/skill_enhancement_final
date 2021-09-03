@@ -1,15 +1,11 @@
 const app = require('../controllers/questions')
 const supertest = require('supertest')
 
-const mongoose = require('mongoose')
-
 var MongoClient = require('mongodb').MongoClient
 
 
 var url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
-//var url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/tester?retryWrites=true&w=majority'
 var db_name = 'skillenhancement'
-//var db_name = 'tester'
 var col_name_q = 'questionAnswer'
 var col_name_u = 'users'
 var col_name_n = 'notifications'

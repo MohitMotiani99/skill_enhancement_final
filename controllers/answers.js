@@ -5,10 +5,10 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 var cors = require('cors')
 app.use(cors())
-var server = app.listen(8088,()=>{
-    console.log('Answer Controller Started')
+// var server = app.listen(8088,()=>{
+//     console.log('Answer Controller Started')
 
-})
+// })
 
 var MongoClient = require('mongodb').MongoClient
 
@@ -27,24 +27,24 @@ MongoClient.connect(url,(err,db)=>{
     if(err)throw err
     dbo = db.db(db_name)
 
-    console.log('sep Database Connected')
+    //console.log('sep Database Connected')
 
     var q_counter;
     var initial_q_counter
 
     //connecting to globals collection to fetch the next post id
     dbo.collection('globals').find({}).toArray((err,result)=>{
-        console.log(result)
+        // console.log(result)
         q_counter = result[0].q_num
         initial_q_counter = q_counter
 
-        console.log(q_counter)
+        // console.log(q_counter)
 
     //cleanup function to updatee post counter on server close to the collection 'globals'
     function cleanup(){
         dbo.collection('globals').updateOne({'q_num':initial_q_counter},{$set:{'q_num':q_counter}},(err,result)=>{
             console.log('Server Closed')
-            process.exit(1)
+            //process.exit(1)
 
         })
     }
@@ -71,7 +71,7 @@ MongoClient.connect(url,(err,db)=>{
                 var answer = result[0]
                 dbo.collection(col_name_q).updateOne({'PostTypeId':2,'Id':answer_id},{$inc:{'ViewCount':1}},(err,result)=>{
                     if(err) throw err
-                    console.log(result)
+                    // console.log(result)
 
                     answer.ViewCount+=1
                     res.send(answer)
@@ -122,12 +122,12 @@ MongoClient.connect(url,(err,db)=>{
                                 {
                                     dbo.collection(col_name_q).updateOne({'PostTypeId':1,'Id':question_id},{$set:{'AcceptedAnswerId':answer_id}},(err,result)=>{
                                         if(err) throw err
-                                        console.log(result)
+                                        // console.log(result)
 
                                         //after updation sending notification to the owner of the answer which got accepted
                                         new Promise((resolve,reject)=>{
                                             if(ActionUserId != OwnerUserId){
-                                                console.log('inside noti call')
+                                                // console.log('inside noti call')
                                                 request.post({
                                                     headers:{'content-type':'application/json',
                                                         'x-access-token':token},
@@ -138,7 +138,7 @@ MongoClient.connect(url,(err,db)=>{
                                                     })
                                                 },(err,response)=>{
                                                     if(err) throw err
-                                                    console.log(response.body)
+                                                    // console.log(response.body)
                                                     
                                                 })
                                             }
@@ -215,7 +215,7 @@ MongoClient.connect(url,(err,db)=>{
                                 {
                                     dbo.collection(col_name_q).updateOne({'PostTypeId':1,'Id':question_id},{$set:{'AcceptedAnswerId':-1}},(err,result)=>{
                                         if(err) throw err
-                                        console.log(result)
+                                        // console.log(result)
                                         res.redirect(`/answers/${answer_id}`)
                                     })
                                 }
@@ -278,7 +278,7 @@ MongoClient.connect(url,(err,db)=>{
                                 else{
                                     dbo.collection(col_name_q).deleteOne({'PostTypeId':2,'Id':answer_id},(err,result)=>{
                                         if(err) throw err
-                                        console.log(result)
+                                        // console.log(result)
                                         res.redirect(`http://localhost:8089/questions/${question_id}`)
                                     })
                                 }
@@ -318,7 +318,7 @@ MongoClient.connect(url,(err,db)=>{
         },(err,response)=>{
             if(err)
                 throw err
-            console.log(response.body)
+            // console.log(response.body)
             if(response.body=='Success'){
                 res.redirect(`/answers/${answer_id}`)
             }
@@ -343,7 +343,7 @@ MongoClient.connect(url,(err,db)=>{
         },(err,response)=>{
             if(err)
                 throw err
-            console.log(response.body)
+            // console.log(response.body)
             if(response.body=='Success'){
                 res.redirect(`/answers/${answer_id}`)
             }
@@ -368,7 +368,7 @@ MongoClient.connect(url,(err,db)=>{
         },(err,response)=>{
             if(err)
                 throw err
-            console.log(response.body)
+            // console.log(response.body)
             if(response.body=='Success'){
                 res.redirect(`/answers/${answer_id}`)
             }
@@ -381,3 +381,5 @@ MongoClient.connect(url,(err,db)=>{
     })
 
 })
+
+module.exports = app
