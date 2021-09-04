@@ -6,8 +6,8 @@ app.use(express.urlencoded({extended:true}))
 var cors = require('cors')
 app.use(cors())
 
-var server = app.listen(8083,()=>{
-    console.log('Notofication Controller Started')
+app.listen(8083,()=>{
+    console.log('Notification Controller Started')
 
 })
 
@@ -35,32 +35,32 @@ MongoClient.connect(url,(err,db)=>{
     if(err)throw err
     dbo = db.db(db_name)
 
-    console.log('Motification Database Connected')
+    //console.log('Motification Database Connected')
 
     //retrieves the notification counter(n_num) 
     dbo.collection('globals').find({}).toArray((err,result)=>{
-        console.log(result)
+        //console.log(result)
         q_counter = result[0].q_num
         initial_q_counter = q_counter
 
         n_counter = result[0].n_num
         initial_n_counter=n_counter
 
-        console.log(n_counter)
+        //console.log(n_counter)
 
 
 
         //to update the notification counter back to the colletion 'globals'
-    function cleanup(){
+    async function cleanup(){
         dbo.collection('globals').updateOne({'n_num':initial_n_counter},{$set:{'n_num':n_counter}},(err,result)=>{
-            console.log('Server Closed')
-            process.exit(1)
+            //console.log('Server Closed')
+            //process.exit(1)
 
         })
     }
 
-    process.on('exit',cleanup)
-    process.on('SIGINT',cleanup)
+    // process.on('exit',cleanup)
+    // process.on('SIGINT',cleanup)
 
 
     //api to get all unread notifications for a particular user
@@ -201,10 +201,11 @@ MongoClient.connect(url,(err,db)=>{
                     var User = result[0]
                     var Body = req.body.Body
 
-                    dbo.collection(col_noti).insertOne({'Id':n_counter++,'Body':Body,'UserId':User_Id,'PostId':PostId,'Status':'unread'},(err,result)=>{
+                    dbo.collection(col_noti).insertOne({'Id':n_counter++,'Body':Body,'UserId':User_Id,'PostId':PostId,'Status':'unread'},async (err,result)=>{
                         if(err)
                             throw err
                         console.log(result)
+                        await cleanup()
                         res.send('Pushed')
                     })
 

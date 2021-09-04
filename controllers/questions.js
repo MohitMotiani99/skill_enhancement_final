@@ -23,7 +23,7 @@ var col_name_u = 'users'
 
 
 //var validate_user = require('/authorize')
-var validate_user = require('C:\\Users\\d976640\\Documents\\skillenhance_OAuth\\controllers\\authorize.js')
+var validate_user = require('./authorize')
 const { connection } = require('mongoose')
 
 //connecting to the skillenhancement MongoDB Atlas Database

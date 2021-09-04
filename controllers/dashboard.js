@@ -22,7 +22,7 @@ MongoClient.connect(url,function(err,db){
     if(err)
       throw err
     dbo=db.db(mydb)
-    console.log('sep Database Connected')
+    //console.log('sep Database Connected')
     
     app.post('/login',(req,res)=>{
 
@@ -236,9 +236,9 @@ MongoClient.connect(url,function(err,db){
       })
     })
 
-    dbo.collection(collection2).find({}).toArray((err,result)=>{
-      console.log(result)
-    })
+    // dbo.collection(collection2).find({}).toArray((err,result)=>{
+    //   console.log(result)
+    // })
 
     //Return user details for all the users with the given search name
     app.post('/searchcusts',(req,res)=>{

@@ -4,11 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --testTimeout=100000 --runInBand --coverage"
+    "test": "jest --testTimeout=100000 --runInBand --coverage",
+    "question_service":"node ./services/question_service",
+    "answer_service":"node ./services/answer_service",
+    "comment_service":"node ./services/comment_service",
+    "user_service":"node ./services/user_service",
+    "dashboard":"node ./controllers/dashboard",
+    "notifications":"node ./controllers/notifications",
+    "start": "concurrently \"npm run question_service\" \"npm run answer_service\" \"npm run comment_service\" \"npm run user_service\" \"npm run dashboard\" \"npm run notifications\"",
+    "dev":"start npm run question_service && start npm run answer_service && start npm run comment_service && start npm run user_service && start npm run dashboard && start npm run notifications"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "concurrently": "^6.2.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "fs": "0.0.1-security",
