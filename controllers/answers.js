@@ -49,8 +49,8 @@ MongoClient.connect(url,(err,db)=>{
         })
     }
 
-    process.on('exit',cleanup)
-    process.on('SIGINT',cleanup)
+    // process.on('exit',cleanup)
+    // process.on('SIGINT',cleanup)
 
 
     //get all answer obects
