@@ -20,8 +20,10 @@ module.exports = {
         console.log(result.Id);
         next(); }
       else if(err) {res.sendStatus(403);}
-  })
-}},
+      })
+    }
+    else res.sendStatus(403)
+  },
 
   verifyToken: async function (req, res, next) {
     // Get auth header value

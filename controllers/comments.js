@@ -23,9 +23,9 @@ var request = require('request')
 var validate_user = require('./authorize')
 var get_token = require('./authorize')
 
-app.listen(8075,function(){
-    console.log("Server started")
-})
+// app.listen(8075,function(){
+//     console.log("Server started")
+// })
 
 MongoClient.connect(url,function(err,db){
     if(err) throw err
@@ -33,18 +33,18 @@ MongoClient.connect(url,function(err,db){
     dbo.collection(collection).find({}).toArray(function(err,result){
         commentId = result[0]["c_num"]
         initial_commentId = commentId
-        console.log(commentId)
+        //console.log(commentId)
     
-        function cleanup(){
+        async function cleanup(){
             dbo.collection('globals').updateOne({'c_num':initial_commentId},{$set:{'c_num':commentId}},(err,result)=>{
-                console.log('Server Closed')
-                process.exit(1)
+                //console.log('Server Closed')
+                //process.exit(1)
     
             })
         }
     
-        process.on('exit',cleanup)
-        process.on('SIGINT',cleanup)
+        // process.on('exit',cleanup)
+        // process.on('SIGINT',cleanup)
     
 
         //Get comments on the posts (question or answer) identified by a set of ids
@@ -53,7 +53,7 @@ MongoClient.connect(url,function(err,db){
             var comments
 
             run().then(()=>{
-                console.log(comment)
+                //console.log(comment)
                 comments = comment
                 comment=[]
                 res.send(comments)
@@ -89,7 +89,7 @@ MongoClient.connect(url,function(err,db){
         //Get comments on the posts (question or answer) identified by a set of ids
         app.get(["/question/:id/comments","/answer/:id/comments"],(req,res)=>{
             var id = Number(req.params["id"])
-            console.log(id)
+            // console.log(id)
             dbo.collection(commentCollection).find({PostId:id}).toArray(function(err,result){
                 if (err) throw err
                 else res.send(result)
@@ -101,13 +101,13 @@ MongoClient.connect(url,function(err,db){
             var questionOwner
             //auth required
             var token = req.headers['x-access-token']
-            if(token==null) res.redirect('/login')
+            if(token==null) res.send('Not Logged In')
             else{
                 var id = Number(req.params["id"])
-                dbo.collection(userCollection).find({token:token}).toArray((err,result)=>{
-                    if(result.length==1 && (validate_user(token, result[0]))){
+                dbo.collection(userCollection).find({token:token}).toArray(async (err,result)=>{
+                    if(result.length==1 && (uv = await validate_user(token, result[0]))){
                         var User = result[0]
-                        dbo.collection(postsCollection).find({'Id':id}).toArray((err,result)=>{
+                        dbo.collection(postsCollection).find({'Id':id}).toArray(async (err,result)=>{
                             if(result.length==1){
                                 if(result[0].ClosedDate!=null) res.send('Post is Already Closed')
                                 else{
@@ -121,15 +121,16 @@ MongoClient.connect(url,function(err,db){
                                         "UserDisplayName": User.username,
                                         "UserId":Number(User.Id)
                                     }
+                                    await cleanup()
                                     questionOwner = result[0].OwnerUserId
                                     dbo.collection(commentCollection).insertOne(commentObj,function(err,result){
                                         if (err) throw err
-                                        else console.log(result)
+                                        //console.log(result)
 
                                         //Notification
                                         new Promise((resolve,reject)=>{
                                             if(User.Id != questionOwner){
-                                                console.log('Comment Notification')
+                                                // console.log('Comment Notification')
                                                 request.post({
                                                     headers:{'content-type':'application/json',
                                                         'x-access-token':token},
@@ -140,7 +141,7 @@ MongoClient.connect(url,function(err,db){
                                                     })
                                                 },(err,response)=>{
                                                     if(err) throw err
-                                                    console.log(response.body)
+                                                    // console.log(response.body)
                                                 })
                                             }
                                             resolve()
@@ -165,11 +166,11 @@ MongoClient.connect(url,function(err,db){
             //Only owner
             var token = req.headers['x-access-token']
             var id = Number(req.params["id"])
-            if (token == null) res.redirect("/login")
+            if (token == null) res.send("Not Logged In")
             else{
-                dbo.collection(userCollection).find({"token":token}).toArray(function(err,result){
+                dbo.collection(userCollection).find({"token":token}).toArray(async function(err,result){
                     if (err) throw err
-                    else if(result.length == 1 && (validate_user(token,result[0]))){
+                    else if(result.length == 1 && (uv = await validate_user(token,result[0]))){
                         user = result[0]
                         dbo.collection(commentCollection).find({"Id":id}).toArray(function(err,result){
                             if (result.length==1 && result[0].UserId == user.Id){
@@ -201,11 +202,11 @@ MongoClient.connect(url,function(err,db){
             //Only owner
             var token = req.headers['x-access-token']
             var id = Number(req.params["id"])
-            if (token == null) res.redirect("/login")
+            if (token == null) res.send("Not Logged In")
             else{
-                dbo.collection(userCollection).find({"token":token}).toArray(function(err,result){
+                dbo.collection(userCollection).find({"token":token}).toArray(async function(err,result){
                     if (err) throw err
-                    else if(result.length == 1 &&  validate_user(token,result[0])){
+                    else if(result.length == 1 &&  (uv = await validate_user(token,result[0]))){
                         user = result[0]
                         dbo.collection(commentCollection).find({"Id":id}).toArray(function(err,result){
                             if (result.length==1){ 
@@ -228,11 +229,11 @@ MongoClient.connect(url,function(err,db){
             //auth required
             var token = req.headers['x-access-token']
             var id = Number(req.params["id"])
-            if (token == null) res.redirect("/login")
+            if (token == null) res.send("Not Logged In")
             else{
-                dbo.collection(userCollection).find({"token":token}).toArray(function(err,result){
+                dbo.collection(userCollection).find({"token":token}).toArray(async function(err,result){
                     if (err) throw err
-                    else if(result.length == 1 && validate_user(token,result[0])){
+                    else if(result.length == 1 && (uv = await validate_user(token,result[0]))){
                         dbo.collection(commentCollection).find({Id:id}).toArray(function(arr,result){
                             if(result.length==1){
                             var score = result[0]["Score"]
@@ -244,6 +245,7 @@ MongoClient.connect(url,function(err,db){
                             else res.send('Invalid Comment Id')
                         })
                     }
+                    else res.send('Invalid User')
                 })
             }
         })
@@ -253,11 +255,11 @@ MongoClient.connect(url,function(err,db){
             //auth required
             var token = req.headers['x-access-token']
             var id = Number(req.params["id"])
-            if (token == null) res.redirect("/login")
+            if (token == null) res.send("Not Logged In")
             else{
-                dbo.collection(userCollection).find({"token":token}).toArray(function(err,result){
+                dbo.collection(userCollection).find({"token":token}).toArray(async function(err,result){
                     if (err) throw err
-                    else if(result.length == 1 && (validate_user(token,result[0]))){
+                    else if(result.length == 1 && (uv = await validate_user(token,result[0]))){
                         dbo.collection(commentCollection).find({Id:id}).toArray(function(arr,result){
                             if(result.length==1){
                             var score = result[0]["Score"]
@@ -269,6 +271,7 @@ MongoClient.connect(url,function(err,db){
                             else res.send('Invalid Comment Id')
                         })
                     }
+                    else res.send('Invalid User')
                 })
             }
         })
@@ -276,7 +279,7 @@ MongoClient.connect(url,function(err,db){
         //Get the comments posted by the users identified id
         app.get(["/users/:id/comments"],(req,res)=>{
             var id = Number(req.params["id"])
-            console.log(id)
+            // console.log(id)
             dbo.collection(userCollection).find({'Id':id}).toArray((err,result)=>{
                 if(result.length==1){
                     dbo.collection(commentCollection).find({UserId:id}).toArray(function(err,result){
@@ -289,3 +292,5 @@ MongoClient.connect(url,function(err,db){
         })
     })
 })
+
+module.exports = app

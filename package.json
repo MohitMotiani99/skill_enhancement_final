@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    
-    "test": "jest --testTimeout=30000 --runInBand"
+    "test": "jest --testTimeout=100000 --runInBand --coverage"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +18,7 @@
     "mongodb": "^4.1.0",
     "mongoose": "^6.0.4",
     "mongoskin": "^2.1.0",
+    "node-fetch": "^3.0.0",
     "nodemon": "^2.0.12",
     "request": "^2.88.2",
     "supertest": "^6.1.6"

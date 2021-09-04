@@ -14,39 +14,39 @@ const { verifyToken } = require('./pauthorize')
 app.use(bodyParser.urlencoded({
     extended:true
 }));
-var server = app.listen(5050,()=>{
-    console.log(' Server Started')
-})
+// var server = app.listen(5050,()=>{
+//     console.log(' Server Started')
+// })
 
 var MongoClient = require('mongodb').MongoClient
 //var url = 'mongodb://127.0.0.1:27017'
 var url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
 var db_name = 'skillenhancement'
 var col_name_q = 'questionAnswer'
-var col_name_u = 'user'
+var col_name_u = 'users'
 
-var validate_user = require('./authorize')
+//var validate_user = require('./authorize')
 const { request } = require('express')
 
 MongoClient.connect(url,(err,db)=>{
     if(err)throw err
     dbo = db.db(db_name)
 
-    console.log('Database Connected')
+    //console.log('Database Connected')
 
     var u_counter;
     var initial_u_counter;
 
     dbo.collection('globals').find({}).toArray((err,result)=>{
-        console.log(result)
+        //console.log(result)
         u_counter = result[0].userid
         initial_u_counter = u_counter
 
-        console.log(u_counter)
+        //console.log(u_counter)
 
     function cleanup(){
         dbo.collection('globals').updateOne({'userid':initial_u_counter},{$set:{'userid':u_counter}},(err,result)=>{
-            console.log('Server Closed')
+            //console.log('Server Closed')
             process.exit(1)
 
         })
@@ -56,36 +56,38 @@ MongoClient.connect(url,(err,db)=>{
     process.on('SIGINT',cleanup)
 
     //get complete user details from id
-    app.get('/users/:user_id', verifyAuth, (req,res)=>{
+    app.get('/users/:user_id',verifyAuth, async (req,res)=>{
+        
         //fetch user id
         var user_id = String(req.params.user_id)
         console.log(user_id)
-        console.log(typeof user_id)
+        // console.log(typeof user_id)
 
         //find the user is database
         dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
-            console.log(result)
-            console.log(result.length)
+            // console.log(result)
+            // console.log(result.length)
             if(result.length == 1)
                 {
                     res.send(result[0])
                 }
             else
                 {
-                   res.send('UnAuthorised User, Login And Continue')
+                    res.send('Invalid User')
+                   //res.send('UnAuthorised User, Login And Continue')
                 }
         })
     })
 
-    app.get('/signup',(req,res)=>{
-        request.get({
-            headers:{'content-type':'application/json'},
-            url:'http://localhost:3000/auth/login',
-        },(err,response)=>{
-            console.log(response.access_token)
+    // app.get('/signup',(req,res)=>{
+    //     request.get({
+    //         headers:{'content-type':'application/json'},
+    //         url:'http://localhost:3000/auth/login',
+    //     },(err,response)=>{
+    //         console.log(response.access_token)
             
-        })
-    })
+    //     })
+    // })
 
     //post complete user details 
     app.post('/api/signup', (req,res)=>{
@@ -97,13 +99,13 @@ MongoClient.connect(url,(err,db)=>{
         var e = req.body.email 
         var g = req.body.gender 
 
-        console.log(Id)
-        console.log(p)
-        //console.log(pc)    
-        console.log(g)    
+        // console.log(Id)
+        // console.log(p)
+        // //console.log(pc)    
+        // console.log(g)    
         
         dbo.collection('user').find({'username':un}).toArray((err,result)=>{
-            console.log(result.length)
+            // console.log(result.length)
                 if (result.length==0)
                 {
                 var u_obj={
@@ -124,7 +126,7 @@ MongoClient.connect(url,(err,db)=>{
 
                 dbo.collection('users').insertOne(u_obj,(err,result)=>{
                     if(err) throw err
-                    console.log(result)
+                    // console.log(result)
                     //res.redirect(`/users/${u_obj.Id}`)
                     res.send("User " +un +" is added succesfully")
                     //res.redirect('/login')
@@ -146,11 +148,11 @@ MongoClient.connect(url,(err,db)=>{
         //var p = req.body.password
         //var pc = req.body.passwordConformation
         //var e = req.body.image
-        console.log(JSON.stringify(req.body))
+        // console.log(JSON.stringify(req.body))
         var g = (req.body.gender)
         var s = (req.body.SocialLink)
-        console.log("Gender: "+g)
-        console.log('SocialLink: '+s)
+        // console.log("Gender: "+g)
+        // console.log('SocialLink: '+s)
         
         dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
             if(result.length==1 ){
@@ -192,16 +194,16 @@ MongoClient.connect(url,(err,db)=>{
     app.delete('/users/:user_id/delete', verifyAuth, (req,res)=>{
         var user_id = String(req.params.user_id)
 
-        console.log(user_id)
-        console.log(typeof user_id)
+        // console.log(user_id)
+        // console.log(typeof user_id)
 
         dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
-            console.log(result.length)
+            // console.log(result.length)
                 if (result.length==1)
                 {
                     var u = result[0]
                     dbo.collection('users').deleteOne({'Id':user_id},(err,result)=>{
-                        console.log(result)
+                        // console.log(result)
                         //res.send(JSON.stringify(result))
                         res.send('User: '+u.username +' Deleted')
                     })
@@ -219,14 +221,14 @@ MongoClient.connect(url,(err,db)=>{
     //get all the questions asked by the user
     app.get('/users/:user_id/questions', verifyAuth, (req,res)=>{
         var user_id = String(req.params.user_id)
-        console.log(user_id)
-        console.log(typeof user_id)
+        // console.log(user_id)
+        // console.log(typeof user_id)
 
         dbo.collection('users').find({Id:user_id}).toArray((err,result)=>{
             if(result.length==1){
                 dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':1}).toArray((err,result)=>{
-                    console.log(result)
-                    console.log(result.length)
+                    // console.log(result)
+                    // console.log(result.length)
                     if(result.length >= 1)
                         {
                             // var user = result
@@ -254,15 +256,15 @@ MongoClient.connect(url,(err,db)=>{
     //get all the comments made by the user
     app.get('/users/:user_id/comments', verifyAuth, (req,res)=>{
         var user_id = String(req.params.user_id)
-        console.log(user_id)
-        console.log(typeof user_id)
+        // console.log(user_id)
+        // console.log(typeof user_id)
 
         dbo.collection('users').find({Id:user_id}).toArray((err,result)=>{
             if(result.length==1){
                 //console.log(result)
                 dbo.collection('comments').find({'UserId':user_id}).toArray((err,result)=>{
-                    console.log(result)
-                    console.log(result.length)
+                    // console.log(result)
+                    // console.log(result.length)
                     if(result.length != 0)
                     res.send(result)
                     else if (result.length == 0)
@@ -284,14 +286,14 @@ MongoClient.connect(url,(err,db)=>{
     //get total number of questions posted by the user
     app.get('/users/:user_id/totalquestions', verifyToken, (req,res)=>{
         var user_id = String(req.params.user_id)
-        console.log(user_id)
-        console.log(typeof user_id)
+        // console.log(user_id)
+        // console.log(typeof user_id)
 
         dbo.collection('users').find({Id:user_id}).toArray((err,result)=>{
             if(result.length==1){
                 dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':1}).toArray((err,result)=>{
-                    console.log(result)
-                    console.log(result.length)
+                    // console.log(result)
+                    // console.log(result.length)
                     res.send(JSON.stringify(result.length))
                 })
             }
@@ -304,14 +306,14 @@ MongoClient.connect(url,(err,db)=>{
     //get total number of comments posted by the user
     app.get('/users/:user_id/totalcomments', verifyToken, (req,res)=>{
         var user_id = String(req.params.user_id)
-        console.log(user_id)
-        console.log(typeof user_id)
+        // console.log(user_id)
+        // console.log(typeof user_id)
 
         dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
             if(result.length==1){
                 dbo.collection('comments').find({'UserId':user_id}).toArray((err,result)=>{
-                    console.log(result)
-                    console.log(result.length)
+                    // console.log(result)
+                    // console.log(result.length)
                     res.send(JSON.stringify(result.length))
                 })
             }
@@ -323,14 +325,14 @@ MongoClient.connect(url,(err,db)=>{
     //get total number of answered posted by the user
     app.get('/users/:user_id/totalanswers', verifyToken, (req,res)=>{
         var user_id = String(req.params.user_id)
-        console.log(user_id)
-        console.log(typeof user_id)
+        // console.log(user_id)
+        // console.log(typeof user_id)
 
         dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
             if(result.length==1){
                 dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':2}).toArray((err,result)=>{
-                    console.log(result)
-                    console.log(result.length)
+                    // console.log(result)
+                    // console.log(result.length)
                     res.send(JSON.stringify(result.length))
                 })
             }
@@ -340,19 +342,19 @@ MongoClient.connect(url,(err,db)=>{
     })
         
         
-    })
+    
 
     //get all the answers posted by the user
     app.get('/users/:user_id/answers', verifyAuth, (req,res)=>{
         var user_id = String(req.params.user_id)
-        console.log(user_id)
-        console.log(typeof user_id)
+        // console.log(user_id)
+        // console.log(typeof user_id)
 
         dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
             if(result.length==1){
                 dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':2}).toArray((err,result)=>{
-                    console.log(result)
-                    console.log(result.length)
+                    // console.log(result)
+                    // console.log(result.length)
                     if(result.length!=0)
                     res.send(result)
                     // if(result.length >= 1)
@@ -379,8 +381,8 @@ MongoClient.connect(url,(err,db)=>{
     app.get('/users', verifyToken ,(req,res)=>{
         dbo.collection('users').find().toArray((err,result)=>{
             if(err) throw err
-            console.log(result)
-            console.log(result.length)
+            // console.log(result)
+            // console.log(result.length)
             if(result.length >= 1)
                 {
                         res.send(result)                    
@@ -392,24 +394,9 @@ MongoClient.connect(url,(err,db)=>{
         })
 
     })
-/* 
-    app.get('/tags',(req,res)=>{
-        dbo.collection('questionAnswer').find().toArray((err,result)=>{
-            if(err) throw err
-            console.log(result)
-            console.log(result.length)
-            if(result.length >= 1)
-                {
-                        res.send(JSON.stringify(result))                    
-                }
-            else
-                {
-                   res.send('No questions tagged')
-                }
-        })
 
     })
- */
-
 })
+
+module.exports = app
 

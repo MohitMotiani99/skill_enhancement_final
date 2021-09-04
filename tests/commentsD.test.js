@@ -1,5 +1,6 @@
-const app = require('../controllers/questions')
+const app = require('../controllers/comments')
 const supertest = require('supertest')
+
 var MongoClient = require('mongodb').MongoClient
 
 
@@ -8,24 +9,20 @@ var db_name = 'skillenhancement'
 var col_name_q = 'questionAnswer'
 var col_name_u = 'users'
 var col_name_n = 'notifications'
-
-
-let connection;
-let dbo;
+var col_name_c="comments"
 
 function compare(recieved,expected){
     expect(recieved.Id).toBe(expected.Id)
-    expect(recieved.AcceptedAnswerId).toBe(expected.AcceptedAnswerId)
-    expect(recieved.PostTypeId).toBe(expected.PostTypeId)
     expect(recieved.CreationDate).toBe(expected.CreationDate)
     expect(recieved.Score).toBe(expected.Score)
-    expect(recieved.OwnerUserId).toBe(expected.OwnerUserId)
-    expect(recieved.Title).toBe(expected.Title)
-    expect(recieved.Body).toBe(expected.Body)
-    expect(recieved.Tags).toEqual(expected.Tags)
-    expect(recieved.ClosedDate).toBe(expected.ClosedDate)
+    expect(recieved.Text).toBe(expected.Text)
+    expect(recieved.PostId).toBe(expected.PostId)
+    expect(recieved.UserDisplayName).toBe(expected.UserDisplayName)
+    expect(recieved.UserId).toBe(expected.UserId)
 }
 
+let connection;
+let dbo;
 
 beforeAll(async ()=>{
     connection = await MongoClient.connect(url,{
@@ -34,7 +31,6 @@ beforeAll(async ()=>{
   
     })
     dbo = await connection.db(db_name)
-    
 })
 
 afterAll(async ()=>{
@@ -57,29 +53,38 @@ beforeEach(async ()=>{
         "Id": 9999,
         "PostTypeId": 1,
         "AcceptedAnswerId": -1,
-        "CreationDate": 1629953505529,
+        "CreationDate": Date.now(),
         "Score": 15,
         "ViewCount": 186,
         "OwnerUserId": 901,
-        "Title": "testing api for edit question again after reopening edittes",
-        "Body": "api seems to work fine reopen",
+        "Title": "Answer Testing Question v2.0",
+        "Body": "Tester Body",
         "Tags": [
-            "java",
-            "mongo",
-            "python"
+            "jest"
         ],
         "ClosedDate": null
     })
     await dbo.collection(col_name_u).insertMany([{
         'Id':901,
         'token':'t1',
-        'username':'tester'
+        'username':'tester',
+        'displayName':'Mytester'
     },
     {
         'Id':902,
         'token':'t2',
-        'username':'tester'
+        'username':'tester',
+        'displayName':'Mytester'
     },])
+    await dbo.collection(col_name_c).insertOne({
+        'Id':9997,
+        'PostId':9999,
+        'Score':0,
+        'Text':'Comment Testing Text v1.0',
+        'CreationDate':Date.now(),
+        'UserDisplayName':'tester',
+        'UserId':901
+    })
 })
 afterEach(async ()=>{
     await dbo.collection(col_name_q).deleteOne({'Id':9998,'PostTypeId':2})
@@ -87,27 +92,28 @@ afterEach(async ()=>{
     await dbo.collection(col_name_u).deleteMany({'username':'tester'})
     await dbo.collection(col_name_n).deleteMany({'UserId':901})
     await dbo.collection(col_name_n).deleteMany({'UserId':902})
+    await dbo.collection(col_name_c).deleteMany({'PostId':9999})
+    await dbo.collection(col_name_c).deleteMany({'PostId':9998})
 })
 
 
 
-test('POST /questions/:question_id/delete NOT LOGGED IN', async () => {
-    var question_id = 9999
+test('DELETE /comments/:id/delete NOT LOGGED IN', async () => {
+    var id = 9997
     await supertest(app)
-        .post(`/questions/${question_id}/delete`)
+        .delete(`/comments/${id}/delete`)
         .set({'content-type':'application/json'})
         .expect(200)
         .then(async (res)=>{
-            // console.log(res.text)
             expect(res.text).toBe('Not Logged In')
 
         })
 
 })
-test('POST /questions/:question_id/delete INVALID TOKEN', async () => {
-    var question_id = 9999
+test('DELETE /comments/:id/delete INVALID TOKEN', async () => {
+    var id = 9997
     await supertest(app)
-        .post(`/questions/${question_id}/delete`)
+        .delete(`/comments/${id}/delete`)
         .set({'content-type':'application/json'})
         .set({'x-access-token':'nottoken'})
         .expect(200)
@@ -119,50 +125,49 @@ test('POST /questions/:question_id/delete INVALID TOKEN', async () => {
         })
 
 })
-test('POST /questions/:question_id/delete INVALID QUESTION', async () => {
-    var question_id = 9999000
+test('DELETE /comments/:id/delete INVALID COMMENT', async () => {
+    var id = 9997000
     await supertest(app)
-        .post(`/questions/${question_id}/delete`)
+        .delete(`/comments/${id}/delete`)
         .set({'content-type':'application/json'})
         .set({'x-access-token':'t1'})
         .expect(200)
         .then(async (res)=>{
 
 
-            expect(res.text).toBe('Invalid Question ID')
+            expect(res.text).toBe('Invalid Comment Id')
 
         })
 
 })
-test('POST /questions/:question_id/delete OWNER USER', async () => {
-    var question_id = 9999
+test('DELETE /comments/:id/delete OWNER USER', async () => {
+    var id = 9997
     await supertest(app)
-        .post(`/questions/${question_id}/delete`)
+        .delete(`/comments/${id}/delete`)
         .set({'content-type':'application/json'})
         .set({'x-access-token':'t2'})
         .expect(200)
         .then(async (res)=>{
 
 
-            expect(res.text).toBe('Invalid Question ID')
+            expect(res.text).toBe('No access to delete the comment')
 
         })
 
 })
+test('DELETE /comments/:id/delete', async () => {
+    var id = 9997
 
-test('POST /questions/:question_id/delete', async () => {
-    var question_id = 9999
+    let query_res = await dbo.collection(col_name_c).find({'Id':9997})
+    let expected = query_res[0]
+
     await supertest(app)
-        .post(`/questions/${question_id}/delete`)
+        .delete(`/comments/${id}/delete`)
         .set({'content-type':'application/json'})
         .set({'x-access-token':'t1'})
-        .expect(302)
+        .expect(200)
         .then(async (res)=>{
-
-            // console.log(res.headers)
-            // console.log(res.text)
-            expect(res.headers.location).toBe(`/questions`)
-
+            expect(res.text).toBe('Comment \"'+'Comment Testing Text v1.0'+'\" is Deleted')
         })
 
 })

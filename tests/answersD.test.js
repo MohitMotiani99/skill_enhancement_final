@@ -134,6 +134,21 @@ test('POST /answers/:answer_id/delete INVALID ANSWER', async () => {
         })
 
 })
+test('POST /answers/:answer_id/delete OWNER USER', async () => {
+    var answer_id = 9998
+    await supertest(app)
+        .post(`/answers/${answer_id}/delete`)
+        .set({'content-type':'application/json'})
+        .set({'x-access-token':'t1'})
+        .expect(200)
+        .then(async (res)=>{
+
+
+            expect(res.text).toBe('Invalid Answer ID')
+
+        })
+
+})
 describe('Delete a Answer With Invalid Parent Question',()=>{
     beforeEach(async ()=>{
         await dbo.collection(col_name_q).deleteOne({'Id':9999,'PostTypeId':1})
