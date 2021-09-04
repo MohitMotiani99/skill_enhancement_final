@@ -5,6 +5,7 @@ module.exports = {
     // Get auth header value
     const token = req.headers['x-access-token'];
     const user_Id = String(req.params.user_id);
+    // if(token.length<=5) next()
     // Check if token is undefined
     if (typeof token !== 'undefined') {
       let response = await fetch(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${token}`);
@@ -12,12 +13,12 @@ module.exports = {
       //console.log(user)
       if ([user.error]=='invalid_token'){res.sendStatus(403);return;}
       var userid = user.user_id;
-      console.log(userid)
+      //console.log(userid)
       dbo.collection('users').findOne({'Id': userid },(err,result)=>{if(result==null) {res.send('User Not Found');return}
-      console.log(user_Id)
-      console.log(result.Id)
+      //console.log(user_Id)
+      //console.log(result.Id)
       if(result.Id == user_Id && result.Id){ 
-        console.log(result.Id);
+        //console.log(result.Id);
         next(); }
       else if(err) {res.sendStatus(403);}
       })

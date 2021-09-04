@@ -141,7 +141,7 @@ MongoClient.connect(url,(err,db)=>{
     })
 
     // edit user profile
-    app.patch('/api/users/:user_id/editprofile', verifyAuth, (req,res)=>{
+    app.patch('/users/:user_id/editprofile', verifyAuth, (req,res)=>{
 
         //only owner
         var user_id = String(req.params.user_id)
@@ -157,7 +157,7 @@ MongoClient.connect(url,(err,db)=>{
         dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
             if(result.length==1 ){
                 dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
-                    console.log(result.length)
+                    //console.log(result.length)
                     if (result.length==1)
                     {
                         var u_obj={
@@ -172,19 +172,19 @@ MongoClient.connect(url,(err,db)=>{
                         })
                       
                     }
-                    else if (result.length == 0)
-                    {
-                        res.send('User Doesn\'t Exist')
-                    }
-                    else
-                    {
-                        res.send('Updation Failed, please contact admin')
-                    }
+                    // else if (result.length == 0)
+                    // {
+                    //     res.send('User Doesn\'t Exist')
+                    // }
+                    // else
+                    // {
+                    //     res.send('Updation Failed, please contact admin')
+                    // }
                 })
             }
-            else{ 
-                //console.log(result[0])
-                res.send('Invalid User')}
+            // else{ 
+            //     //console.log(result[0])
+            //     res.send('Invalid User')}
         })
         
     })
@@ -208,11 +208,11 @@ MongoClient.connect(url,(err,db)=>{
                         res.send('User: '+u.username +' Deleted')
                     })
                 }
-                else if (result.length==0)
-                {
-                    res.send("User ID doesn\'t exist. User is may be already deleted")
-                    //res.redirect('/users/:user_id/delete')
-                }
+                // else if (result.length==0)
+                // {
+                //     res.send("User ID doesn\'t exist. User is may be already deleted")
+                //     //res.redirect('/users/:user_id/delete')
+                // }
         })
     })   
 
@@ -284,7 +284,7 @@ MongoClient.connect(url,(err,db)=>{
     })
 
     //get total number of questions posted by the user
-    app.get('/users/:user_id/totalquestions', verifyToken, (req,res)=>{
+    app.get('/users/:user_id/totalquestions', (req,res)=>{
         var user_id = String(req.params.user_id)
         // console.log(user_id)
         // console.log(typeof user_id)
@@ -297,14 +297,15 @@ MongoClient.connect(url,(err,db)=>{
                     res.send(JSON.stringify(result.length))
                 })
             }
-            else res.send('UnAuthorized User, Redirecting to login page')
+            else res.send('Invalid User ID')
+            //else res.send('UnAuthorized User, Redirecting to login page')
         })
 
         
     })
 
     //get total number of comments posted by the user
-    app.get('/users/:user_id/totalcomments', verifyToken, (req,res)=>{
+    app.get('/users/:user_id/totalcomments', (req,res)=>{
         var user_id = String(req.params.user_id)
         // console.log(user_id)
         // console.log(typeof user_id)
@@ -317,13 +318,14 @@ MongoClient.connect(url,(err,db)=>{
                     res.send(JSON.stringify(result.length))
                 })
             }
-            else res.send('UnAuthorized User, redirect to login page')
+            else res.send('Invalid User ID')
+            //else res.send('UnAuthorized User, redirect to login page')
         })
         
     })
         
     //get total number of answered posted by the user
-    app.get('/users/:user_id/totalanswers', verifyToken, (req,res)=>{
+    app.get('/users/:user_id/totalanswers', (req,res)=>{
         var user_id = String(req.params.user_id)
         // console.log(user_id)
         // console.log(typeof user_id)
@@ -336,7 +338,8 @@ MongoClient.connect(url,(err,db)=>{
                     res.send(JSON.stringify(result.length))
                 })
             }
-            else res.send('UnAuthorized User, redirect to login page')
+            else res.send('Invalid User ID')
+            //else res.send('UnAuthorized User, redirect to login page')
         })
         
     })

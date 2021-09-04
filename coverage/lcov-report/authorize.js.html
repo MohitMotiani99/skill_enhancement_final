@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.68% </span>
+                <span class="strong">31.58% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/19</span>
+                <span class='fraction'>6/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.67% </span>
+                <span class="strong">16.67% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/6</span>
+                <span class='fraction'>1/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/4</span>
+                <span class='fraction'>1/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.78% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/18</span>
+                <span class='fraction'>6/18</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -108,27 +108,27 @@
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">50x</span>
+<span class="cline-any cline-yes">49x</span>
 <span class="cline-any cline-yes">49x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -147,27 +147,27 @@ module.exports = function <span class="fstat-no" title="function not covered" >g
 module.exports = function validate_user(token,user_obj){
     //return jwt.verify(token)
 &nbsp;
-    if(token.length&lt;=5)
+    <span class="missing-if-branch" title="else path not taken" >E</span>if(token.length&lt;=5)
         return true
     else{
     var ans;
-    return new Promise((resolve,reject)=&gt;{
-        request.get({
+<span class="cstat-no" title="statement not covered" >    return new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve,reject)=&gt;{</span>
+<span class="cstat-no" title="statement not covered" >        request.get({</span>
             headers:{'content-type':'application/json'},
             url:`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${token}`
-        },(err,response,body)=&gt;{
-            <span class="missing-if-branch" title="if path not taken" >I</span>if(err) <span class="cstat-no" title="statement not covered" >throw err</span>
-            body=JSON.parse(body)
-            <span class="missing-if-branch" title="if path not taken" >I</span>if(body["user_id"]==user_obj.Id)
+        },<span class="fstat-no" title="function not covered" >(e</span>rr,response,body)=&gt;{
+<span class="cstat-no" title="statement not covered" >            if(err) <span class="cstat-no" title="statement not covered" >throw err</span></span>
+<span class="cstat-no" title="statement not covered" >            body=JSON.parse(body)</span>
+<span class="cstat-no" title="statement not covered" >            if(body["user_id"]==user_obj.Id)</span>
                 {
 <span class="cstat-no" title="statement not covered" >                    console.log('yes')</span>
 <span class="cstat-no" title="statement not covered" >                    ans=true</span>
 <span class="cstat-no" title="statement not covered" >                    resolve(ans)</span>
                 }
             else{
-                console.log('no')
-                ans=false
-                resolve(ans)
+<span class="cstat-no" title="statement not covered" >                console.log('no')</span>
+<span class="cstat-no" title="statement not covered" >                ans=false</span>
+<span class="cstat-no" title="statement not covered" >                resolve(ans)</span>
             }
                 
         })
@@ -181,7 +181,7 @@ module.exports = function validate_user(token,user_obj){
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Sep 04 2021 14:21:46 GMT+0530 (India Standard Time)
+                at Sat Sep 04 2021 18:08:12 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>
