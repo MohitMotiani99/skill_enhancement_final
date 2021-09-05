@@ -3,9 +3,9 @@ var express=require('express')
 var request = require('request')
 var app = express()
 var bodyparser = require("body-parser")
-
+var cors=require ('cors')
 var url="mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority"
-
+var cors = require('cors')
 var mydb="skillenhancement"
 var collection="questionAnswer"
 var collection2="users"
@@ -13,6 +13,11 @@ var collection3="comments"
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static("public"))
+app.use(cors())
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 var server = app.listen(3300,function(){
   console.log("Dashboard Controller started")
@@ -22,7 +27,7 @@ MongoClient.connect(url,function(err,db){
     if(err)
       throw err
     dbo=db.db(mydb)
-    //console.log('sep Database Connected')
+    console.log('sep Database Connected')
     
     app.post('/login',(req,res)=>{
 
@@ -42,39 +47,6 @@ MongoClient.connect(url,function(err,db){
           res.send(ans)
         })        
       })
-    })
-
-    //Returns questions and answers relevent to search sentence. (MongodB Text search)
-    app.post('/searchposts',(req,res)=>{
-      var search_string = req.body.search_string
-      new Promise((resolve,reject)=>{
-        dbo.collection(collection).createIndex({'Title':'text','Body':'text'},(err,result)=>{
-          console.log(result)
-          resolve()
-        })  
-      }).then(()=>{
-        dbo.collection(collection).find({$text:{$search:search_string}}).toArray((err,result)=>{
-          if(err) throw err
-          console.log(result)
-          var ans={
-            'questions':[],
-            'answers':[]
-          }
-          new Promise((resolve,reject)=>{
-              result.forEach((p)=>{
-                if(p.PostTypeId==1)
-                ans.questions.push(p)
-                else
-                ans.answers.push(p)
-              })
-              resolve()
-          }).then(()=>{
-            res.send(ans)
-          })
-          
-        })
-      })
-      
     })
 
     //Return relevent questions and answers - Approach1
@@ -135,6 +107,39 @@ MongoClient.connect(url,function(err,db){
               })
           })
       })      
+    })
+
+    //Returns questions and answers relevent to search sentence. (MongodB Text search)
+    app.post('/searchposts',(req,res)=>{
+      var search_string = req.body.search_string
+      new Promise((resolve,reject)=>{
+        dbo.collection(collection).createIndex({'Title':'text','Body':'text'},(err,result)=>{
+          console.log(result)
+          resolve()
+        })  
+      }).then(()=>{
+        dbo.collection(collection).find({$text:{$search:search_string}}).toArray((err,result)=>{
+          if(err) throw err
+          console.log(result)
+          var ans={
+            'questions':[],
+            'answers':[]
+          }
+          new Promise((resolve,reject)=>{
+              result.forEach((p)=>{
+                if(p.PostTypeId==1)
+                ans.questions.push(p)
+                else
+                ans.answers.push(p)
+              })
+              resolve()
+          }).then(()=>{
+            res.send(ans)
+          })
+          
+        })
+      })
+      
     })
 
     //Returns suggested questions based on the content viewed by user
@@ -230,23 +235,19 @@ MongoClient.connect(url,function(err,db){
     app.get('/trending',(req,res)=>{
       request.get({
         headers:{'content-type':'application/json'},
-        url:'http://localhost:3300/questions/sort/ViewCount/desc'
+        url:'http://localhost:3300/questions/sort/Score/desc'
       },(err,response,body)=>{
         res.send(JSON.parse(body))
       })
     })
-
-    // dbo.collection(collection2).find({}).toArray((err,result)=>{
-    //   console.log(result)
-    // })
 
     //Return user details for all the users with the given search name
     app.post('/searchcusts',(req,res)=>{
         var search_name = req.body.search_name.toLowerCase()
         var ans =[]
         dbo.collection(collection2).find({}).toArray((err,result)=>{
-          console.log(result)
-          res.send(result.filter((u)=>{return u.displayName.toLowerCase().indexOf(search_name)>=0}))
+          res.send(result.filter((u)=>{
+            return u.username.toLowerCase().indexOf(search_name)>=0}))
         })
     })   
 })
