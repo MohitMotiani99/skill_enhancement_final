@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --testTimeout=100000 --runInBand --coverage",
+    "test": "jest --testTimeout=100000 --runInBand --coverage --forceExit",
     "question_service":"node ./services/question_service",
     "answer_service":"node ./services/answer_service",
     "comment_service":"node ./services/comment_service",
