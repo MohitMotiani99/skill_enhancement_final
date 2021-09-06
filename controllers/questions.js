@@ -181,30 +181,61 @@ MongoClient.connect(url,(err,db)=>{
                     var ActionUserId = result[0].Id
 
                     //question object existence check
-                    dbo.collection(col_name_q).find({'Id':question_id}).toArray((err,result)=>{
+                    dbo.collection(col_name_q).find({'Id':question_id}).toArray(async (err,result)=>{
                         if(result.length==1){
                             var OwnerUserId = result[0].OwnerUserId
                             var PostTypeId = result[0].PostTypeId
+                            
+                            let amt,sts;
+                            let query_res = await dbo.collection('votes').find({'PostId':question_id,'UserId':User.Id,'PostTypeId':PostTypeId}).toArray()
+                            if(query_res.length == 0){
+                                amt=(vote=='upvote')?1:-1
+                                sts=amt
+                            }
+                            else{
+                                let doc = query_res[0]
+                                if(doc.Status==1)
+                                {
+                                    if(vote=='upvote')
+                                    {
+                                        await dbo.collection('votes').deleteOne({'PostId':question_id,'UserId':User.Id,'PostTypeId':PostTypeId})
+                                        amt = -1
+                                        sts=0
+                                    }
+                                    else if(vote=='downvote'){
+                                        amt=-2
+                                        sts=-1
+                                    }
+                                }
+                                else if(doc.Status == -1)
+                                {
+                                    if(vote=='downvote')
+                                    {
+                                        await dbo.collection('votes').deleteOne({'PostId':question_id,'UserId':User.Id,'PostTypeId':PostTypeId})
+                                        amt = 1
+                                        sts=0
+                                    }
+                                    else if(vote=='upvote'){
+                                        amt=2
+                                        sts=1
+                                    }
+                                }
+                            }
+
+                            if(sts!=0)
+                            await dbo.collection('votes').updateOne({'PostId':question_id,'UserId':User.Id,'PostTypeId':PostTypeId},{$set:{'Status':sts}},{upsert:true})
+
                             var upd_sel={
                                 'Id':question_id
                             }
-                            var upd_params;
-
-                            if(vote == 'upvote'){
-                                upd_params = {
-                                    $inc:{
-                                        'Score': 1
-                                    }
-                                }
-                            }
-                            else if(vote == 'downvote'){
-                                upd_params = {
-                                    $inc:{
-                                        'Score': -1
-                                    }
-                                }
-                            }
+                            var upd_params
                             
+                            upd_params = {
+                                    $inc:{
+                                        'Score': amt
+                                    }
+                            }
+
                             //update SCore
                             dbo.collection(col_name_q).updateOne(upd_sel,upd_params,(err,result)=>{
                                 if(err) throw err
