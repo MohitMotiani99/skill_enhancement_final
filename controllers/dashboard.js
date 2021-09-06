@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable no-var */
 const MongoClient=require('mongodb').MongoClient
 const express=require('express')
@@ -20,10 +21,6 @@ app.use((req, res, next) => {
     next();
 });
 
-const server = app.listen(3300,function(){
-    // eslint-disable-next-line no-console
-    console.log("Dashboard Controller started")
-})
 
 MongoClient.connect(url,function(err,db){
     if(err)
@@ -253,3 +250,5 @@ MongoClient.connect(url,function(err,db){
         })
     })   
 })
+
+module.exports = app

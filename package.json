@@ -9,11 +9,11 @@
     "answer_service": "node ./services/answer_service",
     "comment_service": "node ./services/comment_service",
     "user_service": "node ./services/user_service",
-    "dashboard": "node ./controllers/dashboard",
-    "notifications": "node ./controllers/notifications",
-    "start": "concurrently \"npm run question_service\" \"npm run answer_service\" \"npm run comment_service\" \"npm run dashboard\" \"npm run notifications\" ",
+    "dashboard_service": "node ./services/dashboard_service",
+    "notification_service": "node ./services/notification_service",
+    "start": "concurrently \"npm run question_service\" \"npm run answer_service\" \"npm run comment_service\" \"npm run dashboard_service\" \"npm run notification_service\" \"npm run user_service\"",
     "dev": "start npm run question_service && start npm run answer_service && start npm run comment_service && start npm run dashboard && start npm run notifications",
-    "kube": "kubectl port-forward service/skillserver 8089:8089 8088:8088 8075:8075 5050:5050 8083:8083 3300:3300"
+    "kube": "kubectl port-forward service/skillfinal 8089:8089 8088:8088 8075:8075 5050:5050 8083:8083 3300:3300"
   },
   "author": "",
   "license": "ISC",
@@ -28,7 +28,7 @@
     "mongodb": "^4.1.0",
     "mongoose": "^6.0.4",
     "mongoskin": "^2.1.0",
-    "node-fetch": "^3.0.0",
+    "node-fetch": "^2.6.1",
     "nodemon": "^2.0.12",
     "request": "^2.88.2",
     "supertest": "^6.1.6"

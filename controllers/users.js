@@ -55,7 +55,7 @@ MongoClient.connect(url,(err,db)=>{
         process.on('SIGINT',cleanup)
 
         //get complete user details from id
-        app.get('/users/:user_id',verifyAuth, async (req,res)=>{
+        app.get('/users/:user_id',verifyAuth,async (req,res)=>{
         
             //fetch user id
             const user_id = String(req.params.user_id)

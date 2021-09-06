@@ -9,11 +9,6 @@ app.use(express.urlencoded({extended:true}))
 const cors = require('cors')
 app.use(cors())
 
-app.listen(8083,()=>{
-    console.log('Notification Controller Started')
-
-})
-
 /**
  * Id
  * UserId
@@ -73,7 +68,7 @@ MongoClient.connect(url,(err,db)=>{
             if(req.params.User_Id.length<=5)
                 User_Id = parseInt(User_Id)
         
-            console.log(User_Id)
+            //console.log(User_Id)
             if(token == null || token == undefined){
                 res.send('Not Logged In')
             }
@@ -128,7 +123,7 @@ MongoClient.connect(url,(err,db)=>{
                                 dbo.collection(col_noti).updateOne({'UserId':User_Id,'Id':noti_id},{$set:{'Status':'read'}},(err,result)=>{
                                     if(err)
                                         throw err
-                                    console.log(result)
+                                    //console.log(result)
                                     res.redirect(`/User/${User_Id}/notifs`)
                                 })
                             }
@@ -190,7 +185,7 @@ MongoClient.connect(url,(err,db)=>{
             if(req.params.User_Id.length<=5)
                 User_Id = parseInt(User_Id)
 
-            console.log('hi from noti')
+            //console.log('hi from noti')
             console.log(PostId)
             console.log(User_Id)
             if(token == null || token == undefined){
@@ -222,3 +217,5 @@ MongoClient.connect(url,(err,db)=>{
 
     })
 })
+
+module.exports = app

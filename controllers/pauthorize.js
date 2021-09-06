@@ -2,12 +2,16 @@ const fetch = require("node-fetch");
 
 module.exports = {
     verifyAuth: async function (req, res, next) {
-    // Get auth header value
+        // Get auth header value
         const token = req.headers['x-access-token'];
         const user_Id = String(req.params.user_id);
+        if (token == undefined || token == null || token.length <5) {
+            //console.log(token.length);
+            next();
+        }
         // if(token.length<=5) next()
         // Check if token is undefined
-        if (typeof token !== 'undefined') {
+        else if (typeof token !== 'undefined') {
             const response = await fetch(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${token}`);
             const user = await response.json();
             //console.log(user)
