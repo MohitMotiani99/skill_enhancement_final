@@ -94,6 +94,8 @@ afterEach(async ()=>{
     await dbo.collection(col_name_n).deleteMany({'UserId':902})
     await dbo.collection(col_name_c).deleteMany({'PostId':9999})
     await dbo.collection(col_name_c).deleteMany({'PostId':9998})
+    await dbo.collection('votes').deleteMany({'UserId':901})
+    await dbo.collection('votes').deleteMany({'UserId':902})
 })
 
 test('PATCH /comments/:id/upvote NOT LOGGED IN',async ()=>{

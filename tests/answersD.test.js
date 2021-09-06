@@ -87,6 +87,9 @@ afterEach(async ()=>{
     await dbo.collection(col_name_u).deleteMany({'username':'tester'})
     await dbo.collection(col_name_n).deleteMany({'UserId':901})
     await dbo.collection(col_name_n).deleteMany({'UserId':902})
+    await dbo.collection('votes').deleteMany({'UserId':901})
+    await dbo.collection('votes').deleteMany({'UserId':902})
+
 })
 
 

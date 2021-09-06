@@ -283,4 +283,74 @@ describe('Close Closed QUestion' ,()=>{
     
 
 })
+/**
+ * 
+ * REOPEN QUESTION 
+ * 
+ */
+ test('POST /questions/:question_id/reopen NOT LOGGED IN',async () => {
+    var question_id = 9999
+    await supertest(app)
+        .post(`/questions/${question_id}/reopen`)
+        .set({'content-type':'application/json'})
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Not Logged In')
+        })
+})
+test('POST /questions/:question_id/reopen INVALID QUESTION',async () => {
+    var question_id = 9999000
+    await supertest(app)
+        .post(`/questions/${question_id}/reopen`)
+        .set({'content-type':'application/json'})
+        .set({'x-access-token':'t1'})
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid Question ID')
+        })
+})
+test('POST /questions/:question_id/reopen NOT OWNER',async () => {
+    var question_id = 9999
+    await supertest(app)
+        .post(`/questions/${question_id}/reopen`)
+        .set({'content-type':'application/json'})
+        .set({'x-access-token':'t2'})
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid Question ID')
+        })
+})
+test('POST /questions/:question_id/reopen ALREADY OPEN',async () => {
+    var question_id = 9999
+    await supertest(app)
+        .post(`/questions/${question_id}/reopen`)
+        .set({'content-type':'application/json'})
+        .set({'x-access-token':'t1'})
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Question is Already Open')
+        })
+})
+describe('Open Closed QUestion' ,()=>{
+    beforeEach(async ()=>{
+        await dbo.collection(col_name_q).updateOne({'Id':9999,'PostTypeId':1},{$set:{'ClosedDate':Date.now()}})
+    })
+    test('POST /questions/:question_id/reopen',async () => {
+        var question_id = 9999
+        await supertest(app)
+            .post(`/questions/${question_id}/reopen`)
+            .set({'content-type':'application/json'})
+            .set({'x-access-token':'t1'})
+            .expect(302)
+            .then(async (res)=>{
+                var recieved = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
+                recieved = recieved[0]
+                expect(recieved.ClosedDate).toBe(null)
+                expect(res.headers.location).toBe(`/questions/${question_id}`)
+    
+            })
+    })
+    
+
+})
 

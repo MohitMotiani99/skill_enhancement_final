@@ -32,17 +32,15 @@ MongoClient.connect(url,(err,db)=>{
     if(err)throw err
     dbo = db.db(db_name)
 
-    //console.log('Database Connected')
 
     var u_counter;
     var initial_u_counter;
 
     dbo.collection('globals').find({}).toArray((err,result)=>{
-        //console.log(result)
+
         u_counter = result[0].userid
         initial_u_counter = u_counter
 
-        //console.log(u_counter)
 
     function cleanup(){
         dbo.collection('globals').updateOne({'userid':initial_u_counter},{$set:{'userid':u_counter}},(err,result)=>{
@@ -61,12 +59,8 @@ MongoClient.connect(url,(err,db)=>{
         //fetch user id
         var user_id = String(req.params.user_id)
         console.log(user_id)
-        // console.log(typeof user_id)
-
         //find the user is database
         dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
-            // console.log(result)
-            // console.log(result.length)
             if(result.length == 1)
                 {
                     res.send(result[0])
@@ -74,20 +68,10 @@ MongoClient.connect(url,(err,db)=>{
             else
                 {
                     res.send('Invalid User')
-                   //res.send('UnAuthorised User, Login And Continue')
                 }
         })
     })
 
-    // app.get('/signup',(req,res)=>{
-    //     request.get({
-    //         headers:{'content-type':'application/json'},
-    //         url:'http://localhost:3000/auth/login',
-    //     },(err,response)=>{
-    //         console.log(response.access_token)
-            
-    //     })
-    // })
 
     //post complete user details 
     app.post('/api/signup', (req,res)=>{
@@ -99,11 +83,6 @@ MongoClient.connect(url,(err,db)=>{
         var e = req.body.email 
         var g = req.body.gender 
 
-        // console.log(Id)
-        // console.log(p)
-        // //console.log(pc)    
-        // console.log(g)    
-        
         dbo.collection('user').find({'username':un}).toArray((err,result)=>{
             // console.log(result.length)
                 if (result.length==0)
@@ -126,16 +105,12 @@ MongoClient.connect(url,(err,db)=>{
 
                 dbo.collection('users').insertOne(u_obj,(err,result)=>{
                     if(err) throw err
-                    // console.log(result)
-                    //res.redirect(`/users/${u_obj.Id}`)
                     res.send("User " +un +" is added succesfully")
-                    //res.redirect('/login')
                     u_counter+=1;
                 })                    
             }
             else{
                 res.send('Username already Exists')
-                //res.redirect('/api/signup')
             }
         })
     })
@@ -148,16 +123,11 @@ MongoClient.connect(url,(err,db)=>{
         //var p = req.body.password
         //var pc = req.body.passwordConformation
         //var e = req.body.image
-        // console.log(JSON.stringify(req.body))
         var g = (req.body.gender)
         var s = (req.body.SocialLink)
-        // console.log("Gender: "+g)
-        // console.log('SocialLink: '+s)
-        
         dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
             if(result.length==1 ){
                 dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
-                    //console.log(result.length)
                     if (result.length==1)
                     {
                         var u_obj={
@@ -166,25 +136,14 @@ MongoClient.connect(url,(err,db)=>{
                             SocialLink:s
                         }
                         dbo.collection('users').updateOne({"Id":String(user_id)},{$set:u_obj},(err,result)=>{
-                            //console.log(result)
                             res.redirect(`/users/${user_id}`)
         
                         })
                       
                     }
-                    // else if (result.length == 0)
-                    // {
-                    //     res.send('User Doesn\'t Exist')
-                    // }
-                    // else
-                    // {
-                    //     res.send('Updation Failed, please contact admin')
-                    // }
                 })
             }
-            // else{ 
-            //     //console.log(result[0])
-            //     res.send('Invalid User')}
+            else res.send('Invalid User')
         })
         
     })
@@ -194,90 +153,54 @@ MongoClient.connect(url,(err,db)=>{
     app.delete('/users/:user_id/delete', verifyAuth, (req,res)=>{
         var user_id = String(req.params.user_id)
 
-        // console.log(user_id)
-        // console.log(typeof user_id)
-
         dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
-            // console.log(result.length)
+
                 if (result.length==1)
                 {
                     var u = result[0]
                     dbo.collection('users').deleteOne({'Id':user_id},(err,result)=>{
-                        // console.log(result)
-                        //res.send(JSON.stringify(result))
                         res.send('User: '+u.username +' Deleted')
                     })
                 }
-                // else if (result.length==0)
-                // {
-                //     res.send("User ID doesn\'t exist. User is may be already deleted")
-                //     //res.redirect('/users/:user_id/delete')
-                // }
-        })
+                else res.send('Invalid User')
+            })
     })   
 
-//redirecting
 
     //get all the questions asked by the user
-    app.get('/users/:user_id/questions', verifyAuth, (req,res)=>{
+    app.get('/users/:user_id/questions', (req,res)=>{
         var user_id = String(req.params.user_id)
-        // console.log(user_id)
-        // console.log(typeof user_id)
 
         dbo.collection('users').find({Id:user_id}).toArray((err,result)=>{
             if(result.length==1){
                 dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':1}).toArray((err,result)=>{
-                    // console.log(result)
-                    // console.log(result.length)
                     if(result.length >= 1)
-                        {
-                            // var user = result
-                            // dbo.collection(col_name_q).findOne({'OwnerUserId':user_id, 'PostTypeId':1},(err,result)=>{
-                            //     if(err) throw err
-                            //     console.log(result)
-                            //     res.send(JSON.stringify(user))
-                            // })
-
-                            res.send(result)
-                            
-                        }
+                        res.send(result)                            
                     else
-                        {
-                           res.send('You have not asked any questions yet')
-                        }
+                        res.send('You have not asked any questions yet')
                 })
             }
-            else res.send('UnAuthorized User, Redirecting to login page')
+            else res.send('Invalid User')
         })
         
     })
 
 
     //get all the comments made by the user
-    app.get('/users/:user_id/comments', verifyAuth, (req,res)=>{
+    app.get('/users/:user_id/comments', (req,res)=>{
         var user_id = String(req.params.user_id)
-        // console.log(user_id)
-        // console.log(typeof user_id)
 
         dbo.collection('users').find({Id:user_id}).toArray((err,result)=>{
             if(result.length==1){
-                //console.log(result)
+
                 dbo.collection('comments').find({'UserId':user_id}).toArray((err,result)=>{
-                    // console.log(result)
-                    // console.log(result.length)
                     if(result.length != 0)
-                    res.send(result)
+                        res.send(result)
                     else if (result.length == 0)
-                    {
                        res.send('You have not commented any posts yet')
-                    }
-                    else 
-                    {
-                       res.send('Failed to load, please contact admin')
-                    }
                 })
             }
-            else res.send('UnAuthorized User, Redirecting to login page')
+            else res.send('Invalid User')
         })
 
         
@@ -286,19 +209,15 @@ MongoClient.connect(url,(err,db)=>{
     //get total number of questions posted by the user
     app.get('/users/:user_id/totalquestions', (req,res)=>{
         var user_id = String(req.params.user_id)
-        // console.log(user_id)
-        // console.log(typeof user_id)
 
         dbo.collection('users').find({Id:user_id}).toArray((err,result)=>{
             if(result.length==1){
                 dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':1}).toArray((err,result)=>{
-                    // console.log(result)
-                    // console.log(result.length)
                     res.send(JSON.stringify(result.length))
                 })
             }
             else res.send('Invalid User ID')
-            //else res.send('UnAuthorized User, Redirecting to login page')
+
         })
 
         
@@ -307,19 +226,15 @@ MongoClient.connect(url,(err,db)=>{
     //get total number of comments posted by the user
     app.get('/users/:user_id/totalcomments', (req,res)=>{
         var user_id = String(req.params.user_id)
-        // console.log(user_id)
-        // console.log(typeof user_id)
 
         dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
             if(result.length==1){
                 dbo.collection('comments').find({'UserId':user_id}).toArray((err,result)=>{
-                    // console.log(result)
-                    // console.log(result.length)
                     res.send(JSON.stringify(result.length))
                 })
             }
             else res.send('Invalid User ID')
-            //else res.send('UnAuthorized User, redirect to login page')
+
         })
         
     })
@@ -327,19 +242,13 @@ MongoClient.connect(url,(err,db)=>{
     //get total number of answered posted by the user
     app.get('/users/:user_id/totalanswers', (req,res)=>{
         var user_id = String(req.params.user_id)
-        // console.log(user_id)
-        // console.log(typeof user_id)
-
         dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
             if(result.length==1){
                 dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':2}).toArray((err,result)=>{
-                    // console.log(result)
-                    // console.log(result.length)
                     res.send(JSON.stringify(result.length))
                 })
             }
             else res.send('Invalid User ID')
-            //else res.send('UnAuthorized User, redirect to login page')
         })
         
     })
@@ -348,54 +257,30 @@ MongoClient.connect(url,(err,db)=>{
     
 
     //get all the answers posted by the user
-    app.get('/users/:user_id/answers', verifyAuth, (req,res)=>{
+    app.get('/users/:user_id/answers', (req,res)=>{
         var user_id = String(req.params.user_id)
-        // console.log(user_id)
-        // console.log(typeof user_id)
-
         dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
             if(result.length==1){
                 dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':2}).toArray((err,result)=>{
-                    // console.log(result)
-                    // console.log(result.length)
                     if(result.length!=0)
-                    res.send(result)
-                    // if(result.length >= 1)
-                    //     {
-                    //         var user = result
-                    //         dbo.collection(col_name_q).findOne({'OwnerUserId':user_id, 'PostTypeId':2},(err,result)=>{
-                    //             if(err) throw err
-                    //             console.log(result)
-                    //             res.send(JSON.stringify(user))
-                    //         })
-                            
-                    //     }
+                        res.send(result)
                     else
-                        {
-                           res.send('You have not answered any quesions yet')
-                        }
+                        res.send('You have not answered any quesions yet')
                 })
             }
-            else res.send('UnAuthorized User, redirect to login page')
+            else res.send('Invalid User')
         })
         
     })
 
-    app.get('/users', verifyToken ,(req,res)=>{
+    app.get('/users' ,(req,res)=>{
         dbo.collection('users').find().toArray((err,result)=>{
             if(err) throw err
-            // console.log(result)
-            // console.log(result.length)
             if(result.length >= 1)
-                {
-                        res.send(result)                    
-                }
+                res.send(result)                    
             else
-                {
-                   res.send('No users to display')
-                }
+                res.send('No users to display')
         })
-
     })
 
     })

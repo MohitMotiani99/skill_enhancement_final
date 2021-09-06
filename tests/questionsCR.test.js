@@ -92,6 +92,8 @@ afterEach(async ()=>{
     await dbo.collection(col_name_u).deleteMany({'username':'tester'})
     await dbo.collection(col_name_n).deleteMany({'UserId':901})
     await dbo.collection(col_name_n).deleteMany({'UserId':902})
+    await dbo.collection('votes').deleteMany({'UserId':901})
+    await dbo.collection('votes').deleteMany({'UserId':902})
 })
 
 
@@ -318,3 +320,25 @@ afterEach(async ()=>{
         })
     })
 
+    describe('Add Answer ',()=>{
+        afterEach(async ()=>{
+            await dbo.collection(col_name_q).deleteMany({'PostTypeId':2,'ParentId':9999})
+        })
+        test('POST /questions/:question_id/answers/add', async () => {
+            var question_id = 9999
+            var answer = {
+                'Body':'Testing Add Answer v1.2 for JEST'
+            }
+            await supertest(app).post(`/questions/${question_id}/answers/add`)
+            .set({'content-type':'application/json'})
+            .set({'x-access-token':'t2'})
+            .send(answer)
+            .expect(302)
+            .then(async (res)=>{
+                let recieved = await dbo.collection(col_name_q).find({'PostTypeId':2,'ParentId':9999,'Body':answer.Body}).toArray()
+                recieved = recieved[0]
+                expect(res.headers.location).toBe(`http://localhost:8088/answers/${recieved.Id}`)
+                expect(recieved.Body).toBe(answer.Body)
+            }) 
+        })
+    })
