@@ -11,7 +11,7 @@
     "user_service": "node ./services/user_service",
     "dashboard": "node ./controllers/dashboard",
     "notifications": "node ./controllers/notifications",
-    "start": "concurrently \"npm run question_service\" \"npm run answer_service\" \"npm run comment_service\" \"npm run dashboard\" \"npm run notifications\" \"npm run user_service\"",
+    "start": "concurrently \"npm run question_service\" \"npm run answer_service\" \"npm run comment_service\" \"npm run dashboard\" \"npm run notifications\" ",
     "dev": "start npm run question_service && start npm run answer_service && start npm run comment_service && start npm run dashboard && start npm run notifications",
     "kube": "kubectl port-forward service/skillserver 8089:8089 8088:8088 8075:8075 5050:5050 8083:8083 3300:3300"
   },
