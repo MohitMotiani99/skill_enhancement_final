@@ -1,14 +1,14 @@
 const app = require('../controllers/answers')
 const supertest = require('supertest')
 
-var MongoClient = require('mongodb').MongoClient
+const MongoClient = require('mongodb').MongoClient
 
 
-var url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
-var db_name = 'skillenhancement'
-var col_name_q = 'questionAnswer'
-var col_name_u = 'users'
-var col_name_n = 'notifications'
+const url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
+const db_name = 'skillenhancement'
+const col_name_q = 'questionAnswer'
+const col_name_u = 'users'
+const col_name_n = 'notifications'
 
 
 let connection;
@@ -91,27 +91,27 @@ afterEach(async ()=>{
 
 test('GET /answers/:answer_id INVALID ANSWER',async () => {
 
-    var answer_id = 100000
+    const answer_id = 100000
     await supertest(app).get(`/answers/${answer_id}`)
-    .expect(200)
-    .then((res)=>{
-        expect(res.text).toBe('Invalid Answer ID')
-    })
+        .expect(200)
+        .then((res)=>{
+            expect(res.text).toBe('Invalid Answer ID')
+        })
     
 })
 
 test('GET /answers/:answer_id VALID ANSWER',async () => {
 
-    var answer_id = 9998
+    const answer_id = 9998
     await supertest(app).get(`/answers/${answer_id}`)
-    .expect(200)
-    .then(async (res)=>{
-        var query_res = await dbo.collection(col_name_q).find({'Id':answer_id,'PostTypeId':2}).toArray()
-        var expected = query_res[0]
-        var recieved = res.body
+        .expect(200)
+        .then(async (res)=>{
+            const query_res = await dbo.collection(col_name_q).find({'Id':answer_id,'PostTypeId':2}).toArray()
+            const expected = query_res[0]
+            const recieved = res.body
 
-        compare(recieved,expected)
-    })
+            compare(recieved,expected)
+        })
 })
 
 /**
@@ -120,40 +120,40 @@ test('GET /answers/:answer_id VALID ANSWER',async () => {
  * 
  */
 test('POST /answers/:answer_id/accept NOT LOGGED IN', async () => {
-    var answer_id = 9998
+    const answer_id = 9998
     await supertest(app).post(`/answers/${answer_id}/accept`)
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Not Logged In')
-    })
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Not Logged In')
+        })
 })
 test('POST /answers/:answer_id/accept INVALID TOKEN', async () => {
-    var answer_id = 9998
+    const answer_id = 9998
     await supertest(app).post(`/answers/${answer_id}/accept`)
-    .set({'x-access-token':'nottoken'})
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid User')
-    })
+        .set({'x-access-token':'nottoken'})
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid User')
+        })
 })
 test('POST /answers/:answer_id/accept OWNER USER', async () => {
-    var answer_id = 9998
+    const answer_id = 9998
     await supertest(app).post(`/answers/${answer_id}/accept`)
-    .set({'x-access-token':'t2'})
-    .expect(200)
-    .then(async (res)=>{
+        .set({'x-access-token':'t2'})
+        .expect(200)
+        .then(async (res)=>{
         //console.log(res.text)
-        expect(res.text).toBe('Invalid Answer ID')
-    })
+            expect(res.text).toBe('Invalid Answer ID')
+        })
 })
 test('POST /answers/:answer_id/accept INVALID ANSWER', async () => {
-    var answer_id = 9998000
+    const answer_id = 9998000
     await supertest(app).post(`/answers/${answer_id}/accept`)
-    .set({'x-access-token':'t1'})
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid Answer ID')
-    })
+        .set({'x-access-token':'t1'})
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid Answer ID')
+        })
 })
 describe('Accept Answer with Invalid Parent Question',()=>{
     beforeEach(async ()=>{
@@ -161,13 +161,13 @@ describe('Accept Answer with Invalid Parent Question',()=>{
     })
 
     test('POST /answers/:answer_id/accept INVALID PARENT QUESTION', async () => {
-        var answer_id = 9998
+        const answer_id = 9998
         await supertest(app).post(`/answers/${answer_id}/accept`)
-        .set({'x-access-token':'t1'})
-        .expect(200)
-        .then(async (res)=>{
-            expect(res.text).toBe('Invalid Answer ID')
-        })
+            .set({'x-access-token':'t1'})
+            .expect(200)
+            .then(async (res)=>{
+                expect(res.text).toBe('Invalid Answer ID')
+            })
     })
 })
 describe('Accept Answer with Closed Parent Question',()=>{
@@ -178,13 +178,13 @@ describe('Accept Answer with Closed Parent Question',()=>{
         //console.log(q[0])
     })
     test('POST /answers/:answer_id/accept CLOSED PARENT QUESTION', async () => {
-        var answer_id = 9998
+        const answer_id = 9998
         await supertest(app).post(`/answers/${answer_id}/accept`)
-        .set({'x-access-token':'t1'})
-        .expect(200)
-        .then(async (res)=>{
-            expect(res.text).toBe('Question is already Closed')
-        })
+            .set({'x-access-token':'t1'})
+            .expect(200)
+            .then(async (res)=>{
+                expect(res.text).toBe('Question is already Closed')
+            })
     })
 })
 describe('Accept Answer with Parent Question Already Accepted One',()=>{
@@ -192,38 +192,38 @@ describe('Accept Answer with Parent Question Already Accepted One',()=>{
         await dbo.collection(col_name_q).updateOne({'PostTypeId':1,'Id':9999},{$set:{'AcceptedAnswerId':100000}})
     })
     test('POST /answers/:answer_id/accept ALREADY AN ACCEPTED ANSWER', async () => {
-        var answer_id = 9998
+        const answer_id = 9998
         await supertest(app).post(`/answers/${answer_id}/accept`)
-        .set({'x-access-token':'t1'})
-        .expect(200)
-        .then(async (res)=>{
-            expect(res.text).toBe('Contains An Already Accepted Answer,Undo that to Accept this one')
-        })
+            .set({'x-access-token':'t1'})
+            .expect(200)
+            .then(async (res)=>{
+                expect(res.text).toBe('Contains An Already Accepted Answer,Undo that to Accept this one')
+            })
     })    
 })
 test('POST /answers/:answer_id/accept', async () => {
     let expected = await dbo.collection(col_name_q).find({'PostTypeId':1,'Id':9999}).toArray()
     expected = expected[0]
 
-    var answer_id = 9998
+    const answer_id = 9998
     await supertest(app).post(`/answers/${answer_id}/accept`)
-    .set({'x-access-token':'t1'})
-    .expect(302)
-    .then(async (res)=>{
-        expect(res.headers.location).toBe(`/answers/${answer_id}`)
-        let recieved = await dbo.collection(col_name_q).find({'PostTypeId':1,'Id':9999}).toArray()
-        recieved = recieved[0]
+        .set({'x-access-token':'t1'})
+        .expect(302)
+        .then(async (res)=>{
+            expect(res.headers.location).toBe(`/answers/${answer_id}`)
+            let recieved = await dbo.collection(col_name_q).find({'PostTypeId':1,'Id':9999}).toArray()
+            recieved = recieved[0]
         
-        expect(recieved.Id).toStrictEqual(9999)
-        expect(recieved.AcceptedAnswerId).toStrictEqual(9998)
-        expect(recieved.PostTypeId).toBe(expected.PostTypeId)
-        expect(recieved.CreationDate).toBe(expected.CreationDate)
-        expect(recieved.Score).toBe(expected.Score)
-        expect(recieved.OwnerUserId).toBe(expected.OwnerUserId)
-        expect(recieved.Title).toBe(expected.Title)
-        expect(recieved.Body).toBe(expected.Body)
-        expect(recieved.Tags).toEqual(expected.Tags)
-        expect(recieved.ClosedDate).toBe(expected.ClosedDate)
+            expect(recieved.Id).toStrictEqual(9999)
+            expect(recieved.AcceptedAnswerId).toStrictEqual(9998)
+            expect(recieved.PostTypeId).toBe(expected.PostTypeId)
+            expect(recieved.CreationDate).toBe(expected.CreationDate)
+            expect(recieved.Score).toBe(expected.Score)
+            expect(recieved.OwnerUserId).toBe(expected.OwnerUserId)
+            expect(recieved.Title).toBe(expected.Title)
+            expect(recieved.Body).toBe(expected.Body)
+            expect(recieved.Tags).toEqual(expected.Tags)
+            expect(recieved.ClosedDate).toBe(expected.ClosedDate)
         })
 })
 
@@ -233,41 +233,41 @@ test('POST /answers/:answer_id/accept', async () => {
  * ACCEPT ANSWER UNDO
  * 
  */
- test('POST /answers/:answer_id/accept/undo  NOT LOGGED IN', async () => {
-    var answer_id = 9998
+test('POST /answers/:answer_id/accept/undo  NOT LOGGED IN', async () => {
+    const answer_id = 9998
     await supertest(app).post(`/answers/${answer_id}/accept/undo`)
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Not Logged In')
-    })
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Not Logged In')
+        })
 })
 test('POST /answers/:answer_id/accept/undo INVALID TOKEN', async () => {
-    var answer_id = 9998
+    const answer_id = 9998
     await supertest(app).post(`/answers/${answer_id}/accept/undo`)
-    .set({'x-access-token':'nottoken'})
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid User')
-    })
+        .set({'x-access-token':'nottoken'})
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid User')
+        })
 })
 test('POST /answers/:answer_id/accept/undo  OWNER USER', async () => {
-    var answer_id = 9998
+    const answer_id = 9998
     await supertest(app).post(`/answers/${answer_id}/accept/undo`)
-    .set({'x-access-token':'t2'})
-    .expect(200)
-    .then(async (res)=>{
+        .set({'x-access-token':'t2'})
+        .expect(200)
+        .then(async (res)=>{
         //console.log(res.text)
-        expect(res.text).toBe('Invalid Question ID')
-    })
+            expect(res.text).toBe('Invalid Question ID')
+        })
 })
 test('POST /answers/:answer_id/accept/undo INVALID ANSWER', async () => {
-    var answer_id = 9998000
+    const answer_id = 9998000
     await supertest(app).post(`/answers/${answer_id}/accept/undo`)
-    .set({'x-access-token':'t1'})
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid Answer ID')
-    })
+        .set({'x-access-token':'t1'})
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid Answer ID')
+        })
 })
 describe('Undo Accept Answer with Invalid Parent Question',()=>{
     beforeEach(async ()=>{
@@ -275,13 +275,13 @@ describe('Undo Accept Answer with Invalid Parent Question',()=>{
     })
 
     test('POST /answers/:answer_id/accept/undo INVALID PARENT QUESTION', async () => {
-        var answer_id = 9998
+        const answer_id = 9998
         await supertest(app).post(`/answers/${answer_id}/accept/undo`)
-        .set({'x-access-token':'t1'})
-        .expect(200)
-        .then(async (res)=>{
-            expect(res.text).toBe('Invalid Question ID')
-        })
+            .set({'x-access-token':'t1'})
+            .expect(200)
+            .then(async (res)=>{
+                expect(res.text).toBe('Invalid Question ID')
+            })
     })
 })
 describe('Undo Accept Answer with Closed Parent Question',()=>{
@@ -292,13 +292,13 @@ describe('Undo Accept Answer with Closed Parent Question',()=>{
         //console.log(q[0])
     })
     test('POST /answers/:answer_id/accept/undo  CLOSED PARENT QUESTION', async () => {
-        var answer_id = 9998
+        const answer_id = 9998
         await supertest(app).post(`/answers/${answer_id}/accept/undo`)
-        .set({'x-access-token':'t1'})
-        .expect(200)
-        .then(async (res)=>{
-            expect(res.text).toBe('Question is in Closed State')
-        })
+            .set({'x-access-token':'t1'})
+            .expect(200)
+            .then(async (res)=>{
+                expect(res.text).toBe('Question is in Closed State')
+            })
     })
 })
 describe('Undo Accept Answer But This is Not the Acceepted Answer',()=>{
@@ -306,23 +306,23 @@ describe('Undo Accept Answer But This is Not the Acceepted Answer',()=>{
         await dbo.collection(col_name_q).updateOne({'PostTypeId':1,'Id':9999},{$set:{'AcceptedAnswerId':9000}})
     })
     test('POST /answers/:answer_id/accept/undo THIS IS NOT AN ACCEPTED ANSWER', async () => {
-        var answer_id = 9998
+        const answer_id = 9998
         await supertest(app).post(`/answers/${answer_id}/accept/undo`)
-        .set({'x-access-token':'t1'})
-        .expect(200)
-        .then(async (res)=>{
-            expect(res.text).toBe('This is not an accepted answer')
-        })
+            .set({'x-access-token':'t1'})
+            .expect(200)
+            .then(async (res)=>{
+                expect(res.text).toBe('This is not an accepted answer')
+            })
     })    
 })
 test('POST /answers/:answer_id/accept/undo THERE IS NOT AN ACCEPTED ANSWER', async () => {
-    var answer_id = 9998
+    const answer_id = 9998
     await supertest(app).post(`/answers/${answer_id}/accept/undo`)
-    .set({'x-access-token':'t1'})
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Contains No Accepted Answer')
-    })
+        .set({'x-access-token':'t1'})
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Contains No Accepted Answer')
+        })
 })
 describe('UNDO AN ACCEPTED ANSWER',()=>{
     beforeEach(async ()=>{
@@ -332,25 +332,25 @@ describe('UNDO AN ACCEPTED ANSWER',()=>{
         let expected = await dbo.collection(col_name_q).find({'PostTypeId':1,'Id':9999}).toArray()
         expected = expected[0]    
         
-        var answer_id = 9998
+        const answer_id = 9998
         await supertest(app).post(`/answers/${answer_id}/accept/undo`)
-        .set({'x-access-token':'t1'})
-        .expect(302)
-        .then(async (res)=>{
-            expect(res.headers.location).toBe(`/answers/${answer_id}`)
-            let recieved = await dbo.collection(col_name_q).find({'PostTypeId':1,'Id':9999}).toArray()
-            recieved = recieved[0]
+            .set({'x-access-token':'t1'})
+            .expect(302)
+            .then(async (res)=>{
+                expect(res.headers.location).toBe(`/answers/${answer_id}`)
+                let recieved = await dbo.collection(col_name_q).find({'PostTypeId':1,'Id':9999}).toArray()
+                recieved = recieved[0]
             
-            expect(recieved.Id).toStrictEqual(9999)
-            expect(recieved.AcceptedAnswerId).toStrictEqual(-1)
-            expect(recieved.PostTypeId).toBe(expected.PostTypeId)
-            expect(recieved.CreationDate).toBe(expected.CreationDate)
-            expect(recieved.Score).toBe(expected.Score)
-            expect(recieved.OwnerUserId).toBe(expected.OwnerUserId)
-            expect(recieved.Title).toBe(expected.Title)
-            expect(recieved.Body).toBe(expected.Body)
-            expect(recieved.Tags).toEqual(expected.Tags)
-            expect(recieved.ClosedDate).toBe(expected.ClosedDate)
-        })
+                expect(recieved.Id).toStrictEqual(9999)
+                expect(recieved.AcceptedAnswerId).toStrictEqual(-1)
+                expect(recieved.PostTypeId).toBe(expected.PostTypeId)
+                expect(recieved.CreationDate).toBe(expected.CreationDate)
+                expect(recieved.Score).toBe(expected.Score)
+                expect(recieved.OwnerUserId).toBe(expected.OwnerUserId)
+                expect(recieved.Title).toBe(expected.Title)
+                expect(recieved.Body).toBe(expected.Body)
+                expect(recieved.Tags).toEqual(expected.Tags)
+                expect(recieved.ClosedDate).toBe(expected.ClosedDate)
+            })
     })
 })

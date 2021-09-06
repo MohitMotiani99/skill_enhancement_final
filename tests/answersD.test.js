@@ -1,13 +1,13 @@
 const app = require('../controllers/answers')
 const supertest = require('supertest')
-var MongoClient = require('mongodb').MongoClient
+const MongoClient = require('mongodb').MongoClient
 
 
-var url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
-var db_name = 'skillenhancement'
-var col_name_q = 'questionAnswer'
-var col_name_u = 'users'
-var col_name_n = 'notifications'
+const url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
+const db_name = 'skillenhancement'
+const col_name_q = 'questionAnswer'
+const col_name_u = 'users'
+const col_name_n = 'notifications'
 
 
 let connection;
@@ -93,9 +93,8 @@ afterEach(async ()=>{
 })
 
 
-
 test('POST /answers/:answer_id/delete NOT LOGGED IN', async () => {
-    var answer_id = 9998
+    const answer_id = 9998
     await supertest(app)
         .post(`/answers/${answer_id}/delete`)
         .set({'content-type':'application/json'})
@@ -108,7 +107,7 @@ test('POST /answers/:answer_id/delete NOT LOGGED IN', async () => {
 
 })
 test('POST /answers/:answer_id/delete INVALID TOKEN', async () => {
-    var answer_id = 9998
+    const answer_id = 9998
     await supertest(app)
         .post(`/answers/${answer_id}/delete`)
         .set({'content-type':'application/json'})
@@ -123,7 +122,7 @@ test('POST /answers/:answer_id/delete INVALID TOKEN', async () => {
 
 })
 test('POST /answers/:answer_id/delete INVALID ANSWER', async () => {
-    var answer_id = 9998000
+    const answer_id = 9998000
     await supertest(app)
         .post(`/answers/${answer_id}/delete`)
         .set({'content-type':'application/json'})
@@ -138,7 +137,7 @@ test('POST /answers/:answer_id/delete INVALID ANSWER', async () => {
 
 })
 test('POST /answers/:answer_id/delete OWNER USER', async () => {
-    var answer_id = 9998
+    const answer_id = 9998
     await supertest(app)
         .post(`/answers/${answer_id}/delete`)
         .set({'content-type':'application/json'})
@@ -157,7 +156,7 @@ describe('Delete a Answer With Invalid Parent Question',()=>{
         await dbo.collection(col_name_q).deleteOne({'Id':9999,'PostTypeId':1})
     })
     test('POST /answers/:answer_id/delete INVALID PARENT QUESTION', async () => {
-        var answer_id = 9998
+        const answer_id = 9998
         await supertest(app)
             .post(`/answers/${answer_id}/delete`)
             .set({'content-type':'application/json'})
@@ -174,7 +173,7 @@ describe('Delete an Accepted Answer',()=>{
         await dbo.collection(col_name_q).updateOne({'Id':9999,'PostTypeId':1},{$set:{'AcceptedAnswerId':9998}})
     })
     test('POST /answers/:answer_id/delete ACCEPTED ANSWER', async () => {
-        var answer_id = 9998
+        const answer_id = 9998
         await supertest(app)
             .post(`/answers/${answer_id}/delete`)
             .set({'content-type':'application/json'})
@@ -187,7 +186,7 @@ describe('Delete an Accepted Answer',()=>{
     })  
 })
 test('POST /answers/:answer_id/delete', async () => {
-    var answer_id = 9998
+    const answer_id = 9998
     await supertest(app)
         .post(`/answers/${answer_id}/delete`)
         .set({'content-type':'application/json'})

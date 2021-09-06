@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const app = require('../controllers/users')
 
 app.listen(5050,()=>{

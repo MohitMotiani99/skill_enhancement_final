@@ -1,13 +1,13 @@
 const app = require('../controllers/questions')
 const supertest = require('supertest')
-var MongoClient = require('mongodb').MongoClient
+const MongoClient = require('mongodb').MongoClient
 
 
-var url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
-var db_name = 'skillenhancement'
-var col_name_q = 'questionAnswer'
-var col_name_u = 'users'
-var col_name_n = 'notifications'
+const url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
+const db_name = 'skillenhancement'
+const col_name_q = 'questionAnswer'
+const col_name_u = 'users'
+const col_name_n = 'notifications'
 
 
 let connection;
@@ -90,9 +90,8 @@ afterEach(async ()=>{
 })
 
 
-
 test('POST /questions/:question_id/delete NOT LOGGED IN', async () => {
-    var question_id = 9999
+    const question_id = 9999
     await supertest(app)
         .post(`/questions/${question_id}/delete`)
         .set({'content-type':'application/json'})
@@ -105,7 +104,7 @@ test('POST /questions/:question_id/delete NOT LOGGED IN', async () => {
 
 })
 test('POST /questions/:question_id/delete INVALID TOKEN', async () => {
-    var question_id = 9999
+    const question_id = 9999
     await supertest(app)
         .post(`/questions/${question_id}/delete`)
         .set({'content-type':'application/json'})
@@ -120,7 +119,7 @@ test('POST /questions/:question_id/delete INVALID TOKEN', async () => {
 
 })
 test('POST /questions/:question_id/delete INVALID QUESTION', async () => {
-    var question_id = 9999000
+    const question_id = 9999000
     await supertest(app)
         .post(`/questions/${question_id}/delete`)
         .set({'content-type':'application/json'})
@@ -135,7 +134,7 @@ test('POST /questions/:question_id/delete INVALID QUESTION', async () => {
 
 })
 test('POST /questions/:question_id/delete OWNER USER', async () => {
-    var question_id = 9999
+    const question_id = 9999
     await supertest(app)
         .post(`/questions/${question_id}/delete`)
         .set({'content-type':'application/json'})
@@ -151,7 +150,7 @@ test('POST /questions/:question_id/delete OWNER USER', async () => {
 })
 
 test('POST /questions/:question_id/delete', async () => {
-    var question_id = 9999
+    const question_id = 9999
     await supertest(app)
         .post(`/questions/${question_id}/delete`)
         .set({'content-type':'application/json'})

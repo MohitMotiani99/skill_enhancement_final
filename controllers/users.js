@@ -1,7 +1,8 @@
+/* eslint-disable no-var */
 var express = require('express')
 var bodyParser = require('body-parser')
 var express=require('express')
-var app = express()
+const app = express()
 var bodyParser = require("body-parser")
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
@@ -18,12 +19,12 @@ app.use(bodyParser.urlencoded({
 //     console.log(' Server Started')
 // })
 
-var MongoClient = require('mongodb').MongoClient
+const MongoClient = require('mongodb').MongoClient
 //var url = 'mongodb://127.0.0.1:27017'
-var url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
-var db_name = 'skillenhancement'
-var col_name_q = 'questionAnswer'
-var col_name_u = 'users'
+const url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
+const db_name = 'skillenhancement'
+const col_name_q = 'questionAnswer'
+const col_name_u = 'users'
 
 //var validate_user = require('./authorize')
 const { request } = require('express')
@@ -33,8 +34,8 @@ MongoClient.connect(url,(err,db)=>{
     dbo = db.db(db_name)
 
 
-    var u_counter;
-    var initial_u_counter;
+    let u_counter;
+    let initial_u_counter;
 
     dbo.collection('globals').find({}).toArray((err,result)=>{
 
@@ -42,246 +43,243 @@ MongoClient.connect(url,(err,db)=>{
         initial_u_counter = u_counter
 
 
-    function cleanup(){
-        dbo.collection('globals').updateOne({'userid':initial_u_counter},{$set:{'userid':u_counter}},(err,result)=>{
+        function cleanup(){
+            dbo.collection('globals').updateOne({'userid':initial_u_counter},{$set:{'userid':u_counter}},(err,result)=>{
             //console.log('Server Closed')
-            process.exit(1)
+                process.exit(1)
 
-        })
-    }
+            })
+        }
 
-    process.on('exit',cleanup)
-    process.on('SIGINT',cleanup)
+        process.on('exit',cleanup)
+        process.on('SIGINT',cleanup)
 
-    //get complete user details from id
-    app.get('/users/:user_id',verifyAuth, async (req,res)=>{
+        //get complete user details from id
+        app.get('/users/:user_id',verifyAuth, async (req,res)=>{
         
-        //fetch user id
-        var user_id = String(req.params.user_id)
-        console.log(user_id)
-        //find the user is database
-        dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
-            if(result.length == 1)
+            //fetch user id
+            const user_id = String(req.params.user_id)
+            //find the user is database
+            dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
+                if(result.length == 1)
                 {
                     res.send(result[0])
                 }
-            else
+                else
                 {
                     res.send('Invalid User')
                 }
+            })
         })
-    })
 
 
-    //post complete user details 
-    app.post('/api/signup', (req,res)=>{
+        //post complete user details 
+        app.post('/api/signup', (req,res)=>{
 
-        var p = req.body.password
-        //var pc = req.body.passwordConformation
-        var Id = u_counter 
-        var un = req.body.username 
-        var e = req.body.email 
-        var g = req.body.gender 
+            const p = req.body.password
+            //var pc = req.body.passwordConformation
+            const Id = u_counter 
+            const un = req.body.username 
+            const e = req.body.email 
+            const g = req.body.gender 
 
-        dbo.collection('user').find({'username':un}).toArray((err,result)=>{
+            dbo.collection('user').find({'username':un}).toArray((err,result)=>{
             // console.log(result.length)
                 if (result.length==0)
                 {
-                var u_obj={
-                    Id:Number(u_counter),
-                    username:un,
-                    token:"abc",
-                    displayName:"None",
-                    firstName:"None",
-                    lastName:"None",
-                    password:"None",
-                    grade:0,
-                    email:e,
-                    gender:g,
-                    socialLink:'None',
-                    image:"https://secure.gravatar.com/avatar/6123d8d55f9cc322bc7ef0f0?s=90&d=ide...",
-                    CreationDate:Date()
-                }
-
-                dbo.collection('users').insertOne(u_obj,(err,result)=>{
-                    if(err) throw err
-                    res.send("User " +un +" is added succesfully")
-                    u_counter+=1;
-                })                    
-            }
-            else{
-                res.send('Username already Exists')
-            }
-        })
-    })
-
-    // edit user profile
-    app.patch('/users/:user_id/editprofile', verifyAuth, (req,res)=>{
-
-        //only owner
-        var user_id = String(req.params.user_id)
-        //var p = req.body.password
-        //var pc = req.body.passwordConformation
-        //var e = req.body.image
-        var g = (req.body.gender)
-        var s = (req.body.SocialLink)
-        dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
-            if(result.length==1 ){
-                dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
-                    if (result.length==1)
-                    {
-                        var u_obj={
-                            //password:(p==undefined)?result[0].password:p,
-                            gender:g,
-                            SocialLink:s
-                        }
-                        dbo.collection('users').updateOne({"Id":String(user_id)},{$set:u_obj},(err,result)=>{
-                            res.redirect(`/users/${user_id}`)
-        
-                        })
-                      
+                    const u_obj={
+                        Id:Number(u_counter),
+                        username:un,
+                        token:"abc",
+                        displayName:"None",
+                        firstName:"None",
+                        lastName:"None",
+                        password:"None",
+                        grade:0,
+                        email:e,
+                        gender:g,
+                        socialLink:'None',
+                        image:"https://secure.gravatar.com/avatar/6123d8d55f9cc322bc7ef0f0?s=90&d=ide...",
+                        CreationDate:Date()
                     }
-                })
-            }
-            else res.send('Invalid User')
+
+                    dbo.collection('users').insertOne(u_obj,(err,result)=>{
+                        if(err) throw err
+                        res.send("User " +un +" is added succesfully")
+                        u_counter+=1;
+                    })                    
+                }
+                else{
+                    res.send('Username already Exists')
+                }
+            })
+        })
+
+        // edit user profile
+        app.patch('/users/:user_id/editprofile', verifyAuth, (req,res)=>{
+
+            //only owner
+            const user_id = String(req.params.user_id)
+            //var p = req.body.password
+            //var pc = req.body.passwordConformation
+            //var e = req.body.image
+            const g = (req.body.gender)
+            const s = (req.body.SocialLink)
+            dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
+                if(result.length==1){
+                    dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
+                        if (result.length==1)
+                        {
+                            const u_obj={
+                            //password:(p==undefined)?result[0].password:p,
+                                gender:g,
+                                SocialLink:s
+                            }
+                            dbo.collection('users').updateOne({"Id":String(user_id)},{$set:u_obj},(err,result)=>{
+                                res.redirect(`/users/${user_id}`)
+        
+                            })
+                      
+                        }
+                    })
+                }
+                else res.send('Invalid User')
+            })
+        
         })
         
-    })
-        
 
-     //delete user profile
-    app.delete('/users/:user_id/delete', verifyAuth, (req,res)=>{
-        var user_id = String(req.params.user_id)
+        //delete user profile
+        app.delete('/users/:user_id/delete', verifyAuth, (req,res)=>{
+            const user_id = String(req.params.user_id)
 
-        dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
+            dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
 
                 if (result.length==1)
                 {
-                    var u = result[0]
+                    const u = result[0]
                     dbo.collection('users').deleteOne({'Id':user_id},(err,result)=>{
                         res.send('User: '+u.username +' Deleted')
                     })
                 }
                 else res.send('Invalid User')
             })
-    })   
+        })   
 
 
-    //get all the questions asked by the user
-    app.get('/users/:user_id/questions', (req,res)=>{
-        var user_id = String(req.params.user_id)
+        //get all the questions asked by the user
+        app.get('/users/:user_id/questions', (req,res)=>{
+            const user_id = String(req.params.user_id)
 
-        dbo.collection('users').find({Id:user_id}).toArray((err,result)=>{
-            if(result.length==1){
-                dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':1}).toArray((err,result)=>{
-                    if(result.length >= 1)
-                        res.send(result)                            
-                    else
-                        res.send('You have not asked any questions yet')
-                })
-            }
-            else res.send('Invalid User')
-        })
+            dbo.collection('users').find({Id:user_id}).toArray((err,result)=>{
+                if(result.length==1){
+                    dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':1}).toArray((err,result)=>{
+                        if(result.length >= 1)
+                            res.send(result)                            
+                        else
+                            res.send('You have not asked any questions yet')
+                    })
+                }
+                else res.send('Invalid User')
+            })
         
-    })
-
-
-    //get all the comments made by the user
-    app.get('/users/:user_id/comments', (req,res)=>{
-        var user_id = String(req.params.user_id)
-
-        dbo.collection('users').find({Id:user_id}).toArray((err,result)=>{
-            if(result.length==1){
-
-                dbo.collection('comments').find({'UserId':user_id}).toArray((err,result)=>{
-                    if(result.length != 0)
-                        res.send(result)
-                    else if (result.length == 0)
-                       res.send('You have not commented any posts yet')
-                })
-            }
-            else res.send('Invalid User')
         })
 
+
+        //get all the comments made by the user
+        app.get('/users/:user_id/comments', (req,res)=>{
+            const user_id = String(req.params.user_id)
+
+            dbo.collection('users').find({Id:user_id}).toArray((err,result)=>{
+                if(result.length==1){
+
+                    dbo.collection('comments').find({'UserId':user_id}).toArray((err,result)=>{
+                        if(result.length != 0)
+                            res.send(result)
+                        else if (result.length == 0)
+                            res.send('You have not commented any posts yet')
+                    })
+                }
+                else res.send('Invalid User')
+            })
+
         
-    })
-
-    //get total number of questions posted by the user
-    app.get('/users/:user_id/totalquestions', (req,res)=>{
-        var user_id = String(req.params.user_id)
-
-        dbo.collection('users').find({Id:user_id}).toArray((err,result)=>{
-            if(result.length==1){
-                dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':1}).toArray((err,result)=>{
-                    res.send(JSON.stringify(result.length))
-                })
-            }
-            else res.send('Invalid User ID')
-
         })
 
+        //get total number of questions posted by the user
+        app.get('/users/:user_id/totalquestions', (req,res)=>{
+            const user_id = String(req.params.user_id)
+
+            dbo.collection('users').find({Id:user_id}).toArray((err,result)=>{
+                if(result.length==1){
+                    dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':1}).toArray((err,result)=>{
+                        res.send(JSON.stringify(result.length))
+                    })
+                }
+                else res.send('Invalid User ID')
+
+            })
+
         
-    })
+        })
 
-    //get total number of comments posted by the user
-    app.get('/users/:user_id/totalcomments', (req,res)=>{
-        var user_id = String(req.params.user_id)
+        //get total number of comments posted by the user
+        app.get('/users/:user_id/totalcomments', (req,res)=>{
+            const user_id = String(req.params.user_id)
 
-        dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
-            if(result.length==1){
-                dbo.collection('comments').find({'UserId':user_id}).toArray((err,result)=>{
-                    res.send(JSON.stringify(result.length))
-                })
-            }
-            else res.send('Invalid User ID')
+            dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
+                if(result.length==1){
+                    dbo.collection('comments').find({'UserId':user_id}).toArray((err,result)=>{
+                        res.send(JSON.stringify(result.length))
+                    })
+                }
+                else res.send('Invalid User ID')
 
+            })
+        
         })
         
-    })
+        //get total number of answered posted by the user
+        app.get('/users/:user_id/totalanswers', (req,res)=>{
+            const user_id = String(req.params.user_id)
+            dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
+                if(result.length==1){
+                    dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':2}).toArray((err,result)=>{
+                        res.send(JSON.stringify(result.length))
+                    })
+                }
+                else res.send('Invalid User ID')
+            })
         
-    //get total number of answered posted by the user
-    app.get('/users/:user_id/totalanswers', (req,res)=>{
-        var user_id = String(req.params.user_id)
-        dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
-            if(result.length==1){
-                dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':2}).toArray((err,result)=>{
-                    res.send(JSON.stringify(result.length))
-                })
-            }
-            else res.send('Invalid User ID')
         })
-        
-    })
-        
-        
     
 
-    //get all the answers posted by the user
-    app.get('/users/:user_id/answers', (req,res)=>{
-        var user_id = String(req.params.user_id)
-        dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
-            if(result.length==1){
-                dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':2}).toArray((err,result)=>{
-                    if(result.length!=0)
-                        res.send(result)
-                    else
-                        res.send('You have not answered any quesions yet')
-                })
-            }
-            else res.send('Invalid User')
-        })
+        //get all the answers posted by the user
+        app.get('/users/:user_id/answers', (req,res)=>{
+            const user_id = String(req.params.user_id)
+            dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
+                if(result.length==1){
+                    dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':2}).toArray((err,result)=>{
+                        if(result.length!=0)
+                            res.send(result)
+                        else
+                            res.send('You have not answered any quesions yet')
+                    })
+                }
+                else res.send('Invalid User')
+            })
         
-    })
-
-    app.get('/users' ,(req,res)=>{
-        dbo.collection('users').find().toArray((err,result)=>{
-            if(err) throw err
-            if(result.length >= 1)
-                res.send(result)                    
-            else
-                res.send('No users to display')
         })
-    })
+
+        app.get('/users' ,(req,res)=>{
+            dbo.collection('users').find().toArray((err,result)=>{
+                if(err) throw err
+                if(result.length >= 1)
+                    res.send(result)                    
+                else
+                    res.send('No users to display')
+            })
+        })
 
     })
 })

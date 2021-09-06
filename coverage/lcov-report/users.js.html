@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">63.78% </span>
+                <span class="strong">64.29% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>81/127</span>
+                <span class='fraction'>81/126</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">65.32% </span>
+                <span class="strong">65.85% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>81/124</span>
+                <span class='fraction'>81/123</span>
             </div>
         
             
@@ -345,9 +345,8 @@
 <a name='L286'></a><a href='#L286'>286</a>
 <a name='L287'></a><a href='#L287'>287</a>
 <a name='L288'></a><a href='#L288'>288</a>
-<a name='L289'></a><a href='#L289'>289</a>
-<a name='L290'></a><a href='#L290'>290</a>
-<a name='L291'></a><a href='#L291'>291</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L289'></a><a href='#L289'>289</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -406,7 +405,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -604,8 +602,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -637,10 +633,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var express = require('express')
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disable no-var */
+var express = require('express')
 var bodyParser = require('body-parser')
 var express=require('express')
-var app = express()
+const app = express()
 var bodyParser = require("body-parser")
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
@@ -657,12 +654,12 @@ app.use(bodyParser.urlencoded({
 //     console.log(' Server Started')
 // })
 &nbsp;
-var MongoClient = require('mongodb').MongoClient
+const MongoClient = require('mongodb').MongoClient
 //var url = 'mongodb://127.0.0.1:27017'
-var url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&amp;w=majority'
-var db_name = 'skillenhancement'
-var col_name_q = 'questionAnswer'
-var col_name_u = 'users'
+const url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&amp;w=majority'
+const db_name = 'skillenhancement'
+const col_name_q = 'questionAnswer'
+const col_name_u = 'users'
 &nbsp;
 //var validate_user = require('./authorize')
 const { request } = require('express')
@@ -672,8 +669,8 @@ MongoClient.connect(url,(err,db)=&gt;{
     dbo = db.db(db_name)
 &nbsp;
 &nbsp;
-    var u_counter;
-    var initial_u_counter;
+    let u_counter;
+    let initial_u_counter;
 &nbsp;
     dbo.collection('globals').find({}).toArray((err,result)=&gt;{
 &nbsp;
@@ -681,246 +678,243 @@ MongoClient.connect(url,(err,db)=&gt;{
         initial_u_counter = u_counter
 &nbsp;
 &nbsp;
-    function <span class="fstat-no" title="function not covered" >cleanup(</span>){
-<span class="cstat-no" title="statement not covered" >        dbo.collection('globals').updateOne({'userid':initial_u_counter},{$set:{'userid':u_counter}},<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
+        function <span class="fstat-no" title="function not covered" >cleanup(</span>){
+<span class="cstat-no" title="statement not covered" >            dbo.collection('globals').updateOne({'userid':initial_u_counter},{$set:{'userid':u_counter}},<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
             //console.log('Server Closed')
-<span class="cstat-no" title="statement not covered" >            process.exit(1)</span>
+<span class="cstat-no" title="statement not covered" >                process.exit(1)</span>
 &nbsp;
-        })
-    }
+            })
+        }
 &nbsp;
-    process.on('exit',cleanup)
-    process.on('SIGINT',cleanup)
+        process.on('exit',cleanup)
+        process.on('SIGINT',cleanup)
 &nbsp;
-    //get complete user details from id
-    app.get('/users/:user_id',verifyAuth, <span class="fstat-no" title="function not covered" >as</span>ync (req,res)=&gt;{
+        //get complete user details from id
+        app.get('/users/:user_id',verifyAuth, <span class="fstat-no" title="function not covered" >as</span>ync (req,res)=&gt;{
         
-        //fetch user id
-        var user_id = <span class="cstat-no" title="statement not covered" >String(req.params.user_id)</span>
-<span class="cstat-no" title="statement not covered" >        console.log(user_id)</span>
-        //find the user is database
-<span class="cstat-no" title="statement not covered" >        dbo.collection('users').find({'Id':user_id}).toArray(<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
-<span class="cstat-no" title="statement not covered" >            if(result.length == 1)</span>
+            //fetch user id
+            const user_id = <span class="cstat-no" title="statement not covered" >String(req.params.user_id)</span>
+            //find the user is database
+<span class="cstat-no" title="statement not covered" >            dbo.collection('users').find({'Id':user_id}).toArray(<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
+<span class="cstat-no" title="statement not covered" >                if(result.length == 1)</span>
                 {
 <span class="cstat-no" title="statement not covered" >                    res.send(result[0])</span>
                 }
-            else
+                else
                 {
 <span class="cstat-no" title="statement not covered" >                    res.send('Invalid User')</span>
                 }
+            })
         })
-    })
 &nbsp;
 &nbsp;
-    //post complete user details 
-    app.post('/api/signup', <span class="fstat-no" title="function not covered" >(r</span>eq,res)=&gt;{
+        //post complete user details 
+        app.post('/api/signup', <span class="fstat-no" title="function not covered" >(r</span>eq,res)=&gt;{
 &nbsp;
-        var p = <span class="cstat-no" title="statement not covered" >req.body.password</span>
-        //var pc = req.body.passwordConformation
-        var Id = <span class="cstat-no" title="statement not covered" >u_counter </span>
-        var un = <span class="cstat-no" title="statement not covered" >req.body.username </span>
-        var e = <span class="cstat-no" title="statement not covered" >req.body.email </span>
-        var g = <span class="cstat-no" title="statement not covered" >req.body.gender </span>
+            const p = <span class="cstat-no" title="statement not covered" >req.body.password</span>
+            //var pc = req.body.passwordConformation
+            const Id = <span class="cstat-no" title="statement not covered" >u_counter </span>
+            const un = <span class="cstat-no" title="statement not covered" >req.body.username </span>
+            const e = <span class="cstat-no" title="statement not covered" >req.body.email </span>
+            const g = <span class="cstat-no" title="statement not covered" >req.body.gender </span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        dbo.collection('user').find({'username':un}).toArray(<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
+<span class="cstat-no" title="statement not covered" >            dbo.collection('user').find({'username':un}).toArray(<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
             // console.log(result.length)
 <span class="cstat-no" title="statement not covered" >                if (result.length==0)</span>
                 {
-                var u_obj=<span class="cstat-no" title="statement not covered" >{</span>
-                    Id:Number(u_counter),
-                    username:un,
-                    token:"abc",
-                    displayName:"None",
-                    firstName:"None",
-                    lastName:"None",
-                    password:"None",
-                    grade:0,
-                    email:e,
-                    gender:g,
-                    socialLink:'None',
-                    image:"https://secure.gravatar.com/avatar/6123d8d55f9cc322bc7ef0f0?s=90&amp;d=ide...",
-                    CreationDate:Date()
-                }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                dbo.collection('users').insertOne(u_obj,<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
-<span class="cstat-no" title="statement not covered" >                    if(err) <span class="cstat-no" title="statement not covered" >throw err</span></span>
-<span class="cstat-no" title="statement not covered" >                    res.send("User " +un +" is added succesfully")</span>
-<span class="cstat-no" title="statement not covered" >                    u_counter+=1;</span>
-                })                    
-            }
-            else{
-<span class="cstat-no" title="statement not covered" >                res.send('Username already Exists')</span>
-            }
-        })
-    })
-&nbsp;
-    // edit user profile
-    app.patch('/users/:user_id/editprofile', verifyAuth, <span class="fstat-no" title="function not covered" >(r</span>eq,res)=&gt;{
-&nbsp;
-        //only owner
-        var user_id = <span class="cstat-no" title="statement not covered" >String(req.params.user_id)</span>
-        //var p = req.body.password
-        //var pc = req.body.passwordConformation
-        //var e = req.body.image
-        var g = (<span class="cstat-no" title="statement not covered" >req.body.gender)</span>
-        var s = (<span class="cstat-no" title="statement not covered" >req.body.SocialLink)</span>
-<span class="cstat-no" title="statement not covered" >        dbo.collection('users').find({'Id':user_id}).toArray(<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
-<span class="cstat-no" title="statement not covered" >            if(result.length==1 ){</span>
-<span class="cstat-no" title="statement not covered" >                dbo.collection('users').find({'Id':user_id}).toArray(<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
-<span class="cstat-no" title="statement not covered" >                    if (result.length==1)</span>
-                    {
-                        var u_obj=<span class="cstat-no" title="statement not covered" >{</span>
-                            //password:(p==undefined)?result[0].password:p,
-                            gender:g,
-                            SocialLink:s
-                        }
-<span class="cstat-no" title="statement not covered" >                        dbo.collection('users').updateOne({"Id":String(user_id)},{$set:u_obj},<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
-<span class="cstat-no" title="statement not covered" >                            res.redirect(`/users/${user_id}`)</span>
-        
-                        })
-                      
+                    const u_obj=<span class="cstat-no" title="statement not covered" >{</span>
+                        Id:Number(u_counter),
+                        username:un,
+                        token:"abc",
+                        displayName:"None",
+                        firstName:"None",
+                        lastName:"None",
+                        password:"None",
+                        grade:0,
+                        email:e,
+                        gender:g,
+                        socialLink:'None',
+                        image:"https://secure.gravatar.com/avatar/6123d8d55f9cc322bc7ef0f0?s=90&amp;d=ide...",
+                        CreationDate:Date()
                     }
-                })
-            }
-            else <span class="cstat-no" title="statement not covered" >res.send('Invalid User')</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    dbo.collection('users').insertOne(u_obj,<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
+<span class="cstat-no" title="statement not covered" >                        if(err) <span class="cstat-no" title="statement not covered" >throw err</span></span>
+<span class="cstat-no" title="statement not covered" >                        res.send("User " +un +" is added succesfully")</span>
+<span class="cstat-no" title="statement not covered" >                        u_counter+=1;</span>
+                    })                    
+                }
+                else{
+<span class="cstat-no" title="statement not covered" >                    res.send('Username already Exists')</span>
+                }
+            })
+        })
+&nbsp;
+        // edit user profile
+        app.patch('/users/:user_id/editprofile', verifyAuth, <span class="fstat-no" title="function not covered" >(r</span>eq,res)=&gt;{
+&nbsp;
+            //only owner
+            const user_id = <span class="cstat-no" title="statement not covered" >String(req.params.user_id)</span>
+            //var p = req.body.password
+            //var pc = req.body.passwordConformation
+            //var e = req.body.image
+            const g = (<span class="cstat-no" title="statement not covered" >req.body.gender)</span>
+            const s = (<span class="cstat-no" title="statement not covered" >req.body.SocialLink)</span>
+<span class="cstat-no" title="statement not covered" >            dbo.collection('users').find({'Id':user_id}).toArray(<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
+<span class="cstat-no" title="statement not covered" >                if(result.length==1){</span>
+<span class="cstat-no" title="statement not covered" >                    dbo.collection('users').find({'Id':user_id}).toArray(<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
+<span class="cstat-no" title="statement not covered" >                        if (result.length==1)</span>
+                        {
+                            const u_obj=<span class="cstat-no" title="statement not covered" >{</span>
+                            //password:(p==undefined)?result[0].password:p,
+                                gender:g,
+                                SocialLink:s
+                            }
+<span class="cstat-no" title="statement not covered" >                            dbo.collection('users').updateOne({"Id":String(user_id)},{$set:u_obj},<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
+<span class="cstat-no" title="statement not covered" >                                res.redirect(`/users/${user_id}`)</span>
+        
+                            })
+                      
+                        }
+                    })
+                }
+                else <span class="cstat-no" title="statement not covered" >res.send('Invalid User')</span>
+            })
+        
         })
         
-    })
-        
 &nbsp;
-     //delete user profile
-    app.delete('/users/:user_id/delete', verifyAuth, <span class="fstat-no" title="function not covered" >(r</span>eq,res)=&gt;{
-        var user_id = <span class="cstat-no" title="statement not covered" >String(req.params.user_id)</span>
+        //delete user profile
+        app.delete('/users/:user_id/delete', verifyAuth, <span class="fstat-no" title="function not covered" >(r</span>eq,res)=&gt;{
+            const user_id = <span class="cstat-no" title="statement not covered" >String(req.params.user_id)</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        dbo.collection('users').find({'Id':user_id}).toArray(<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
+<span class="cstat-no" title="statement not covered" >            dbo.collection('users').find({'Id':user_id}).toArray(<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >                if (result.length==1)</span>
                 {
-                    var u = <span class="cstat-no" title="statement not covered" >result[0]</span>
+                    const u = <span class="cstat-no" title="statement not covered" >result[0]</span>
 <span class="cstat-no" title="statement not covered" >                    dbo.collection('users').deleteOne({'Id':user_id},<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
 <span class="cstat-no" title="statement not covered" >                        res.send('User: '+u.username +' Deleted')</span>
                     })
                 }
                 else <span class="cstat-no" title="statement not covered" >res.send('Invalid User')</span>
             })
-    })   
+        })   
 &nbsp;
 &nbsp;
-    //get all the questions asked by the user
-    app.get('/users/:user_id/questions', (req,res)=&gt;{
-        var user_id = String(req.params.user_id)
+        //get all the questions asked by the user
+        app.get('/users/:user_id/questions', (req,res)=&gt;{
+            const user_id = String(req.params.user_id)
 &nbsp;
-        dbo.collection('users').find({Id:user_id}).toArray((err,result)=&gt;{
-            if(result.length==1){
-                dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':1}).toArray((err,result)=&gt;{
-                    <span class="missing-if-branch" title="else path not taken" >E</span>if(result.length &gt;= 1)
-                        res.send(result)                            
-                    else
-<span class="cstat-no" title="statement not covered" >                        res.send('You have not asked any questions yet')</span>
-                })
-            }
-            else res.send('Invalid User')
-        })
+            dbo.collection('users').find({Id:user_id}).toArray((err,result)=&gt;{
+                if(result.length==1){
+                    dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':1}).toArray((err,result)=&gt;{
+                        <span class="missing-if-branch" title="else path not taken" >E</span>if(result.length &gt;= 1)
+                            res.send(result)                            
+                        else
+<span class="cstat-no" title="statement not covered" >                            res.send('You have not asked any questions yet')</span>
+                    })
+                }
+                else res.send('Invalid User')
+            })
         
-    })
-&nbsp;
-&nbsp;
-    //get all the comments made by the user
-    app.get('/users/:user_id/comments', (req,res)=&gt;{
-        var user_id = String(req.params.user_id)
-&nbsp;
-        dbo.collection('users').find({Id:user_id}).toArray((err,result)=&gt;{
-            if(result.length==1){
-&nbsp;
-                dbo.collection('comments').find({'UserId':user_id}).toArray((err,result)=&gt;{
-                    <span class="missing-if-branch" title="if path not taken" >I</span>if(result.length != 0)
-<span class="cstat-no" title="statement not covered" >                        res.send(result)</span>
-                    else <span class="missing-if-branch" title="else path not taken" >E</span>if (result.length == 0)
-                       res.send('You have not commented any posts yet')
-                })
-            }
-            else res.send('Invalid User')
         })
 &nbsp;
+&nbsp;
+        //get all the comments made by the user
+        app.get('/users/:user_id/comments', (req,res)=&gt;{
+            const user_id = String(req.params.user_id)
+&nbsp;
+            dbo.collection('users').find({Id:user_id}).toArray((err,result)=&gt;{
+                if(result.length==1){
+&nbsp;
+                    dbo.collection('comments').find({'UserId':user_id}).toArray((err,result)=&gt;{
+                        <span class="missing-if-branch" title="if path not taken" >I</span>if(result.length != 0)
+<span class="cstat-no" title="statement not covered" >                            res.send(result)</span>
+                        else <span class="missing-if-branch" title="else path not taken" >E</span>if (result.length == 0)
+                            res.send('You have not commented any posts yet')
+                    })
+                }
+                else res.send('Invalid User')
+            })
+&nbsp;
         
-    })
-&nbsp;
-    //get total number of questions posted by the user
-    app.get('/users/:user_id/totalquestions', (req,res)=&gt;{
-        var user_id = String(req.params.user_id)
-&nbsp;
-        dbo.collection('users').find({Id:user_id}).toArray((err,result)=&gt;{
-            if(result.length==1){
-                dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':1}).toArray((err,result)=&gt;{
-                    res.send(JSON.stringify(result.length))
-                })
-            }
-            else res.send('Invalid User ID')
-&nbsp;
         })
 &nbsp;
+        //get total number of questions posted by the user
+        app.get('/users/:user_id/totalquestions', (req,res)=&gt;{
+            const user_id = String(req.params.user_id)
+&nbsp;
+            dbo.collection('users').find({Id:user_id}).toArray((err,result)=&gt;{
+                if(result.length==1){
+                    dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':1}).toArray((err,result)=&gt;{
+                        res.send(JSON.stringify(result.length))
+                    })
+                }
+                else res.send('Invalid User ID')
+&nbsp;
+            })
+&nbsp;
         
-    })
+        })
 &nbsp;
-    //get total number of comments posted by the user
-    app.get('/users/:user_id/totalcomments', (req,res)=&gt;{
-        var user_id = String(req.params.user_id)
+        //get total number of comments posted by the user
+        app.get('/users/:user_id/totalcomments', (req,res)=&gt;{
+            const user_id = String(req.params.user_id)
 &nbsp;
-        dbo.collection('users').find({'Id':user_id}).toArray((err,result)=&gt;{
-            if(result.length==1){
-                dbo.collection('comments').find({'UserId':user_id}).toArray((err,result)=&gt;{
-                    res.send(JSON.stringify(result.length))
-                })
-            }
-            else res.send('Invalid User ID')
+            dbo.collection('users').find({'Id':user_id}).toArray((err,result)=&gt;{
+                if(result.length==1){
+                    dbo.collection('comments').find({'UserId':user_id}).toArray((err,result)=&gt;{
+                        res.send(JSON.stringify(result.length))
+                    })
+                }
+                else res.send('Invalid User ID')
 &nbsp;
+            })
+        
         })
         
-    })
+        //get total number of answered posted by the user
+        app.get('/users/:user_id/totalanswers', (req,res)=&gt;{
+            const user_id = String(req.params.user_id)
+            dbo.collection('users').find({'Id':user_id}).toArray((err,result)=&gt;{
+                if(result.length==1){
+                    dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':2}).toArray((err,result)=&gt;{
+                        res.send(JSON.stringify(result.length))
+                    })
+                }
+                else res.send('Invalid User ID')
+            })
         
-    //get total number of answered posted by the user
-    app.get('/users/:user_id/totalanswers', (req,res)=&gt;{
-        var user_id = String(req.params.user_id)
-        dbo.collection('users').find({'Id':user_id}).toArray((err,result)=&gt;{
-            if(result.length==1){
-                dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':2}).toArray((err,result)=&gt;{
-                    res.send(JSON.stringify(result.length))
-                })
-            }
-            else res.send('Invalid User ID')
         })
-        
-    })
-        
-        
     
 &nbsp;
-    //get all the answers posted by the user
-    app.get('/users/:user_id/answers', (req,res)=&gt;{
-        var user_id = String(req.params.user_id)
-        dbo.collection('users').find({'Id':user_id}).toArray((err,result)=&gt;{
-            if(result.length==1){
-                dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':2}).toArray((err,result)=&gt;{
-                    <span class="missing-if-branch" title="else path not taken" >E</span>if(result.length!=0)
-                        res.send(result)
-                    else
-<span class="cstat-no" title="statement not covered" >                        res.send('You have not answered any quesions yet')</span>
-                })
-            }
-            else res.send('Invalid User')
-        })
+        //get all the answers posted by the user
+        app.get('/users/:user_id/answers', (req,res)=&gt;{
+            const user_id = String(req.params.user_id)
+            dbo.collection('users').find({'Id':user_id}).toArray((err,result)=&gt;{
+                if(result.length==1){
+                    dbo.collection('questionAnswer').find({'OwnerUserId':user_id, 'PostTypeId':2}).toArray((err,result)=&gt;{
+                        <span class="missing-if-branch" title="else path not taken" >E</span>if(result.length!=0)
+                            res.send(result)
+                        else
+<span class="cstat-no" title="statement not covered" >                            res.send('You have not answered any quesions yet')</span>
+                    })
+                }
+                else res.send('Invalid User')
+            })
         
-    })
-&nbsp;
-    app.get('/users' ,(req,res)=&gt;{
-        dbo.collection('users').find().toArray((err,result)=&gt;{
-            <span class="missing-if-branch" title="if path not taken" >I</span>if(err) <span class="cstat-no" title="statement not covered" >throw err</span>
-            <span class="missing-if-branch" title="else path not taken" >E</span>if(result.length &gt;= 1)
-                res.send(result)                    
-            else
-<span class="cstat-no" title="statement not covered" >                res.send('No users to display')</span>
         })
-    })
+&nbsp;
+        app.get('/users' ,(req,res)=&gt;{
+            dbo.collection('users').find().toArray((err,result)=&gt;{
+                <span class="missing-if-branch" title="if path not taken" >I</span>if(err) <span class="cstat-no" title="statement not covered" >throw err</span>
+                <span class="missing-if-branch" title="else path not taken" >E</span>if(result.length &gt;= 1)
+                    res.send(result)                    
+                else
+<span class="cstat-no" title="statement not covered" >                    res.send('No users to display')</span>
+            })
+        })
 &nbsp;
     })
 })
@@ -934,7 +928,7 @@ module.exports = app
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Sep 06 2021 12:10:12 GMT+0530 (India Standard Time)
+                at Mon Sep 06 2021 13:18:44 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>

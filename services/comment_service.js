@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const app = require('../controllers/comments')
 
 app.listen(8075,function(){

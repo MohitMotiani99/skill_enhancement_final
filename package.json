@@ -5,15 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --testTimeout=100000 --runInBand --coverage --forceExit",
-    "question_service":"node ./services/question_service",
-    "answer_service":"node ./services/answer_service",
-    "comment_service":"node ./services/comment_service",
-    "user_service":"node ./services/user_service",
-    "dashboard":"node ./controllers/dashboard",
-    "notifications":"node ./controllers/notifications",
+    "question_service": "node ./services/question_service",
+    "answer_service": "node ./services/answer_service",
+    "comment_service": "node ./services/comment_service",
+    "user_service": "node ./services/user_service",
+    "dashboard": "node ./controllers/dashboard",
+    "notifications": "node ./controllers/notifications",
     "start": "concurrently \"npm run question_service\" \"npm run answer_service\" \"npm run comment_service\" \"npm run dashboard\" \"npm run notifications\" \"npm run user_service\"",
-    "dev":"start npm run question_service && start npm run answer_service && start npm run comment_service && start npm run dashboard && start npm run notifications",
-    "kube":"kubectl port-forward service/skillserver 8089:8089 8088:8088 8075:8075 5050:5050 8083:8083 3300:3300"
+    "dev": "start npm run question_service && start npm run answer_service && start npm run comment_service && start npm run dashboard && start npm run notifications",
+    "kube": "kubectl port-forward service/skillserver 8089:8089 8088:8088 8075:8075 5050:5050 8083:8083 3300:3300"
   },
   "author": "",
   "license": "ISC",
@@ -35,7 +35,9 @@
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^2.0.3",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "eslint": "^7.32.0",
+    "eslint-plugin-sonarjs": "^0.10.0"
   },
   "jest": {
     "testEnvironment": "node",

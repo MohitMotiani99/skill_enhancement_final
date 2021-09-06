@@ -1,15 +1,15 @@
 const app = require('../controllers/comments')
 const supertest = require('supertest')
 
-var MongoClient = require('mongodb').MongoClient
+const MongoClient = require('mongodb').MongoClient
 
 
-var url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
-var db_name = 'skillenhancement'
-var col_name_q = 'questionAnswer'
-var col_name_u = 'users'
-var col_name_n = 'notifications'
-var col_name_c="comments"
+const url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
+const db_name = 'skillenhancement'
+const col_name_q = 'questionAnswer'
+const col_name_u = 'users'
+const col_name_n = 'notifications'
+const col_name_c="comments"
 
 function compare(recieved,expected){
     expect(recieved.Id).toBe(expected.Id)
@@ -97,121 +97,120 @@ afterEach(async ()=>{
 })
 
 test('GET /comments/:id INVALID COMMENT', async () => {
-    var id = 9997000
+    const id = 9997000
     await supertest(app).get(`/comments/${id}`)
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid Comment Id')
-    })
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid Comment Id')
+        })
 })
 test('GET /comments/:id', async () => {
-    var id = 9997
+    const id = 9997
     await supertest(app).get(`/comments/${id}`)
-    .expect(200)
-    .then(async (res)=>{
-        let recieved = res.body
-        let expected = await dbo.collection(col_name_c).find({'Id':id}).toArray()
-        expected = expected[0]
+        .expect(200)
+        .then(async (res)=>{
+            const recieved = res.body
+            let expected = await dbo.collection(col_name_c).find({'Id':id}).toArray()
+            expected = expected[0]
 
-        compare(recieved,expected)
-    })
+            compare(recieved,expected)
+        })
 })
 
 
 test('POST /questions/:id/comments/add NOT LOGGED IN', async () => {
-    var id = 9999
-    var comment = {
+    const id = 9999
+    const comment = {
         'body':'Testing Comment APIS v1.2'
     }
     await supertest(app).post(`/questions/${id}/comments/add`)
-    .send(comment)
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Not Logged In')
-    })
+        .send(comment)
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Not Logged In')
+        })
 })
 test('POST /questions/:id/comments/add INVALID TOKEN', async () => {
-    var id = 9999
-    var comment = {
+    const id = 9999
+    const comment = {
         'body':'Testing Comment APIS v1.2'
     }
     await supertest(app).post(`/questions/${id}/comments/add`)
-    .set({'x-access-token':'nottoken'})
-    .send(comment)
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid User Credentials')
-    })
+        .set({'x-access-token':'nottoken'})
+        .send(comment)
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid User Credentials')
+        })
 })
 test('POST /questions/:id/comments/add EXPIRED TOKEN', async () => {
-    var id = 9999
-    var comment = {
+    const id = 9999
+    const comment = {
         'body':'Testing Comment APIS v1.2'
     }
     await supertest(app).post(`/questions/${id}/comments/add`)
-    .set({'x-access-token':'ya29.a0ARrdaM-qIoD4PUKNPPb1wKCDPRamwBUMkrpiG0WjkRTRy8rYrQjCqBEtzW3Wqy53bnXYSx2qZAestW9ekYeZWgz-wrGBPvYYbt2CGm7y31fl5GxIn7xZp1Tt3PL3vFuIKNR0fCnmyiQ_Crf9ASwSY4jrZlQW'})
-    .send(comment)
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid User Credentials')
-    })
+        .set({'x-access-token':'ya29.a0ARrdaM-qIoD4PUKNPPb1wKCDPRamwBUMkrpiG0WjkRTRy8rYrQjCqBEtzW3Wqy53bnXYSx2qZAestW9ekYeZWgz-wrGBPvYYbt2CGm7y31fl5GxIn7xZp1Tt3PL3vFuIKNR0fCnmyiQ_Crf9ASwSY4jrZlQW'})
+        .send(comment)
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid User Credentials')
+        })
 })
 test('POST /questions/:id/comments/add INVALID QUESTION ID', async () => {
-    var id = 9999000
-    var comment = {
+    const id = 9999000
+    const comment = {
         'body':'Testing Comment APIS v1.2'
     }
     await supertest(app).post(`/questions/${id}/comments/add`)
-    .set({'x-access-token':'t2'})
-    .send(comment)
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid Post Id')
-    })
+        .set({'x-access-token':'t2'})
+        .send(comment)
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid Post Id')
+        })
 })
 describe('Comment on Closed Question',()=>{
     beforeEach(async ()=>{
         await dbo.collection(col_name_q).updateOne({'PostTypeId':1,'Id':9999},{$set:{'ClosedDate':Date.now()}})
     })
     test('POST /questions/:id/comments/add CLOSED QUESTION', async () => {
-        var id = 9999
-        var comment = {
+        const id = 9999
+        const comment = {
             'body':'Testing Comment APIS v1.2'
         }
         await supertest(app).post(`/questions/${id}/comments/add`)
-        .set({'x-access-token':'t2'})
-        .send(comment)
-        .expect(200)
-        .then(async (res)=>{
-            expect(res.text).toBe('Post is Already Closed')
-        })
+            .set({'x-access-token':'t2'})
+            .send(comment)
+            .expect(200)
+            .then(async (res)=>{
+                expect(res.text).toBe('Post is Already Closed')
+            })
     })  
 })
 
 test('POST /questions/:id/comments/add', async () => {
-    var id = 9999
-    var comment = {
-            'body':'Testing Comment API for v'+Math.random()
+    const id = 9999
+    const comment = {
+        'body':'Testing Comment API for v'+Math.random()
     }
 
     await supertest(app).post(`/questions/${id}/comments/add`)
-    .set({'x-access-token':'t2'})
-    .send(comment)
-    .expect(302)
-    .then(async (res)=>{
-        let recieved = await dbo.collection(col_name_c).find({'Text':comment.body}).toArray()
-        //console.log(recieved)
-        recieved = recieved[0]
+        .set({'x-access-token':'t2'})
+        .send(comment)
+        .expect(302)
+        .then(async (res)=>{
+            let recieved = await dbo.collection(col_name_c).find({'Text':comment.body}).toArray()
+            //console.log(recieved)
+            recieved = recieved[0]
 
-        expect(res.headers.location).toBe(`/comments/${recieved.Id}`)
+            expect(res.headers.location).toBe(`/comments/${recieved.Id}`)
         
-        expect(recieved.PostId).toStrictEqual(9999)
-        expect(recieved.UserId).toStrictEqual(902)
-        expect(recieved.Text).toStrictEqual(comment.body)
-        expect(recieved.UserDisplayName).toStrictEqual('tester')
+            expect(recieved.PostId).toStrictEqual(9999)
+            expect(recieved.UserId).toStrictEqual(902)
+            expect(recieved.Text).toStrictEqual(comment.body)
+            expect(recieved.UserDisplayName).toStrictEqual('tester')
 
-    })
+        })
 })  
-
 
 

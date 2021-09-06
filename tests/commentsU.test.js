@@ -1,15 +1,15 @@
 const app = require('../controllers/comments')
 const supertest = require('supertest')
 
-var MongoClient = require('mongodb').MongoClient
+const MongoClient = require('mongodb').MongoClient
 
 
-var url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
-var db_name = 'skillenhancement'
-var col_name_q = 'questionAnswer'
-var col_name_u = 'users'
-var col_name_n = 'notifications'
-var col_name_c="comments"
+const url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
+const db_name = 'skillenhancement'
+const col_name_q = 'questionAnswer'
+const col_name_u = 'users'
+const col_name_n = 'notifications'
+const col_name_c="comments"
 
 function compare(recieved,expected){
     expect(recieved.Id).toBe(expected.Id)
@@ -99,109 +99,109 @@ afterEach(async ()=>{
 })
 
 test('PATCH /comments/:id/upvote NOT LOGGED IN',async ()=>{
-    var id = 9997
+    const id = 9997
     await supertest(app)
-    .patch(`/comments/${id}/upvote`)
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Not Logged In')
-    })
+        .patch(`/comments/${id}/upvote`)
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Not Logged In')
+        })
 })
 test('PATCH /comments/:id/upvote INVALID TOKEN',async ()=>{
-    var id = 9997
+    const id = 9997
     await supertest(app)
-    .patch(`/comments/${id}/upvote`)
-    .set({'x-access-token':'nottoken'})
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid User')
-    })
+        .patch(`/comments/${id}/upvote`)
+        .set({'x-access-token':'nottoken'})
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid User')
+        })
 })
 test('PATCH /comments/:id/upvote INVALID COMMENT',async ()=>{
-    var id = 9997000
+    const id = 9997000
     await supertest(app)
-    .patch(`/comments/${id}/upvote`)
-    .set({'x-access-token':'t2'})
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid Comment Id')
-    })
+        .patch(`/comments/${id}/upvote`)
+        .set({'x-access-token':'t2'})
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid Comment Id')
+        })
 })
 test('PATCH /comments/:id/upvote UPVOTE',async ()=>{
 
-    var id = 9997
+    const id = 9997
 
     let query_res = await dbo.collection(col_name_c).find({'Id':id}).toArray()
-    let preAPI = query_res[0]
+    const preAPI = query_res[0]
 
     await supertest(app)
-    .patch(`/comments/${id}/upvote`)
-    .set({'x-access-token':'t2'})
-    .expect(302)
-    .then(async (res)=>{
-        expect(res.headers.location).toBe(`/comments/${id}`)
-        query_res = await dbo.collection(col_name_c).find({'Id':id}).toArray()
-        let postAPI = query_res[0]
-        preAPI['Score']+=1
-        compare(preAPI,postAPI)
-    })
+        .patch(`/comments/${id}/upvote`)
+        .set({'x-access-token':'t2'})
+        .expect(302)
+        .then(async (res)=>{
+            expect(res.headers.location).toBe(`/comments/${id}`)
+            query_res = await dbo.collection(col_name_c).find({'Id':id}).toArray()
+            const postAPI = query_res[0]
+            preAPI['Score']+=1
+            compare(preAPI,postAPI)
+        })
 })
 test('PATCH /comments/:id/downvote/undo DOWNVOTE UNDO',async ()=>{
 
-    var id = 9997
+    const id = 9997
 
     let query_res = await dbo.collection(col_name_c).find({'Id':id}).toArray()
-    let preAPI = query_res[0]
+    const preAPI = query_res[0]
 
     await supertest(app)
-    .patch(`/comments/${id}/downvote/undo`)
-    .set({'x-access-token':'t2'})
-    .expect(302)
-    .then(async (res)=>{
-        expect(res.headers.location).toBe(`/comments/${id}`)
-        query_res = await dbo.collection(col_name_c).find({'Id':id}).toArray()
-        let postAPI = query_res[0]
-        preAPI['Score']+=1
-        compare(preAPI,postAPI)
-    })
+        .patch(`/comments/${id}/downvote/undo`)
+        .set({'x-access-token':'t2'})
+        .expect(302)
+        .then(async (res)=>{
+            expect(res.headers.location).toBe(`/comments/${id}`)
+            query_res = await dbo.collection(col_name_c).find({'Id':id}).toArray()
+            const postAPI = query_res[0]
+            preAPI['Score']+=1
+            compare(preAPI,postAPI)
+        })
 })
 test('PATCH /comments/:id/upvote DOWNVOTE',async ()=>{
 
-    var id = 9997
+    const id = 9997
 
     let query_res = await dbo.collection(col_name_c).find({'Id':id}).toArray()
-    let preAPI = query_res[0]
+    const preAPI = query_res[0]
 
     await supertest(app)
-    .patch(`/comments/${id}/downvote`)
-    .set({'x-access-token':'t2'})
-    .expect(302)
-    .then(async (res)=>{
-        expect(res.headers.location).toBe(`/comments/${id}`)
-        query_res = await dbo.collection(col_name_c).find({'Id':id}).toArray()
-        let postAPI = query_res[0]
-        preAPI['Score']-=1
-        compare(preAPI,postAPI)
-    })
+        .patch(`/comments/${id}/downvote`)
+        .set({'x-access-token':'t2'})
+        .expect(302)
+        .then(async (res)=>{
+            expect(res.headers.location).toBe(`/comments/${id}`)
+            query_res = await dbo.collection(col_name_c).find({'Id':id}).toArray()
+            const postAPI = query_res[0]
+            preAPI['Score']-=1
+            compare(preAPI,postAPI)
+        })
 })
 test('PATCH /comments/:id/downvote/undo UPVOTE UNDO',async ()=>{
 
-    var id = 9997
+    const id = 9997
 
     let query_res = await dbo.collection(col_name_c).find({'Id':id}).toArray()
-    let preAPI = query_res[0]
+    const preAPI = query_res[0]
 
     await supertest(app)
-    .patch(`/comments/${id}/upvote/undo`)
-    .set({'x-access-token':'t2'})
-    .expect(302)
-    .then(async (res)=>{
-        expect(res.headers.location).toBe(`/comments/${id}`)
-        query_res = await dbo.collection(col_name_c).find({'Id':id}).toArray()
-        let postAPI = query_res[0]
-        preAPI['Score']-=1
-        compare(preAPI,postAPI)
-    })
+        .patch(`/comments/${id}/upvote/undo`)
+        .set({'x-access-token':'t2'})
+        .expect(302)
+        .then(async (res)=>{
+            expect(res.headers.location).toBe(`/comments/${id}`)
+            query_res = await dbo.collection(col_name_c).find({'Id':id}).toArray()
+            const postAPI = query_res[0]
+            preAPI['Score']-=1
+            compare(preAPI,postAPI)
+        })
 })
 /**
  * 
@@ -209,10 +209,10 @@ test('PATCH /comments/:id/downvote/undo UPVOTE UNDO',async ()=>{
  * 
  */
 test('POST /comments/:id/edit NOT LOGGED IN', async () => {
-    var comment={
+    const comment={
         'body':'Jest Testing Edit v1.4'
     }
-    var id = 9997
+    const id = 9997
     await supertest(app)
         .patch(`/comments/${id}/edit`)
         .set({'content-type':'application/json'})
@@ -224,10 +224,10 @@ test('POST /comments/:id/edit NOT LOGGED IN', async () => {
 
 })
 test('POST /comments/:id/edit INVALID TOKEN', async () => {
-    var comment={
+    const comment={
         'body':'Jest Testing Edit v1.4'
     }
-    var id = 9997
+    const id = 9997
     await supertest(app)
         .patch(`/comments/${id}/edit`)
         .set({'content-type':'application/json'})
@@ -240,10 +240,10 @@ test('POST /comments/:id/edit INVALID TOKEN', async () => {
 
 })
 test('POST /comments/:id/edit OWNER USER', async () => {
-    var comment={
+    const comment={
         'body':'Jest Testing Edit v1.4'
     }
-    var id = 9997
+    const id = 9997
     await supertest(app)
         .patch(`/comments/${id}/edit`)
         .set({'content-type':'application/json'})
@@ -256,10 +256,10 @@ test('POST /comments/:id/edit OWNER USER', async () => {
 
 })
 test('POST /comments/:id/edit INVALID COMMENT', async () => {
-    var comment={
+    const comment={
         'body':'Jest Testing Edit v1.2'
     }
-    var id = 9997000
+    const id = 9997000
     await supertest(app)
         .patch(`/comments/${id}/edit`)
         .set({'content-type':'application/json'})
@@ -276,10 +276,10 @@ describe('Closed Parent Post',()=>{
         await dbo.collection(col_name_q).updateOne({'Id':9999,'PostTypeId':1},{$set:{'ClosedDate':Date.now()}})
     })
     test('POST /comments/:id/edit CLOSED PARENT POST', async () => {
-        var comment={
+        const comment={
             'body':'Jest Testing Edit v1.2'
         }
-        var id = 9997
+        const id = 9997
         await supertest(app)
             .patch(`/comments/${id}/edit`)
             .set({'content-type':'application/json'})
@@ -293,10 +293,10 @@ describe('Closed Parent Post',()=>{
     })  
 })
 test('POST /comments/:id/edit', async () => {
-    var comment={
+    const comment={
         'body':'Jest Testing Edit for Comments v1.4'
     }
-    var id = 9997
+    const id = 9997
     await supertest(app)
         .patch(`/comments/${id}/edit`)
         .set({'content-type':'application/json'})
@@ -306,7 +306,7 @@ test('POST /comments/:id/edit', async () => {
         .then(async (res)=>{
 
             expect(res.headers.location).toBe('/question/9999/comments')
-            var recieved = await dbo.collection(col_name_c).find({'Id':9997}).toArray()
+            let recieved = await dbo.collection(col_name_c).find({'Id':9997}).toArray()
             recieved = recieved[0]
 
             expect(recieved.Text).toBe(comment.body)

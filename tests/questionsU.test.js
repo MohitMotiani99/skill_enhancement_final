@@ -1,13 +1,13 @@
 const app = require('../controllers/questions')
 const supertest = require('supertest')
-var MongoClient = require('mongodb').MongoClient
+const MongoClient = require('mongodb').MongoClient
 
 
-var url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
-var db_name = 'skillenhancement'
-var col_name_q = 'questionAnswer'
-var col_name_u = 'users'
-var col_name_n = 'notifications'
+const url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
+const db_name = 'skillenhancement'
+const col_name_q = 'questionAnswer'
+const col_name_u = 'users'
+const col_name_n = 'notifications'
 
 
 let connection;
@@ -36,7 +36,7 @@ beforeAll(async ()=>{
 })
 
 afterAll(async ()=>{
-         await connection.close()
+    await connection.close()
 })
 
 beforeEach(async ()=>{
@@ -94,10 +94,10 @@ afterEach(async ()=>{
  */
 
 test('POST /questions/:question_id/edit NOT LOGGED IN', async () => {
-    var question={
+    const question={
         'Body':'Jest Testing Edit v1.3'
     }
-    var question_id = 9999
+    const question_id = 9999
     await supertest(app)
         .post(`/questions/${question_id}/edit`)
         .set({'content-type':'application/json'})
@@ -109,10 +109,10 @@ test('POST /questions/:question_id/edit NOT LOGGED IN', async () => {
 
 })
 test('POST /questions/:question_id/edit INVALID TOKEN', async () => {
-    var question={
+    const question={
         'Body':'Jest Testing Edit v1.3'
     }
-    var question_id = 9999
+    const question_id = 9999
     await supertest(app)
         .post(`/questions/${question_id}/edit`)
         .set({'content-type':'application/json'})
@@ -125,10 +125,10 @@ test('POST /questions/:question_id/edit INVALID TOKEN', async () => {
 
 })
 test('POST /questions/:question_id/edit OWNER USER', async () => {
-    var question={
+    const question={
         'Body':'Jest Testing Edit v1.3'
     }
-    var question_id = 9999
+    const question_id = 9999
     await supertest(app)
         .post(`/questions/${question_id}/edit`)
         .set({'content-type':'application/json'})
@@ -141,10 +141,10 @@ test('POST /questions/:question_id/edit OWNER USER', async () => {
 
 })
 test('POST /questions/:question_id/edit INVALID QUESTION', async () => {
-    var question={
+    const question={
         'Body':'Jest Testing Edit v1.2'
     }
-    var question_id = 9999000
+    const question_id = 9999000
     await supertest(app)
         .post(`/questions/${question_id}/edit`)
         .set({'content-type':'application/json'})
@@ -162,10 +162,10 @@ describe('Closed Question For Edit',() =>{
         await dbo.collection(col_name_q).updateOne({'Id':9999,'PostTypeId':1},{$set:{'ClosedDate':Date.now()}})
     })
     test('POST /questions/:question_id/edit CLOSED QUESTION', async () => {
-        var question={
+        const question={
             'Body':'Jest Testing Edit v1.3'
         }
-        var question_id = 9999
+        const question_id = 9999
         await supertest(app)
             .post(`/questions/${question_id}/edit`)
             .set({'content-type':'application/json'})
@@ -183,10 +183,10 @@ describe('Closed Question For Edit',() =>{
 
 
 test('POST /questions/:question_id/edit', async () => {
-    var question={
+    const question={
         'Body':'Jest Testing Edit v1.3'
     }
-    var question_id = 9999
+    const question_id = 9999
     await supertest(app)
         .post(`/questions/${question_id}/edit`)
         .set({'content-type':'application/json'})
@@ -200,7 +200,7 @@ test('POST /questions/:question_id/edit', async () => {
             // console.log(res.headers)
             // console.log(res.body)
             expect(res.headers.location).toBe(`/questions/${question_id}`)
-            var recieved = await dbo.collection(col_name_q).find({'Id':9999,'PostTypeId':1}).toArray()
+            let recieved = await dbo.collection(col_name_q).find({'Id':9999,'PostTypeId':1}).toArray()
             recieved = recieved[0]
 
             expect(recieved.AcceptedAnswerId).toStrictEqual(-1)
@@ -220,7 +220,7 @@ test('POST /questions/:question_id/edit', async () => {
  * 
  */
 test('POST /questions/:question_id/close NOT LOGGED IN',async () => {
-    var question_id = 9999
+    const question_id = 9999
     await supertest(app)
         .post(`/questions/${question_id}/close`)
         .set({'content-type':'application/json'})
@@ -230,7 +230,7 @@ test('POST /questions/:question_id/close NOT LOGGED IN',async () => {
         })
 })
 test('POST /questions/:question_id/close INVALID QUESTION',async () => {
-    var question_id = 9999000
+    const question_id = 9999000
     await supertest(app)
         .post(`/questions/${question_id}/close`)
         .set({'content-type':'application/json'})
@@ -241,7 +241,7 @@ test('POST /questions/:question_id/close INVALID QUESTION',async () => {
         })
 })
 test('POST /questions/:question_id/close NOT OWNER',async () => {
-    var question_id = 9999
+    const question_id = 9999
     await supertest(app)
         .post(`/questions/${question_id}/close`)
         .set({'content-type':'application/json'})
@@ -252,14 +252,14 @@ test('POST /questions/:question_id/close NOT OWNER',async () => {
         })
 })
 test('POST /questions/:question_id/close',async () => {
-    var question_id = 9999
+    const question_id = 9999
     await supertest(app)
         .post(`/questions/${question_id}/close`)
         .set({'content-type':'application/json'})
         .set({'x-access-token':'t1'})
         .expect(302)
         .then(async (res)=>{
-            var recieved = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
+            let recieved = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
             recieved = recieved[0]
             expect(recieved.ClosedDate).not.toBe(null)
             expect(res.headers.location).toBe(`/questions/${question_id}`)
@@ -270,7 +270,7 @@ describe('Close Closed QUestion' ,()=>{
         await dbo.collection(col_name_q).updateOne({'Id':9999,'PostTypeId':1},{$set:{'ClosedDate':Date.now()}})
     })
     test('POST /questions/:question_id/close CLOSED',async () => {
-        var question_id = 9999
+        const question_id = 9999
         await supertest(app)
             .post(`/questions/${question_id}/close`)
             .set({'content-type':'application/json'})
@@ -288,8 +288,8 @@ describe('Close Closed QUestion' ,()=>{
  * REOPEN QUESTION 
  * 
  */
- test('POST /questions/:question_id/reopen NOT LOGGED IN',async () => {
-    var question_id = 9999
+test('POST /questions/:question_id/reopen NOT LOGGED IN',async () => {
+    const question_id = 9999
     await supertest(app)
         .post(`/questions/${question_id}/reopen`)
         .set({'content-type':'application/json'})
@@ -299,7 +299,7 @@ describe('Close Closed QUestion' ,()=>{
         })
 })
 test('POST /questions/:question_id/reopen INVALID QUESTION',async () => {
-    var question_id = 9999000
+    const question_id = 9999000
     await supertest(app)
         .post(`/questions/${question_id}/reopen`)
         .set({'content-type':'application/json'})
@@ -310,7 +310,7 @@ test('POST /questions/:question_id/reopen INVALID QUESTION',async () => {
         })
 })
 test('POST /questions/:question_id/reopen NOT OWNER',async () => {
-    var question_id = 9999
+    const question_id = 9999
     await supertest(app)
         .post(`/questions/${question_id}/reopen`)
         .set({'content-type':'application/json'})
@@ -321,7 +321,7 @@ test('POST /questions/:question_id/reopen NOT OWNER',async () => {
         })
 })
 test('POST /questions/:question_id/reopen ALREADY OPEN',async () => {
-    var question_id = 9999
+    const question_id = 9999
     await supertest(app)
         .post(`/questions/${question_id}/reopen`)
         .set({'content-type':'application/json'})
@@ -336,14 +336,14 @@ describe('Open Closed QUestion' ,()=>{
         await dbo.collection(col_name_q).updateOne({'Id':9999,'PostTypeId':1},{$set:{'ClosedDate':Date.now()}})
     })
     test('POST /questions/:question_id/reopen',async () => {
-        var question_id = 9999
+        const question_id = 9999
         await supertest(app)
             .post(`/questions/${question_id}/reopen`)
             .set({'content-type':'application/json'})
             .set({'x-access-token':'t1'})
             .expect(302)
             .then(async (res)=>{
-                var recieved = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
+                let recieved = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
                 recieved = recieved[0]
                 expect(recieved.ClosedDate).toBe(null)
                 expect(res.headers.location).toBe(`/questions/${question_id}`)

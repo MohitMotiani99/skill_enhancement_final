@@ -352,7 +352,8 @@
 <a name='L293'></a><a href='#L293'>293</a>
 <a name='L294'></a><a href='#L294'>294</a>
 <a name='L295'></a><a href='#L295'>295</a>
-<a name='L296'></a><a href='#L296'>296</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
@@ -404,6 +405,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -647,30 +649,30 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span></td><td class="text"><pre class="prettyprint lang-js">var MongoClient=require('mongodb').MongoClient
-var url="mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/test"
-var mydb="skillenhancement"
-var commentCollection="comments"
-var postsCollection = "questionAnswer"
-var userCollection = "users"
-var collection = "globals"
+<span class="cline-any cline-yes">3x</span></td><td class="text"><pre class="prettyprint lang-js">const MongoClient=require('mongodb').MongoClient
+const url="mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/test"
+const mydb="skillenhancement"
+const commentCollection="comments"
+const postsCollection = "questionAnswer"
+const userCollection = "users"
+const collection = "globals"
 &nbsp;
 &nbsp;
-var express=require('express')
-var app = express()
-var bodyparser = require("body-parser")
+const express=require('express')
+const app = express()
+const bodyparser = require("body-parser")
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static("public"))
 &nbsp;
-var commentId
-var comment = []
-var user
-var validation
+let commentId
+let comment = []
+let user
+let validation
 &nbsp;
-var request = require('request')
-var validate_user = require('./authorize')
-var get_token = require('./authorize')
+const request = require('request')
+const validate_user = require('./authorize')
+const get_token = require('./authorize')
 &nbsp;
 // app.listen(8075,function(){
 //     console.log("Server started")
@@ -698,9 +700,10 @@ MongoClient.connect(url,function(err,db){
 &nbsp;
         //Get comments on the posts (question or answer) identified by a set of ids
         app.get(["/questions/:ids/comments","/answers/:ids/comments"],<span class="fstat-no" title="function not covered" >(r</span>eq,res)=&gt;{
-            var ids = <span class="cstat-no" title="statement not covered" >JSON.parse(req.params["ids"])</span>
-            var comments
+            const ids = <span class="cstat-no" title="statement not covered" >JSON.parse(req.params["ids"])</span>
+            let comments
 &nbsp;
+            // eslint-disable-next-line no-use-before-define
 <span class="cstat-no" title="statement not covered" >            run().then(<span class="fstat-no" title="function not covered" >()</span>=&gt;{</span>
                 //console.log(comment)
 <span class="cstat-no" title="statement not covered" >                comments = comment</span>
@@ -709,7 +712,7 @@ MongoClient.connect(url,function(err,db){
             })
 &nbsp;
             async function <span class="fstat-no" title="function not covered" >run(</span>){
-<span class="cstat-no" title="statement not covered" >                    ids.forEach(<span class="fstat-no" title="function not covered" >id</span>=&gt;{</span>
+<span class="cstat-no" title="statement not covered" >                ids.forEach(<span class="fstat-no" title="function not covered" >id</span>=&gt;{</span>
 <span class="cstat-no" title="statement not covered" >                    dbo.collection(commentCollection).find({"PostId":id}).toArray(<span class="fstat-no" title="function not covered" >fu</span>nction(err,result){</span>
 <span class="cstat-no" title="statement not covered" >                        if (err) </span>
 <span class="cstat-no" title="statement not covered" >                            throw err</span>
@@ -728,7 +731,7 @@ MongoClient.connect(url,function(err,db){
 &nbsp;
         //Get comments on the posts identified by a comment id
         app.get('/comments/:id',(req,res)=&gt;{
-            var id = Number(req.params["id"])
+            const id = Number(req.params["id"])
             dbo.collection(commentCollection).find({Id:id}).toArray((err,result)=&gt;{
                 if(result.length!=1) res.send('Invalid Comment Id')
                 else res.send(result[0])
@@ -737,7 +740,7 @@ MongoClient.connect(url,function(err,db){
 &nbsp;
         //Get comments on the posts (question or answer) identified by a set of ids
         app.get(["/question/:id/comments","/answer/:id/comments"],<span class="fstat-no" title="function not covered" >(r</span>eq,res)=&gt;{
-            var id = <span class="cstat-no" title="statement not covered" >Number(req.params["id"])</span>
+            const id = <span class="cstat-no" title="statement not covered" >Number(req.params["id"])</span>
             // console.log(id)
 <span class="cstat-no" title="statement not covered" >            dbo.collection(commentCollection).find({PostId:id}).toArray(<span class="fstat-no" title="function not covered" >fu</span>nction(err,result){</span>
 <span class="cstat-no" title="statement not covered" >                if (err) <span class="cstat-no" title="statement not covered" >throw err</span></span>
@@ -747,20 +750,20 @@ MongoClient.connect(url,function(err,db){
 &nbsp;
         //Create a new comment on the post identified by id
         app.post(["/questions/:id/comments/add","/answers/:id/comments/add"],(req,res)=&gt;{
-            var questionOwner
+            let questionOwner
             //auth required
-            var token = req.headers['x-access-token']
+            const token = req.headers['x-access-token']
             if(token==null) res.send('Not Logged In')
             else{
-                var id = Number(req.params["id"])
+                const id = Number(req.params["id"])
                 dbo.collection(userCollection).find({token:token}).toArray(async (err,result)=&gt;{
                     if(result.length==1 &amp;&amp; (uv = await validate_user(token, result[0]))){
-                        var User = result[0]
+                        const User = result[0]
                         dbo.collection(postsCollection).find({'Id':id}).toArray(async (err,result)=&gt;{
                             if(result.length==1){
                                 if(result[0].ClosedDate!=null) res.send('Post is Already Closed')
                                 else{
-                                    var commentObj={
+                                    const commentObj={
                                         "Id": commentId++,
                                         "PostId": id,
                                         "Score":0,
@@ -798,9 +801,9 @@ MongoClient.connect(url,function(err,db){
                                         }).then(()=&gt;{
                                             res.redirect(`/comments/${commentObj.Id}`)
                                         })
-                                        })
-                                    }
+                                    })
                                 }
+                            }
                             else res.send('Invalid Post Id')
                         })
                     }
@@ -813,8 +816,8 @@ MongoClient.connect(url,function(err,db){
         app.patch("/comments/:id/edit",(req,res)=&gt;{
             //auth required
             //Only owner
-            var token = req.headers['x-access-token']
-            var id = Number(req.params["id"])
+            const token = req.headers['x-access-token']
+            const id = Number(req.params["id"])
             if (token == null) res.send("Not Logged In")
             else{
                 dbo.collection(userCollection).find({"token":token}).toArray(async function(err,result){
@@ -829,9 +832,9 @@ MongoClient.connect(url,function(err,db){
                                         else{
                                             dbo.collection(commentCollection).updateOne({"Id":id},{$set:{"Text":req.body.body,"CreationDate":Date.now()}})
                                             <span class="missing-if-branch" title="else path not taken" >E</span>if(result[0].PostTypeId==1)
-                                            res.redirect(`/question/${result[0].Id}/comments`)
+                                                res.redirect(`/question/${result[0].Id}/comments`)
                                             else <span class="cstat-no" title="statement not covered" >if(result[0].PostTypeId==2)</span>
-<span class="cstat-no" title="statement not covered" >                                            res.redirect(`/answer/${result[0].Id}/comments`)</span>
+<span class="cstat-no" title="statement not covered" >                                                res.redirect(`/answer/${result[0].Id}/comments`)</span>
                                         }
                                     }
                                     else <span class="cstat-no" title="statement not covered" >res.send('Invalid Post Id')</span>
@@ -849,21 +852,21 @@ MongoClient.connect(url,function(err,db){
         app.delete("/comments/:id/delete",(req,res)=&gt;{
             //auth required
             //Only owner
-            var token = req.headers['x-access-token']
-            var id = Number(req.params["id"])
+            const token = req.headers['x-access-token']
+            const id = Number(req.params["id"])
             if (token == null) res.send("Not Logged In")
             else{
                 dbo.collection(userCollection).find({"token":token}).toArray(async function(err,result){
                     <span class="missing-if-branch" title="if path not taken" >I</span>if (err) <span class="cstat-no" title="statement not covered" >throw err</span>
-                    else if(result.length == 1 &amp;&amp;  (uv = await validate_user(token,result[0]))){
+                    else if(result.length == 1 &amp;&amp; (uv = await validate_user(token,result[0]))){
                         user = result[0]
                         dbo.collection(commentCollection).find({"Id":id}).toArray(function(err,result){
                             if (result.length==1){ 
-                            if(result[0].UserId == user.Id){
-                                dbo.collection(commentCollection).deleteOne({Id:id})
-                                res.send('Comment \"'+result[0].Text+'\" is Deleted')
-                            }
-                            else res.send("No access to delete the comment")
+                                if(result[0].UserId == user.Id){
+                                    dbo.collection(commentCollection).deleteOne({Id:id})
+                                    res.send('Comment \"'+result[0].Text+'\" is Deleted')
+                                }
+                                else res.send("No access to delete the comment")
                             }
                             else res.send('Invalid Comment Id')
                         })
@@ -876,8 +879,8 @@ MongoClient.connect(url,function(err,db){
         //Casts an upvote on the given comment &amp;&amp; Undo an down Vote
         app.patch(["/comments/:id/upvote","/comments/:id/downvote/undo"],(req,res)=&gt;{
             //auth required
-            var token = req.headers['x-access-token']
-            var id = Number(req.params["id"])
+            const token = req.headers['x-access-token']
+            const id = Number(req.params["id"])
             if (token == null) res.send("Not Logged In")
             else{
                 dbo.collection(userCollection).find({"token":token}).toArray(async function(err,result){
@@ -885,11 +888,11 @@ MongoClient.connect(url,function(err,db){
                     else if(result.length == 1 &amp;&amp; (uv = await validate_user(token,result[0]))){
                         dbo.collection(commentCollection).find({Id:id}).toArray(function(arr,result){
                             if(result.length==1){
-                            var score = result[0]["Score"]
-                            dbo.collection(commentCollection).updateOne({"Id":Number(id)},{$set:{"Score":score+1}},(err,result)=&gt;{
-                                <span class="missing-if-branch" title="if path not taken" >I</span>if(err) <span class="cstat-no" title="statement not covered" >throw err</span>
-                                res.redirect(`/comments/${id}`)
-                            })
+                                const score = result[0]["Score"]
+                                dbo.collection(commentCollection).updateOne({"Id":Number(id)},{$set:{"Score":score+1}},(err,result)=&gt;{
+                                    <span class="missing-if-branch" title="if path not taken" >I</span>if(err) <span class="cstat-no" title="statement not covered" >throw err</span>
+                                    res.redirect(`/comments/${id}`)
+                                })
                             }
                             else res.send('Invalid Comment Id')
                         })
@@ -902,8 +905,8 @@ MongoClient.connect(url,function(err,db){
         //Downvote a given comment &amp;&amp; Undo an up vote
         app.patch(["/comments/:id/downvote", "/comments/:id/upvote/undo"],(req,res)=&gt;{
             //auth required
-            var token = req.headers['x-access-token']
-            var id = Number(req.params["id"])
+            const token = req.headers['x-access-token']
+            const id = Number(req.params["id"])
             <span class="missing-if-branch" title="if path not taken" >I</span>if (token == null) <span class="cstat-no" title="statement not covered" >res.send("Not Logged In")</span>
             else{
                 dbo.collection(userCollection).find({"token":token}).toArray(async function(err,result){
@@ -911,11 +914,11 @@ MongoClient.connect(url,function(err,db){
                     else <span class="missing-if-branch" title="else path not taken" >E</span>if(result.length == 1 &amp;&amp; (uv = await validate_user(token,result[0]))){
                         dbo.collection(commentCollection).find({Id:id}).toArray(function(arr,result){
                             <span class="missing-if-branch" title="else path not taken" >E</span>if(result.length==1){
-                            var score = result[0]["Score"]
-                            dbo.collection(commentCollection).updateOne({"Id":Number(id)},{$set:{"Score":score-1}},(err,result)=&gt;{
-                                <span class="missing-if-branch" title="if path not taken" >I</span>if(err) <span class="cstat-no" title="statement not covered" >throw err</span>
-                                res.redirect(`/comments/${id}`)
-                            })
+                                const score = result[0]["Score"]
+                                dbo.collection(commentCollection).updateOne({"Id":Number(id)},{$set:{"Score":score-1}},(err,result)=&gt;{
+                                    <span class="missing-if-branch" title="if path not taken" >I</span>if(err) <span class="cstat-no" title="statement not covered" >throw err</span>
+                                    res.redirect(`/comments/${id}`)
+                                })
                             }
                             else <span class="cstat-no" title="statement not covered" >res.send('Invalid Comment Id')</span>
                         })
@@ -927,7 +930,7 @@ MongoClient.connect(url,function(err,db){
 &nbsp;
         //Get the comments posted by the users identified id
         app.get(["/users/:id/comments"],<span class="fstat-no" title="function not covered" >(r</span>eq,res)=&gt;{
-            var id = <span class="cstat-no" title="statement not covered" >Number(req.params["id"])</span>
+            const id = <span class="cstat-no" title="statement not covered" >Number(req.params["id"])</span>
             // console.log(id)
 <span class="cstat-no" title="statement not covered" >            dbo.collection(userCollection).find({'Id':id}).toArray(<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{</span>
 <span class="cstat-no" title="statement not covered" >                if(result.length==1){</span>
@@ -949,7 +952,7 @@ module.exports = app</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Sep 06 2021 12:10:12 GMT+0530 (India Standard Time)
+                at Mon Sep 06 2021 13:18:44 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>

@@ -1,15 +1,14 @@
 const app = require('../controllers/questions')
 const supertest = require('supertest')
 
-var MongoClient = require('mongodb').MongoClient
+const MongoClient = require('mongodb').MongoClient
 
 
-var url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
-var db_name = 'skillenhancement'
-var col_name_q = 'questionAnswer'
-var col_name_u = 'users'
-var col_name_n = 'notifications'
-var col_name_n = 'notifications'
+const url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
+const db_name = 'skillenhancement'
+const col_name_q = 'questionAnswer'
+const col_name_u = 'users'
+const col_name_n = 'notifications'
 
 
 let connection;
@@ -41,9 +40,9 @@ beforeAll(async ()=>{
 
 afterAll(async ()=>{
     //await dbo.close()
-         //console.log('in here')
-         await connection.close()
-        //done()
+    //console.log('in here')
+    await connection.close()
+    //done()
 })
 
 
@@ -97,39 +96,36 @@ afterEach(async ()=>{
 })
 
 
+test('GET /questions/:question_id  InValid Question',async () => {
 
-
-
-    test('GET /questions/:question_id  InValid Question',async () => {
-
-        var question_id = 100000
-        await supertest(app).get(`/questions/${question_id}`)
+    const question_id = 100000
+    await supertest(app).get(`/questions/${question_id}`)
         .expect(200)
         .then((res)=>{
             //console.log(res.text)
             expect(res.text).toBe('Invalid Question ID')
         })
         
-    })
+})
 
-    test('GET /questions/:question_id  Valid Question',async () => {
+test('GET /questions/:question_id  Valid Question',async () => {
 
-        var question_id = 9999
-        await supertest(app).get(`/questions/${question_id}`)
+    const question_id = 9999
+    await supertest(app).get(`/questions/${question_id}`)
         .expect(200)
         .then(async (res)=>{
-            var query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
-            var expected = query_res[0]
-            var recieved = res.body
+            const query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
+            const expected = query_res[0]
+            const recieved = res.body
 
             compare(recieved,expected)
         })
-    })
+})
 
-    test('GET /questions/:question_id/:vote NOT LOGGED IN',async ()=>{
-        var question_id = 9999
-        var vote = 'upvote'
-        await supertest(app)
+test('GET /questions/:question_id/:vote NOT LOGGED IN',async ()=>{
+    const question_id = 9999
+    const vote = 'upvote'
+    await supertest(app)
         .get(`/questions/${question_id}/${vote}`)
         .expect(200)
         .then(async (res)=>{
@@ -138,17 +134,17 @@ afterEach(async ()=>{
             //console.log(res.body)
             expect(res.text).toBe('Not Logged In')
         })
-    })
+})
 
-    test('GET /questions/:question_id/:vote UPVOTE',async ()=>{
+test('GET /questions/:question_id/:vote UPVOTE',async ()=>{
 
-        var question_id = 9999
-        var vote = 'upvote'
+    const question_id = 9999
+    const vote = 'upvote'
 
-        let query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
-        let preAPI = query_res[0]
+    let query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
+    const preAPI = query_res[0]
 
-        await supertest(app)
+    await supertest(app)
         .get(`/questions/${question_id}/${vote}`)
         .set({'x-access-token':'t2'})
         .expect(302)
@@ -156,24 +152,24 @@ afterEach(async ()=>{
             //console.log(res.text)
             //console.log(res.body)
             query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
-            let postAPI = query_res[0]
+            const postAPI = query_res[0]
             //let preAPI = postAPI
             //console.log(preAPI)
             preAPI['Score']+=1
             //console.log(postAPI)
             compare(preAPI,postAPI)
         })
-    })
+})
 
-    test('GET /questions/:question_id/:vote DOWNVOTE',async ()=>{
+test('GET /questions/:question_id/:vote DOWNVOTE',async ()=>{
 
-        var question_id = 9999
-        var vote = 'downvote'
+    const question_id = 9999
+    const vote = 'downvote'
 
-        let query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
-        let preAPI = query_res[0]
+    let query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
+    const preAPI = query_res[0]
 
-        await supertest(app)
+    await supertest(app)
         .get(`/questions/${question_id}/${vote}`)
         .set({'x-access-token':'t2'})
         .expect(302)
@@ -181,24 +177,24 @@ afterEach(async ()=>{
             //console.log(res.text)
             //console.log(res.body)
             query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
-            let postAPI = query_res[0]
+            const postAPI = query_res[0]
             //let preAPI = postAPI
             //console.log(preAPI)
             preAPI['Score']-=1
             //console.log(postAPI)
             compare(preAPI,postAPI)
         })
-    })
+})
 
-    test('GET /questions/:question_id/:vote/undo UPVOTE UNDO',async ()=>{
+test('GET /questions/:question_id/:vote/undo UPVOTE UNDO',async ()=>{
 
-        var question_id = 9999
-        var vote = 'upvote'
+    const question_id = 9999
+    const vote = 'upvote'
 
-        let query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
-        let preAPI = query_res[0]
+    let query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
+    const preAPI = query_res[0]
 
-        await supertest(app)
+    await supertest(app)
         .get(`/questions/${question_id}/${vote}/undo`)
         .set({'x-access-token':'t2'})
         .expect(302)
@@ -206,24 +202,24 @@ afterEach(async ()=>{
             //console.log(res.text)
             //console.log(res.body)
             query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
-            let postAPI = query_res[0]
+            const postAPI = query_res[0]
             //let preAPI = postAPI
             //console.log(preAPI)
             preAPI['Score']-=1
             //console.log(postAPI)
             compare(preAPI,postAPI)
         })
-    })
+})
 
-    test('GET /questions/:question_id/:vote/undo DOWNVOTE UNDO',async ()=>{
+test('GET /questions/:question_id/:vote/undo DOWNVOTE UNDO',async ()=>{
 
-        var question_id = 9999
-        var vote = 'downvote'
+    const question_id = 9999
+    const vote = 'downvote'
 
-        let query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
-        let preAPI = query_res[0]
+    let query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
+    const preAPI = query_res[0]
 
-        await supertest(app)
+    await supertest(app)
         .get(`/questions/${question_id}/${vote}/undo`)
         .set({'x-access-token':'t2'})
         .expect(302)
@@ -231,105 +227,105 @@ afterEach(async ()=>{
             //console.log(res.text)
             //console.log(res.body)
             query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
-            let postAPI = query_res[0]
+            const postAPI = query_res[0]
             //let preAPI = postAPI
             //console.log(preAPI)
             preAPI['Score']+=1
             //console.log(postAPI)
             compare(preAPI,postAPI)
         })
+})
+
+test('POST /questions/add  NOT LOGGED IN', async () => {
+    const question={
+        'Title':'Testing Jtest',
+        'Body':'Jest Testing going on',
+        'Tags':['jest','supertest']
+    }
+        
+    await supertest(app)
+        .post('/questions/add')
+        .set({'content-type':'application/json'})
+        .send(question)
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Not Logged In')
+        })
+})
+test('POST /questions/add  INVALID TOKEN', async () => {
+    const question={
+        'Title':'Testing Jtest',
+        'Body':'Jest Testing going on',
+        'Tags':['jest','supertest']
+    }
+        
+    await supertest(app)
+        .post('/questions/add')
+        .set({'content-type':'application/json'})
+        .set({'x-access-token':'nottoken'})
+        .send(question)
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid User')
+        })
+})
+
+
+describe('Adding Question ', ()=>{
+
+    let q_id;
+
+        
+    afterEach(async ()=>{
+            
+        await dbo.collection(col_name_q).deleteOne({'Id':q_id})
     })
 
-    test('POST /questions/add  NOT LOGGED IN', async () => {
-        var question={
-            'Title':'Testing Jtest',
+    test('POST /questions/add', async () => {
+        const question={
+            'Title':Math.random().toString(),
             'Body':'Jest Testing going on',
             'Tags':['jest','supertest']
         }
-        
+            
         await supertest(app)
             .post('/questions/add')
             .set({'content-type':'application/json'})
+            .set({'x-access-token':'t1'})
             .send(question)
-            .expect(200)
+            .expect(302)
             .then(async (res)=>{
-                expect(res.text).toBe('Not Logged In')
+    
+                expect(res.headers.location).toMatch(/questions\/\d+/)
+    
+                q_id = res.body.Id
+                // console.log(res)
+    
+                let recieved = await dbo.collection(col_name_q).find({'Title':question.Title,'PostTypeId':1}).toArray()
+                recieved = recieved[0]
+                q_id = recieved.Id
+                expect(recieved.AcceptedAnswerId).toStrictEqual(-1)
+                expect(recieved.PostTypeId).toStrictEqual(1)
+                expect(recieved.Score).toStrictEqual(0)
+                expect(recieved.OwnerUserId).toStrictEqual(901)
+                expect(recieved.Title).toBe(question.Title)
+                expect(recieved.Body).toBe(question.Body)
+                expect(recieved.Tags).toEqual(question.Tags)
+                expect(recieved.ClosedDate).toBe(null)
             })
     })
-    test('POST /questions/add  INVALID TOKEN', async () => {
-        var question={
-            'Title':'Testing Jtest',
-            'Body':'Jest Testing going on',
-            'Tags':['jest','supertest']
+})
+
+describe('Add Answer ',()=>{
+    afterEach(async ()=>{
+        await dbo.collection(col_name_q).deleteMany({'PostTypeId':2,'ParentId':9999})
+    })
+    test('POST /questions/:question_id/answers/add', async () => {
+        const question_id = 9999
+        const answer = {
+            'Body':'Testing Add Answer v1.2 for JEST'
         }
-        
-        await supertest(app)
-            .post('/questions/add')
-            .set({'content-type':'application/json'})
-            .set({'x-access-token':'nottoken'})
-            .send(question)
-            .expect(200)
-            .then(async (res)=>{
-                expect(res.text).toBe('Invalid User')
-            })
-    })
-
-
-    describe('Adding Question ', ()=>{
-
-        let q_id;
-
-        
-        afterEach(async ()=>{
-            
-            await dbo.collection(col_name_q).deleteOne({'Id':q_id})
-        })
-
-        test('POST /questions/add', async () => {
-            var question={
-                'Title':Math.random().toString(),
-                'Body':'Jest Testing going on',
-                'Tags':['jest','supertest']
-            }
-            
-            await supertest(app)
-                .post('/questions/add')
-                .set({'content-type':'application/json'})
-                .set({'x-access-token':'t1'})
-                .send(question)
-                .expect(302)
-                .then(async (res)=>{
-    
-                    expect(res.headers.location).toMatch(/questions\/\d+/)
-    
-                    q_id = res.body.Id
-                    // console.log(res)
-    
-                    let recieved = await dbo.collection(col_name_q).find({'Title':question.Title,'PostTypeId':1}).toArray()
-                    recieved = recieved[0]
-                    q_id = recieved.Id
-                    expect(recieved.AcceptedAnswerId).toStrictEqual(-1)
-                    expect(recieved.PostTypeId).toStrictEqual(1)
-                    expect(recieved.Score).toStrictEqual(0)
-                    expect(recieved.OwnerUserId).toStrictEqual(901)
-                    expect(recieved.Title).toBe(question.Title)
-                    expect(recieved.Body).toBe(question.Body)
-                    expect(recieved.Tags).toEqual(question.Tags)
-                    expect(recieved.ClosedDate).toBe(null)
-                })
-        })
-    })
-
-    describe('Add Answer ',()=>{
-        afterEach(async ()=>{
-            await dbo.collection(col_name_q).deleteMany({'PostTypeId':2,'ParentId':9999})
-        })
-        test('POST /questions/:question_id/answers/add', async () => {
-            var question_id = 9999
-            var answer = {
-                'Body':'Testing Add Answer v1.2 for JEST'
-            }
-            await supertest(app).post(`/questions/${question_id}/answers/add`)
+        await supertest(app).post(`/questions/${question_id}/answers/add`)
             .set({'content-type':'application/json'})
             .set({'x-access-token':'t2'})
             .send(answer)
@@ -340,5 +336,5 @@ afterEach(async ()=>{
                 expect(res.headers.location).toBe(`http://localhost:8088/answers/${recieved.Id}`)
                 expect(recieved.Body).toBe(answer.Body)
             }) 
-        })
     })
+})

@@ -1,17 +1,17 @@
 const app = require('../controllers/users')
- const supertest = require('supertest')
-var MongoClient = require('mongodb').MongoClient
+const supertest = require('supertest')
+const MongoClient = require('mongodb').MongoClient
 test('should ', () => {
     expect(1+1).toBe(2)
 })
 
 
-var url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
-var db_name = 'skillenhancement'
-var col_name_q = 'questionAnswer'
-var col_name_u = 'users'
-var col_name_n = 'notifications'
-var col_name_c = 'comments'
+const url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
+const db_name = 'skillenhancement'
+const col_name_q = 'questionAnswer'
+const col_name_u = 'users'
+const col_name_n = 'notifications'
+const col_name_c = 'comments'
 
 
 let connection;
@@ -113,20 +113,20 @@ afterEach(async ()=>{
 
 
 test(' GET /users/:user_id NOT LOGGED IN', async () => {
-    var user_id = 901
+    const user_id = 901
     await supertest(app).get(`/users/${user_id}`)
-    .expect(403)
+        .expect(403)
 })
 test(' GET /users/:user_id INVALID USER ID', async () => {
-    var user_id = 901000
+    const user_id = 901000
     await supertest(app).get(`/users/${user_id}`)
-    .expect(403)
+        .expect(403)
 })
 test(' GET /users/:user_id EXPIRED TOKEN', async () => {
-    var user_id = '104542337112312950899'
+    const user_id = '104542337112312950899'
     await supertest(app).get(`/users/${user_id}`)
-    .set({'x-access-token':'ya29.a0ARrdaM-qIoD4PUKNPPb1wKCDPRamwBUMkrpiG0WjkRTRy8rYrQjCqBEtzW3Wqy53bnXYSx2qZAestW9ekYeZWgz-wrGBPvYYbt2CGm7y31fl5GxIn7xZp1Tt3PL3vFuIKNR0fCnmyiQ_Crf9ASwSY4jrZlQW'})
-    .expect(403)
+        .set({'x-access-token':'ya29.a0ARrdaM-qIoD4PUKNPPb1wKCDPRamwBUMkrpiG0WjkRTRy8rYrQjCqBEtzW3Wqy53bnXYSx2qZAestW9ekYeZWgz-wrGBPvYYbt2CGm7y31fl5GxIn7xZp1Tt3PL3vFuIKNR0fCnmyiQ_Crf9ASwSY4jrZlQW'})
+        .expect(403)
     
 })
 
@@ -136,20 +136,20 @@ test(' GET /users/:user_id EXPIRED TOKEN', async () => {
  * 
  */
 test('PATCH /users/:user_id/editprofile NOT LOGGED IN', async () => {
-    var user_id = '903'
+    const user_id = '903'
     await supertest(app).patch(`/users/${user_id}/editprofile`)
-    .expect(403)
+        .expect(403)
 })
 test('PATCH /users/:user_id/editprofile INVALID USER ID', async () => {
-    var user_id = '903000'
+    const user_id = '903000'
     await supertest(app).patch(`/users/${user_id}/editprofile`)
-    .expect(403)
+        .expect(403)
 })
 test(' PATCH /users/:user_id/editprofile  EXPIRED TOKEN', async () => {
-    var user_id = '104542337112312950899'
+    const user_id = '104542337112312950899'
     await supertest(app).patch(`/users/${user_id}/editprofile`)
-    .set({'x-access-token':'ya29.a0ARrdaM-qIoD4PUKNPPb1wKCDPRamwBUMkrpiG0WjkRTRy8rYrQjCqBEtzW3Wqy53bnXYSx2qZAestW9ekYeZWgz-wrGBPvYYbt2CGm7y31fl5GxIn7xZp1Tt3PL3vFuIKNR0fCnmyiQ_Crf9ASwSY4jrZlQW'})
-    .expect(403)
+        .set({'x-access-token':'ya29.a0ARrdaM-qIoD4PUKNPPb1wKCDPRamwBUMkrpiG0WjkRTRy8rYrQjCqBEtzW3Wqy53bnXYSx2qZAestW9ekYeZWgz-wrGBPvYYbt2CGm7y31fl5GxIn7xZp1Tt3PL3vFuIKNR0fCnmyiQ_Crf9ASwSY4jrZlQW'})
+        .expect(403)
     
 })
 // test('PATCH /users/:user_id/editprofile', async () => {
@@ -192,113 +192,112 @@ test(' PATCH /users/:user_id/editprofile  EXPIRED TOKEN', async () => {
 // })
 
 test('GET /users/:user_id/totalquestions INVALID USER',async ()=>{
-    var user_id = 901000
+    const user_id = 901000
     await supertest(app).get(`/users/${user_id}/totalquestions`)
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid User ID')
-    })
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid User ID')
+        })
 })
 test('GET /users/:user_id/totalquestions',async ()=>{
-    var user_id = '903'
+    const user_id = '903'
     await supertest(app).get(`/users/${user_id}/totalquestions`)
-    .expect(200)
-    .then(async (res)=>{
+        .expect(200)
+        .then(async (res)=>{
         //let cnt = await dbo.collection(col_name_q).find({'OwnerUserId':user_id,'PostTypeId':1}).toArray().length
-        let cnt = '1'
-        expect(res.text).toBe(cnt)
-    })
+            const cnt = '1'
+            expect(res.text).toBe(cnt)
+        })
 })
 
 
 test('GET /users/:user_id/totalanswers INVALID USER',async ()=>{
-    var user_id = 901000
+    const user_id = 901000
     await supertest(app).get(`/users/${user_id}/totalanswers`)
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid User ID')
-    })
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid User ID')
+        })
 })
 test('GET /users/:user_id/totalanswers',async ()=>{
-    var user_id = '903'
+    const user_id = '903'
     await supertest(app).get(`/users/${user_id}/totalanswers`)
-    .expect(200)
-    .then(async (res)=>{
+        .expect(200)
+        .then(async (res)=>{
         //let cnt = await dbo.collection(col_name_q).find({'OwnerUserId':user_id,'PostTypeId':2}).toArray().length
-        let cnt = '1'
-        expect(res.text).toBe(cnt)
-    })
+            const cnt = '1'
+            expect(res.text).toBe(cnt)
+        })
 })
 
 
 test('GET /users/:user_id/totalcomments INVALID USER',async ()=>{
-    var user_id = 901000
+    const user_id = 901000
     await supertest(app).get(`/users/${user_id}/totalcomments`)
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid User ID')
-    })
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid User ID')
+        })
 })
 test('GET /users/:user_id/totalcomments',async ()=>{
-    var user_id = '903'
+    const user_id = '903'
     await supertest(app).get(`/users/${user_id}/totalcomments`)
-    .expect(200)
-    .then(async (res)=>{
+        .expect(200)
+        .then(async (res)=>{
         //let cnt = await dbo.collection(col_name_c).find({'UserId':user_id}).toArray().length
-        let cnt = '0'
-        expect(res.text).toBe(cnt)
-    })
+            const cnt = '0'
+            expect(res.text).toBe(cnt)
+        })
 })
 
 test('GET /users/:user_id/questions', async() => {
-    var user_id = '90300'
+    const user_id = '90300'
     await supertest(app).get(`/users/${user_id}/questions`)
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid User')
-    })
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid User')
+        })
 })
 test('GET /users/:user_id/questions', async() => {
-    var user_id = '903'
+    const user_id = '903'
     await supertest(app).get(`/users/${user_id}/questions`)
-    .expect(200)
+        .expect(200)
     
 })
 
 test('GET /users/:user_id/answers', async() => {
-    var user_id = '903'
+    const user_id = '903'
     await supertest(app).get(`/users/${user_id}/answers`)
-    .expect(200)
+        .expect(200)
     
 })
 test('GET /users/:user_id/answers', async() => {
-    var user_id = '90300'
+    const user_id = '90300'
     await supertest(app).get(`/users/${user_id}/answers`)
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid User')
-    })
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid User')
+        })
 })
 
 test('GET /users/:user_id/comments', async() => {
-    var user_id = '90300'
+    const user_id = '90300'
     await supertest(app).get(`/users/${user_id}/comments`)
-    .expect(200)
-    .then(async (res)=>{
-        expect(res.text).toBe('Invalid User')
-    })
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid User')
+        })
 })
 test('GET /users/:user_id/comments', async() => {
-    var user_id = '903'
+    const user_id = '903'
     await supertest(app).get(`/users/${user_id}/comments`)
-    .expect(200)
+        .expect(200)
     
 })
 
-test('GET /users',async  () => {
+test('GET /users',async () => {
     await supertest(app).get('/users')
-    .expect(200)
+        .expect(200)
 })
-
 
 

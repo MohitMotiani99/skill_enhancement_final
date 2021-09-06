@@ -1,15 +1,15 @@
 const app = require('../controllers/comments')
 const supertest = require('supertest')
 
-var MongoClient = require('mongodb').MongoClient
+const MongoClient = require('mongodb').MongoClient
 
 
-var url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
-var db_name = 'skillenhancement'
-var col_name_q = 'questionAnswer'
-var col_name_u = 'users'
-var col_name_n = 'notifications'
-var col_name_c="comments"
+const url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
+const db_name = 'skillenhancement'
+const col_name_q = 'questionAnswer'
+const col_name_u = 'users'
+const col_name_n = 'notifications'
+const col_name_c="comments"
 
 function compare(recieved,expected){
     expect(recieved.Id).toBe(expected.Id)
@@ -97,9 +97,8 @@ afterEach(async ()=>{
 })
 
 
-
 test('DELETE /comments/:id/delete NOT LOGGED IN', async () => {
-    var id = 9997
+    const id = 9997
     await supertest(app)
         .delete(`/comments/${id}/delete`)
         .set({'content-type':'application/json'})
@@ -111,7 +110,7 @@ test('DELETE /comments/:id/delete NOT LOGGED IN', async () => {
 
 })
 test('DELETE /comments/:id/delete INVALID TOKEN', async () => {
-    var id = 9997
+    const id = 9997
     await supertest(app)
         .delete(`/comments/${id}/delete`)
         .set({'content-type':'application/json'})
@@ -126,7 +125,7 @@ test('DELETE /comments/:id/delete INVALID TOKEN', async () => {
 
 })
 test('DELETE /comments/:id/delete INVALID COMMENT', async () => {
-    var id = 9997000
+    const id = 9997000
     await supertest(app)
         .delete(`/comments/${id}/delete`)
         .set({'content-type':'application/json'})
@@ -141,7 +140,7 @@ test('DELETE /comments/:id/delete INVALID COMMENT', async () => {
 
 })
 test('DELETE /comments/:id/delete OWNER USER', async () => {
-    var id = 9997
+    const id = 9997
     await supertest(app)
         .delete(`/comments/${id}/delete`)
         .set({'content-type':'application/json'})
@@ -156,10 +155,10 @@ test('DELETE /comments/:id/delete OWNER USER', async () => {
 
 })
 test('DELETE /comments/:id/delete', async () => {
-    var id = 9997
+    const id = 9997
 
-    let query_res = await dbo.collection(col_name_c).find({'Id':9997})
-    let expected = query_res[0]
+    const query_res = await dbo.collection(col_name_c).find({'Id':9997})
+    const expected = query_res[0]
 
     await supertest(app)
         .delete(`/comments/${id}/delete`)
