@@ -1,0 +1,38 @@
+type: "object"
+required:
+  - "Id"
+  - "PostTypeId"
+  - "AcceptedAnswerId"
+  - "CreationDate"
+  - "Score"
+  - "ViewCount"
+  - "OwnerUserId"
+  - "Title"
+  - "Body"
+  - "Tags"
+  - "ClosedDate"
+properties:
+    Id:
+      type: "integer"
+    PostTypeId:
+      type: "integer"
+    AcceptedAnswerId:
+      type: "integer"
+    CreationDate:
+      type: "integer"
+    Score:
+      type: "integer"
+    ViewCount:
+      type: "integer"
+    OwnerUserId:
+      type: "integer"
+    Title:
+      type: "string"
+    Body:
+      type: "string"
+    Tags:
+      type: "array"
+      items:
+        type: "string"
+    ClosedDate:
+      type: "integer"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1630960855264" clover="3.2.0">
-  <project timestamp="1630960855264" name="All files">
+<coverage generated="1630996097774" clover="3.2.0">
+  <project timestamp="1630996097774" name="All files">
     <metrics statements="995" coveredstatements="834" conditionals="542" coveredconditionals="359" methods="283" coveredmethods="234" elements="1820" coveredelements="1427" complexity="0" loc="995" ncloc="995" packages="1" files="8" classes="8"/>
     <file name="answers.js" path="C:\Users\d976640\Documents\skillenhance_OAuth\controllers\answers.js">
       <metrics statements="147" coveredstatements="139" conditionals="90" coveredconditionals="71" methods="33" coveredmethods="29"/>
@@ -432,9 +432,9 @@
       <line num="217" count="4" type="cond" truecount="1" falsecount="1"/>
       <line num="218" count="4" type="stmt"/>
       <line num="219" count="4" type="cond" truecount="2" falsecount="0"/>
-      <line num="220" count="173" type="stmt"/>
+      <line num="220" count="172" type="stmt"/>
       <line num="221" count="3" type="cond" truecount="1" falsecount="1"/>
-      <line num="222" count="508" type="stmt"/>
+      <line num="222" count="510" type="stmt"/>
       <line num="226" count="4" type="stmt"/>
       <line num="228" count="4" type="stmt"/>
       <line num="234" count="1" type="stmt"/>

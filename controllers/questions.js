@@ -6,6 +6,19 @@ app.use(express.urlencoded({extended:true}));
 const cors = require('cors');
 app.use(cors());
 
+const path = require('path')
+const swaggerUi = require("swagger-ui-express")
+const fs = require('fs')
+const jsyaml = require('js-yaml');
+const file_path = path.join(__dirname,'..','swagger','questionSwagger.yaml')
+const spec = fs.readFileSync(file_path, 'utf8');
+swaggerDocument = jsyaml.load(spec);
+app.use(
+    '/swgr',
+    swaggerUi.serve, 
+    swaggerUi.setup(swaggerDocument)
+);
+
 const request = require('request');
 
 // var server = app.listen(8089,()=>{
@@ -672,7 +685,6 @@ MongoClient.connect(url,(err,db)=>{
                                         'ViewCount':0,
                                         'Body':data.Body,
                                         'OwnerUserId':User.Id,
-                                        'Tags':data.Tags,
                                     };
 
                                     await cleanup();

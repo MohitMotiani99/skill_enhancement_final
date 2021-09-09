@@ -1,0 +1,31 @@
+swagger: "2.0.0"
+info:
+  version: "1.0.0" 
+  title: "My blog project"
+  description: "My Blog Project API"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+host: "localhost:3300"
+basePath: "/"
+schemes: 
+  - "http"
+  - "https"
+consumes: 
+  - "application/json"
+  - "application/xml"
+produces: 
+  - "application/json"
+tags:
+  - name: "dashboard"
+    description: "Everything About Dashboard"
+paths:
+  /mainpage2:
+    post:
+      tags:
+        - "dashboard"
+      summary: "Get All Posts"
+      responses:
+        "200":
+          description: "OK"
+
