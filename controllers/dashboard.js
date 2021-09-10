@@ -21,6 +21,18 @@ app.use((req, res, next) => {
     next();
 });
 
+const path = require('path')
+const swaggerUi = require("swagger-ui-express")
+const fs = require('fs')
+const jsyaml = require('js-yaml');
+const file_path = path.join(__dirname,'..','swagger','dashboardSwagger.yaml')
+const spec = fs.readFileSync(file_path, 'utf8');
+swaggerDocument = jsyaml.load(spec);
+app.use(
+    '/swgr',
+    swaggerUi.serve, 
+    swaggerUi.setup(swaggerDocument)
+);
 
 MongoClient.connect(url,function(err,db){
     if(err)

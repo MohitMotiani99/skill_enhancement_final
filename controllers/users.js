@@ -29,6 +29,19 @@ const col_name_u = 'users'
 //var validate_user = require('./authorize')
 const { request } = require('express')
 
+const path = require('path')
+const swaggerUi = require("swagger-ui-express")
+const fs = require('fs')
+const jsyaml = require('js-yaml');
+const file_path = path.join(__dirname,'..','swagger','userSwagger.yaml')
+const spec = fs.readFileSync(file_path, 'utf8');
+swaggerDocument = jsyaml.load(spec);
+app.use(
+    '/swgr',
+    swaggerUi.serve, 
+    swaggerUi.setup(swaggerDocument)
+);
+
 MongoClient.connect(url,(err,db)=>{
     if(err)throw err
     dbo = db.db(db_name)
@@ -55,7 +68,7 @@ MongoClient.connect(url,(err,db)=>{
         process.on('SIGINT',cleanup)
 
         //get complete user details from id
-        app.get('/users/:user_id',verifyAuth,async (req,res)=>{
+        app.get('/users/:user_id',async (req,res)=>{
         
             //fetch user id
             const user_id = String(req.params.user_id)

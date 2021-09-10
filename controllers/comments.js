@@ -14,7 +14,21 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static("public"))
 
+const path = require('path')
+const swaggerUi = require("swagger-ui-express")
+const fs = require('fs')
+const jsyaml = require('js-yaml');
+const file_path = path.join(__dirname,'..','swagger','commentSwagger.yaml')
+const spec = fs.readFileSync(file_path, 'utf8');
+swaggerDocument = jsyaml.load(spec);
+app.use(
+    '/swgr',
+    swaggerUi.serve, 
+    swaggerUi.setup(swaggerDocument)
+);
+
 let commentId
+// eslint-disable-next-line prefer-const
 let comment = []
 let user
 let validation
@@ -48,35 +62,35 @@ MongoClient.connect(url,function(err,db){
     
 
         //Get comments on the posts (question or answer) identified by a set of ids
-        app.get(["/questions/:ids/comments","/answers/:ids/comments"],(req,res)=>{
-            const ids = JSON.parse(req.params["ids"])
-            let comments
+        // app.get(["/questions/:ids/comments","/answers/:ids/comments"],(req,res)=>{
+        //     const ids = JSON.parse(req.params["ids"])
+        //     let comments
 
-            // eslint-disable-next-line no-use-before-define
-            run().then(()=>{
-                //console.log(comment)
-                comments = comment
-                comment=[]
-                res.send(comments)
-            })
+        //     // eslint-disable-next-line no-use-before-define
+        //     run().then(()=>{
+        //         //console.log(comment)
+        //         comments = comment
+        //         comment=[]
+        //         res.send(comments)
+        //     })
 
-            async function run(){
-                ids.forEach(id=>{
-                    dbo.collection(commentCollection).find({"PostId":id}).toArray(function(err,result){
-                        if (err) 
-                            throw err
-                        else if (result.length == 0){
-                            comment = ["Invalid Comment Id"]
-                        }
-                        else {
-                            result.forEach(ele=>{
-                                comment.push(ele)
-                            })
-                        }
-                    })
-                })
-            }
-        })
+        //     async function run(){
+        //         ids.forEach(id=>{
+        //             dbo.collection(commentCollection).find({"PostId":id}).toArray(function(err,result){
+        //                 if (err) 
+        //                     throw err
+        //                 else if (result.length == 0){
+        //                     comment = ["Invalid Comment Id"]
+        //                 }
+        //                 else {
+        //                     result.forEach(ele=>{
+        //                         comment.push(ele)
+        //                     })
+        //                 }
+        //             })
+        //         })
+        //     }
+        // })
 
         //Get comments on the posts identified by a comment id
         app.get('/comments/:id',(req,res)=>{
@@ -88,7 +102,7 @@ MongoClient.connect(url,function(err,db){
         })
 
         //Get comments on the posts (question or answer) identified by a set of ids
-        app.get(["/question/:id/comments","/answer/:id/comments"],(req,res)=>{
+        app.get(["/questions/:id/comments","/answers/:id/comments"],(req,res)=>{
             const id = Number(req.params["id"])
             // console.log(id)
             dbo.collection(commentCollection).find({PostId:id}).toArray(function(err,result){
@@ -181,9 +195,9 @@ MongoClient.connect(url,function(err,db){
                                         else{
                                             dbo.collection(commentCollection).updateOne({"Id":id},{$set:{"Text":req.body.body,"CreationDate":Date.now()}})
                                             if(result[0].PostTypeId==1)
-                                                res.redirect(`/question/${result[0].Id}/comments`)
+                                                res.redirect(`/questions/${result[0].Id}/comments`)
                                             else if(result[0].PostTypeId==2)
-                                                res.redirect(`/answer/${result[0].Id}/comments`)
+                                                res.redirect(`/answers/${result[0].Id}/comments`)
                                         }
                                     }
                                     else res.send('Invalid Post Id')
