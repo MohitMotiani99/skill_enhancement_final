@@ -34,6 +34,8 @@ app.use(
     swaggerUi.setup(swaggerDocument)
 );
 
+require('dotenv').config()
+
 MongoClient.connect(url,function(err,db){
     if(err)
         throw err
@@ -81,7 +83,7 @@ MongoClient.connect(url,function(err,db){
             const a_set = new Set()
             request.get({
                 headers:{'content-type':'application/json'},
-                url:'http://localhost:8089/questions'
+                url:`http://${process.env.HOST}:8089/questions`
             },(err,response,body)=>{
                 if(err) throw err
                 new Promise((resolve,reject)=>{
@@ -96,7 +98,7 @@ MongoClient.connect(url,function(err,db){
                     new Promise((resolve,reject)=>{
                         request.get({
                             headers:{'content-type':'application/json'},
-                            url:'http://localhost:8088/answers'
+                            url:`http://${process.env.HOST}:8088/answers`
                         },(err,response,body)=>{
                             if(err) throw err                   
                             search_words.forEach(word=>{
@@ -158,7 +160,7 @@ MongoClient.connect(url,function(err,db){
         const data = req.body 
         request.post({
             headers:{'content-type':'application/json'},
-            url:'http://localhost:3300/searchposts',
+            url:`http://${process.env.HOST}:3300/searchposts`,
             body:JSON.stringify({
                 'search_string':data.Title+" "+data.Body
             })},(err,response)=>{
@@ -179,7 +181,7 @@ MongoClient.connect(url,function(err,db){
         }).then(()=>{
             request.get({
                 headers:{'content-type':'application/json'},
-                url:'http://localhost:8089/questions'
+                url:`http://${process.env.HOST}:8089/questions`
             },(err,response,body)=>{
                 if(err) throw err
                 new Promise((resolve,reject)=>{
@@ -218,9 +220,9 @@ MongoClient.connect(url,function(err,db){
         const posts = req.params.posts
         let host_url;
         if(posts == 'questions')
-            host_url='http://localhost:8089/questions'
+            host_url=`http://${process.env.HOST}:8089/questions`
         else if(posts == 'answers')
-            host_url='http://localhost:8088/answers'
+            host_url=`http://${process.env.HOST}:8088/answers`
         request.get({
             headers:{'content-type':'apllication/json'},
             url:host_url
@@ -246,7 +248,7 @@ MongoClient.connect(url,function(err,db){
     app.get('/trending',(req,res)=>{
         request.get({
             headers:{'content-type':'application/json'},
-            url:'http://localhost:3300/questions/sort/Score/desc'
+            url:`http://${process.env.HOST}:3300/questions/sort/Score/desc`
         },(err,response,body)=>{
             res.send(JSON.parse(body))
         })

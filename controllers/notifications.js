@@ -1,6 +1,5 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 /* eslint-disable sonarjs/cognitive-complexity */
-/* eslint-disable no-console */
 const express = require('express')
 const app = express()
 app.use(express.static(__dirname+'/public'))
@@ -29,6 +28,8 @@ app.use(
     swaggerUi.serve, 
     swaggerUi.setup(swaggerDocument)
 );
+
+require('dotenv').config()
 
 const MongoClient = require('mongodb').MongoClient
 
@@ -175,7 +176,6 @@ MongoClient.connect(url,(err,db)=>{
                         dbo.collection(col_noti).updateMany({'UserId':User_Id,'Status':'unread'},{$set:{'Status':'read'}},(err,result)=>{
                             if(err)
                                 throw err
-                            console.log(result)
                             res.send('All Notifications Marked as Read')
                         })
 
@@ -191,7 +191,6 @@ MongoClient.connect(url,(err,db)=>{
         //api to push a notification for a particular user
         app.post('/User/:User_Id/push',(req,res)=>{
             const token = req.headers['x-access-token']
-            console.log(req.body)
             const PostId = parseInt(req.body.PostId)
 
             let User_Id = req.params.User_Id
@@ -199,8 +198,6 @@ MongoClient.connect(url,(err,db)=>{
                 User_Id = parseInt(User_Id)
 
             //console.log('hi from noti')
-            console.log(PostId)
-            console.log(User_Id)
             if(token == null || token == undefined){
                 res.send('Not Logged In')
             }
@@ -214,7 +211,6 @@ MongoClient.connect(url,(err,db)=>{
                         dbo.collection(col_noti).insertOne({'Id':n_counter++,'Body':Body,'UserId':User_Id,'PostId':PostId,'Status':'unread'},async (err,result)=>{
                             if(err)
                                 throw err
-                            console.log(result)
                             await cleanup()
                             res.send('Pushed')
                         })

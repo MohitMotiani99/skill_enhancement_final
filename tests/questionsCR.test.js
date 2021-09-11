@@ -338,3 +338,51 @@ describe('Add Answer ',()=>{
             }) 
     })
 })
+
+describe('Add Answer to Closed Question',()=>{
+    beforeEach(async ()=>{
+        await dbo.collection(col_name_q).updateOne({'PostTypeId':1,'Id':9999},{$set:{'ClosedDate':Date.now()}})
+    })
+    test('POST /questions/:question_id/answers/add CLOSED QUESTION', async () => {
+        const question_id = 9999
+        const answer = {
+            'Body':'Testing Add Answer v1.2 for JEST'
+        }
+        await supertest(app).post(`/questions/${question_id}/answers/add`)
+            .set({'content-type':'application/json'})
+            .set({'x-access-token':'t2'})
+            .send(answer)
+            .expect(200)
+            .then(async (res)=>{
+                expect(res.text).toBe('Already Closed Question')
+            }) 
+    })
+})
+test('POST /questions/:question_id/answers/add INVALID QUESTION', async () => {
+    const question_id = 9999000
+    const answer = {
+        'Body':'Testing Add Answer v1.2 for JEST'
+    }
+    await supertest(app).post(`/questions/${question_id}/answers/add`)
+        .set({'content-type':'application/json'})
+        .set({'x-access-token':'t2'})
+        .send(answer)
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid Question ID')
+        }) 
+})
+test('POST /questions/:question_id/answers/add INVALID USER', async () => {
+    const question_id = 9999
+    const answer = {
+        'Body':'Testing Add Answer v1.2 for JEST'
+    }
+    await supertest(app).post(`/questions/${question_id}/answers/add`)
+        .set({'content-type':'application/json'})
+        .set({'x-access-token':'nottoken'})
+        .send(answer)
+        .expect(200)
+        .then(async (res)=>{
+            expect(res.text).toBe('Invalid User')
+        }) 
+})

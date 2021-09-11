@@ -23,8 +23,10 @@ app.use(
     swaggerUi.setup(swaggerDocument)
 );
 
+
 const MongoClient = require('mongodb').MongoClient
 
+require('dotenv').config()
 
 const url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
 const db_name = 'skillenhancement'
@@ -144,7 +146,7 @@ MongoClient.connect(url,(err,db)=>{
                                                         request.post({
                                                             headers:{'content-type':'application/json',
                                                                 'x-access-token':token},
-                                                            url:`http://localhost:8083/User/${OwnerUserId}/push`,
+                                                            url:`http://${process.env.HOST}:8083/User/${OwnerUserId}/push`,
                                                             body:JSON.stringify({
                                                                 Body: "Congo!!!! "+User.username + " has accepted your answer on this question",
                                                                 PostId:answer_id
@@ -292,7 +294,7 @@ MongoClient.connect(url,(err,db)=>{
                                             dbo.collection(col_name_q).deleteOne({'PostTypeId':2,'Id':answer_id},(err,result)=>{
                                                 if(err) throw err
                                                 // console.log(result)
-                                                res.redirect(`http://localhost:8089/questions/${question_id}`)
+                                                res.redirect(`http://${process.env.HOST}:8089/questions/${question_id}`)
                                             })
                                         }
                                     }   
@@ -326,7 +328,7 @@ MongoClient.connect(url,(err,db)=>{
                     'content-type':'application/json',
                     'x-access-token':token
                 },
-                url:`http://localhost:8089/questions/${answer_id}/edit`,
+                url:`http://${process.env.HOST}:8089/questions/${answer_id}/edit`,
                 body : JSON.stringify(req.body)
             },(err,response)=>{
                 if(err)
@@ -352,7 +354,7 @@ MongoClient.connect(url,(err,db)=>{
                     'content-type':'application/json',
                     'x-access-token':token
                 },
-                url:`http://localhost:8089/questions/${answer_id}/${vote}`,
+                url:`http://${process.env.HOST}:8089/questions/${answer_id}/${vote}`,
             },(err,response)=>{
                 if(err)
                     throw err
@@ -377,7 +379,7 @@ MongoClient.connect(url,(err,db)=>{
                     'content-type':'application/json',
                     'x-access-token':token
                 },
-                url:`http://localhost:8089/questions/${answer_id}/${vote}/undo`,
+                url:`http://${process.env.HOST}:8089/questions/${answer_id}/${vote}/undo`,
             },(err,response)=>{
                 if(err)
                     throw err

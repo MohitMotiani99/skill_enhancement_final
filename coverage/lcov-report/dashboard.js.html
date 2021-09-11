@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78.57% </span>
+                <span class="strong">79.87% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>110/140</span>
+                <span class='fraction'>119/149</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.25% </span>
+                <span class="strong">86.26% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>104/122</span>
+                <span class='fraction'>113/131</span>
             </div>
         
             
@@ -310,7 +310,21 @@
 <a name='L251'></a><a href='#L251'>251</a>
 <a name='L252'></a><a href='#L252'>252</a>
 <a name='L253'></a><a href='#L253'>253</a>
-<a name='L254'></a><a href='#L254'>254</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -333,6 +347,20 @@
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -400,7 +428,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-yes">28x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -531,7 +559,7 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">172x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">510x</span>
+<span class="cline-any cline-yes">503x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -558,7 +586,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -586,6 +614,20 @@ app.use((req, res, next) =&gt; {
     next();
 });
 &nbsp;
+const path = require('path')
+const swaggerUi = require("swagger-ui-express")
+const fs = require('fs')
+const jsyaml = require('js-yaml');
+const file_path = path.join(__dirname,'..','swagger','dashboardSwagger.yaml')
+const spec = fs.readFileSync(file_path, 'utf8');
+swaggerDocument = jsyaml.load(spec);
+app.use(
+    '/swgr',
+    swaggerUi.serve, 
+    swaggerUi.setup(swaggerDocument)
+);
+&nbsp;
+require('dotenv').config()
 &nbsp;
 MongoClient.connect(url,function(err,db){
     <span class="missing-if-branch" title="if path not taken" >I</span>if(err)
@@ -634,7 +676,7 @@ MongoClient.connect(url,function(err,db){
             const a_set = new Set()
             request.get({
                 headers:{'content-type':'application/json'},
-                url:'http://localhost:8089/questions'
+                url:`http://${process.env.HOST}:8089/questions`
             },(err,response,body)=&gt;{
                 <span class="missing-if-branch" title="if path not taken" >I</span>if(err) <span class="cstat-no" title="statement not covered" >throw err</span>
                 new Promise((resolve,reject)=&gt;{
@@ -649,7 +691,7 @@ MongoClient.connect(url,function(err,db){
                     new Promise((resolve,reject)=&gt;{
                         request.get({
                             headers:{'content-type':'application/json'},
-                            url:'http://localhost:8088/answers'
+                            url:`http://${process.env.HOST}:8088/answers`
                         },(err,response,body)=&gt;{
                             <span class="missing-if-branch" title="if path not taken" >I</span>if(err) <span class="cstat-no" title="statement not covered" >throw err                   </span>
                             search_words.forEach(word=&gt;{
@@ -711,7 +753,7 @@ MongoClient.connect(url,function(err,db){
         const data = req.body 
         request.post({
             headers:{'content-type':'application/json'},
-            url:'http://localhost:3300/searchposts',
+            url:`http://${process.env.HOST}:3300/searchposts`,
             body:JSON.stringify({
                 'search_string':data.Title+" "+data.Body
             })},(err,response)=&gt;{
@@ -732,7 +774,7 @@ MongoClient.connect(url,function(err,db){
         }).then(<span class="fstat-no" title="function not covered" >()</span>=&gt;{
 <span class="cstat-no" title="statement not covered" >            request.get({</span>
                 headers:{'content-type':'application/json'},
-                url:'http://localhost:8089/questions'
+                url:`http://${process.env.HOST}:8089/questions`
             },<span class="fstat-no" title="function not covered" >(e</span>rr,response,body)=&gt;{
 <span class="cstat-no" title="statement not covered" >                if(err) <span class="cstat-no" title="statement not covered" >throw err</span></span>
 <span class="cstat-no" title="statement not covered" >                new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve,reject)=&gt;{</span>
@@ -771,9 +813,9 @@ MongoClient.connect(url,function(err,db){
         const posts = req.params.posts
         let host_url;
         if(posts == 'questions')
-            host_url='http://localhost:8089/questions'
+            host_url=`http://${process.env.HOST}:8089/questions`
         else <span class="missing-if-branch" title="else path not taken" >E</span>if(posts == 'answers')
-            host_url='http://localhost:8088/answers'
+            host_url=`http://${process.env.HOST}:8088/answers`
         request.get({
             headers:{'content-type':'apllication/json'},
             url:host_url
@@ -799,7 +841,7 @@ MongoClient.connect(url,function(err,db){
     app.get('/trending',(req,res)=&gt;{
         request.get({
             headers:{'content-type':'application/json'},
-            url:'http://localhost:3300/questions/sort/Score/desc'
+            url:`http://${process.env.HOST}:3300/questions/sort/Score/desc`
         },(err,response,body)=&gt;{
             res.send(JSON.parse(body))
         })
@@ -823,7 +865,7 @@ module.exports = app</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Sep 07 2021 11:58:17 GMT+0530 (India Standard Time)
+                at Sat Sep 11 2021 20:14:07 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>

@@ -19,6 +19,8 @@ app.use(
     swaggerUi.setup(swaggerDocument)
 );
 
+require('dotenv').config()
+
 const request = require('request');
 
 // var server = app.listen(8089,()=>{
@@ -259,7 +261,7 @@ MongoClient.connect(url,(err,db)=>{
                                             request.post({
                                                 headers:{'content-type':'application/json',
                                                     'x-access-token':token},
-                                                url:`http://localhost:8083/User/${OwnerUserId}/push`,
+                                                url:`http://${process.env.HOST}:8083/User/${OwnerUserId}/push`,
                                                 body:JSON.stringify({
                                                     Body: User.username + " has Reacted On your Post",
                                                     PostId:question_id
@@ -368,7 +370,7 @@ MongoClient.connect(url,(err,db)=>{
                                             request.post({
                                                 headers:{'content-type':'application/json',
                                                     'x-access-token':token},
-                                                url:`http://localhost:8083/User/${OwnerUserId}/push`,
+                                                url:`http://${process.env.HOST}:8083/User/${OwnerUserId}/push`,
                                                 body:JSON.stringify({
                                                     Body: User.username + " has Reacted On your Post",
                                                     PostId:question_id
@@ -453,7 +455,7 @@ MongoClient.connect(url,(err,db)=>{
                                                             request.post({
                                                                 headers:{'content-type':'application/json',
                                                                     'x-access-token':token},
-                                                                url:`http://localhost:8083/User/${answer}/push`,
+                                                                url:`http://${process.env.HOST}:8083/User/${answer}/push`,
                                                                 body:JSON.stringify({
                                                                     Body: User.username + " has deleted the post you answerd on",
                                                                     PostId:question_id
@@ -576,7 +578,7 @@ MongoClient.connect(url,(err,db)=>{
                                                                 request.post({
                                                                     headers:{'content-type':'application/json',
                                                                         'x-access-token':token},
-                                                                    url:`http://localhost:8083/User/${answer}/push`,
+                                                                    url:`http://${process.env.HOST}:8083/User/${answer}/push`,
                                                                     body:JSON.stringify({
                                                                         Body: User.username + " has Editted the post you answerd on",
                                                                         PostId:question_id
@@ -702,7 +704,7 @@ MongoClient.connect(url,(err,db)=>{
                                             request.post({
                                                 headers:{'content-type':'application/json',
                                                     'x-access-token':token},
-                                                url:`http://localhost:8083/User/${OwnerUserId}/push`,
+                                                url:`http://${process.env.HOST}:8083/User/${OwnerUserId}/push`,
                                                 body:JSON.stringify({
                                                     Body: User.username + " has answerd to your question",
                                                     PostId:question_id
@@ -710,13 +712,13 @@ MongoClient.connect(url,(err,db)=>{
                                             },(err,response)=>{
                                                 if(err) throw err;
                                                 // console.log(response.body)
-                                                res.redirect(`http://localhost:8088/answers/${a_obj.Id}`);
+                                                res.redirect(`http://${process.env.HOST}:8088/answers/${a_obj.Id}`);
                                         
         
                                             });
                                         }
                                         else 
-                                            res.redirect(`http://localhost:8088/answers/${a_obj.Id}`);
+                                            res.redirect(`http://${process.env.HOST}:8088/answers/${a_obj.Id}`);
 
                                     });
                                 }
@@ -789,7 +791,7 @@ MongoClient.connect(url,(err,db)=>{
                                                                 request.post({
                                                                     headers:{'content-type':'application/json',
                                                                         'x-access-token':token},
-                                                                    url:`http://localhost:8083/User/${answer}/push`,
+                                                                    url:`http://${process.env.HOST}:8083/User/${answer}/push`,
                                                                     body:JSON.stringify({
                                                                         Body: User.username + " has Closed the post you answerd on",
                                                                         PostId:question_id
@@ -881,7 +883,7 @@ MongoClient.connect(url,(err,db)=>{
                                                                 request.post({
                                                                     headers:{'content-type':'application/json',
                                                                         'x-access-token':token},
-                                                                    url:`http://localhost:8083/User/${answer}/push`,
+                                                                    url:`http://${process.env.HOST}:8083/User/${answer}/push`,
                                                                     body:JSON.stringify({
                                                                         Body: User.username + " has ReOpened the post you answerd on",
                                                                         PostId:question_id

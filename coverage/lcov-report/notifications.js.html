@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.08% </span>
+                <span class="strong">92.38% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>93/101</span>
+                <span class='fraction'>97/105</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93% </span>
+                <span class="strong">93.27% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>93/100</span>
+                <span class='fraction'>97/104</span>
             </div>
         
             
@@ -277,8 +277,16 @@
 <a name='L218'></a><a href='#L218'>218</a>
 <a name='L219'></a><a href='#L219'>219</a>
 <a name='L220'></a><a href='#L220'>220</a>
-<a name='L221'></a><a href='#L221'>221</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -295,6 +303,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -442,7 +465,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -458,15 +480,12 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -480,7 +499,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -499,7 +517,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disable sonarjs/no-duplicate-string */
 /* eslint-disable sonarjs/cognitive-complexity */
-/* eslint-disable no-console */
 const express = require('express')
 const app = express()
 app.use(express.static(__dirname+'/public'))
@@ -515,6 +532,21 @@ app.use(cors())
  * Body
  * Status
  */
+&nbsp;
+const path = require('path')
+const swaggerUi = require("swagger-ui-express")
+const fs = require('fs')
+const jsyaml = require('js-yaml');
+const file_path = path.join(__dirname,'..','swagger','notificationSwagger.yaml')
+const spec = fs.readFileSync(file_path, 'utf8');
+swaggerDocument = jsyaml.load(spec);
+app.use(
+    '/swgr',
+    swaggerUi.serve, 
+    swaggerUi.setup(swaggerDocument)
+);
+&nbsp;
+require('dotenv').config()
 &nbsp;
 const MongoClient = require('mongodb').MongoClient
 &nbsp;
@@ -661,7 +693,6 @@ MongoClient.connect(url,(err,db)=&gt;{
                         dbo.collection(col_noti).updateMany({'UserId':User_Id,'Status':'unread'},{$set:{'Status':'read'}},(err,result)=&gt;{
                             <span class="missing-if-branch" title="if path not taken" >I</span>if(err)
 <span class="cstat-no" title="statement not covered" >                                throw err</span>
-                            console.log(result)
                             res.send('All Notifications Marked as Read')
                         })
 &nbsp;
@@ -677,7 +708,6 @@ MongoClient.connect(url,(err,db)=&gt;{
         //api to push a notification for a particular user
         app.post('/User/:User_Id/push',(req,res)=&gt;{
             const token = req.headers['x-access-token']
-            console.log(req.body)
             const PostId = parseInt(req.body.PostId)
 &nbsp;
             let User_Id = req.params.User_Id
@@ -685,8 +715,6 @@ MongoClient.connect(url,(err,db)=&gt;{
                 User_Id = parseInt(User_Id)
 &nbsp;
             //console.log('hi from noti')
-            console.log(PostId)
-            console.log(User_Id)
             if(token == null || token == undefined){
                 res.send('Not Logged In')
             }
@@ -700,7 +728,6 @@ MongoClient.connect(url,(err,db)=&gt;{
                         dbo.collection(col_noti).insertOne({'Id':n_counter++,'Body':Body,'UserId':User_Id,'PostId':PostId,'Status':'unread'},async (err,result)=&gt;{
                             <span class="missing-if-branch" title="if path not taken" >I</span>if(err)
 <span class="cstat-no" title="statement not covered" >                                throw err</span>
-                            console.log(result)
                             await cleanup()
                             res.send('Pushed')
                         })
@@ -724,7 +751,7 @@ module.exports = app</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Sep 07 2021 11:58:17 GMT+0530 (India Standard Time)
+                at Sat Sep 11 2021 20:14:07 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>

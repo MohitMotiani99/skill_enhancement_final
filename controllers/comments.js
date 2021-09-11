@@ -27,6 +27,8 @@ app.use(
     swaggerUi.setup(swaggerDocument)
 );
 
+require('dotenv').config()
+
 let commentId
 // eslint-disable-next-line prefer-const
 let comment = []
@@ -149,7 +151,7 @@ MongoClient.connect(url,function(err,db){
                                                 request.post({
                                                     headers:{'content-type':'application/json',
                                                         'x-access-token':token},
-                                                    url:`http://localhost:8083/User/${questionOwner}/push`,
+                                                    url:`http://${process.env.HOST}:8083/User/${questionOwner}/push`,
                                                     body:JSON.stringify({
                                                         Body: User.displayName + " has commented on your Post",
                                                         PostId:id
@@ -189,11 +191,11 @@ MongoClient.connect(url,function(err,db){
                         user = result[0]
                         dbo.collection(commentCollection).find({"Id":id}).toArray(function(err,result){
                             if (result.length==1 && result[0].UserId == user.Id){
-                                dbo.collection(postsCollection).find({'Id':result[0].PostId}).toArray((err,result)=>{
+                                dbo.collection(postsCollection).find({'Id':result[0].PostId}).toArray(async (err,result)=>{
                                     if(result.length == 1){
                                         if(result[0].ClosedDate!=null)res.send('Post is Already Closed')
                                         else{
-                                            dbo.collection(commentCollection).updateOne({"Id":id},{$set:{"Text":req.body.body,"CreationDate":Date.now()}})
+                                            await dbo.collection(commentCollection).updateOne({"Id":id},{$set:{"Text":req.body.body,"CreationDate":Date.now()}})
                                             if(result[0].PostTypeId==1)
                                                 res.redirect(`/questions/${result[0].Id}/comments`)
                                             else if(result[0].PostTypeId==2)

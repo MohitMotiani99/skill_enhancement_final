@@ -305,7 +305,7 @@ test('POST /comments/:id/edit', async () => {
         .expect(302)
         .then(async (res)=>{
 
-            expect(res.headers.location).toBe('/question/9999/comments')
+            expect(res.headers.location).toBe('/questions/9999/comments')
             let recieved = await dbo.collection(col_name_c).find({'Id':9997}).toArray()
             recieved = recieved[0]
 

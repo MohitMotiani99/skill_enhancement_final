@@ -42,6 +42,8 @@ app.use(
     swaggerUi.setup(swaggerDocument)
 );
 
+require('dotenv').config()
+
 MongoClient.connect(url,(err,db)=>{
     if(err)throw err
     dbo = db.db(db_name)
@@ -87,46 +89,46 @@ MongoClient.connect(url,(err,db)=>{
 
 
         //post complete user details 
-        app.post('/api/signup', (req,res)=>{
+        // app.post('/api/signup', (req,res)=>{
 
-            const p = req.body.password
-            //var pc = req.body.passwordConformation
-            const Id = u_counter 
-            const un = req.body.username 
-            const e = req.body.email 
-            const g = req.body.gender 
+        //     const p = req.body.password
+        //     //var pc = req.body.passwordConformation
+        //     const Id = u_counter 
+        //     const un = req.body.username 
+        //     const e = req.body.email 
+        //     const g = req.body.gender 
 
-            dbo.collection('user').find({'username':un}).toArray((err,result)=>{
-            // console.log(result.length)
-                if (result.length==0)
-                {
-                    const u_obj={
-                        Id:Number(u_counter),
-                        username:un,
-                        token:"abc",
-                        displayName:"None",
-                        firstName:"None",
-                        lastName:"None",
-                        password:"None",
-                        grade:0,
-                        email:e,
-                        gender:g,
-                        socialLink:'None',
-                        image:"https://secure.gravatar.com/avatar/6123d8d55f9cc322bc7ef0f0?s=90&d=ide...",
-                        CreationDate:Date()
-                    }
+        //     dbo.collection('user').find({'username':un}).toArray((err,result)=>{
+        //     // console.log(result.length)
+        //         if (result.length==0)
+        //         {
+        //             const u_obj={
+        //                 Id:Number(u_counter),
+        //                 username:un,
+        //                 token:"abc",
+        //                 displayName:"None",
+        //                 firstName:"None",
+        //                 lastName:"None",
+        //                 password:"None",
+        //                 grade:0,
+        //                 email:e,
+        //                 gender:g,
+        //                 socialLink:'None',
+        //                 image:"https://secure.gravatar.com/avatar/6123d8d55f9cc322bc7ef0f0?s=90&d=ide...",
+        //                 CreationDate:Date()
+        //             }
 
-                    dbo.collection('users').insertOne(u_obj,(err,result)=>{
-                        if(err) throw err
-                        res.send("User " +un +" is added succesfully")
-                        u_counter+=1;
-                    })                    
-                }
-                else{
-                    res.send('Username already Exists')
-                }
-            })
-        })
+        //             dbo.collection('users').insertOne(u_obj,(err,result)=>{
+        //                 if(err) throw err
+        //                 res.send("User " +un +" is added succesfully")
+        //                 u_counter+=1;
+        //             })                    
+        //         }
+        //         else{
+        //             res.send('Username already Exists')
+        //         }
+        //     })
+        // })
 
         // edit user profile
         app.patch('/users/:user_id/editprofile', verifyAuth, (req,res)=>{
