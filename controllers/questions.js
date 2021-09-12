@@ -607,7 +607,6 @@ MongoClient.connect(url,(err,db)=>{
                                     res.send('Already in Closed State');
                                 }
                                 else{
-                                    const OwnerUserId = result[0].OwnerUserId;
 
                                     dbo.collection(col_name_q).updateOne({'Id':question_id},{$set:{'ClosedDate':Date.now()}},(err,result)=>{
                                         if(err) throw err;

@@ -30,10 +30,7 @@ app.use(
 require('dotenv').config()
 
 let commentId
-// eslint-disable-next-line prefer-const
-let comment = []
 let user
-let validation
 
 const request = require('request')
 const validate_user = require('./authorize')
@@ -44,7 +41,7 @@ MongoClient.connect(url,function(err,db){
     if(err) throw err
     const dbo=db.db(mydb)
     dbo.collection(collection).find({}).toArray(function(err,result){
-        let commentId = result[0]["c_num"]
+        commentId = result[0]["c_num"]
         const initial_commentId = commentId
     
         async function cleanup(){

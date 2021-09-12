@@ -1,11 +1,10 @@
-/* eslint-disable no-var */
-var express = require('express')
-var bodyParser = require('body-parser')
+const express = require('express')
+const bodyParser = require('body-parser')
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static("public"))
-var cors = require('cors')
+const cors = require('cors')
 app.use(cors())
 const { verifyAuth } = require('./pauthorize')
 const { verifyToken } = require('./pauthorize')
@@ -17,11 +16,7 @@ app.use(bodyParser.urlencoded({
 const MongoClient = require('mongodb').MongoClient
 const url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
 const db_name = 'skillenhancement'
-const col_name_q = 'questionAnswer'
-const col_name_u = 'users'
 
-//var validate_user = require('./authorize')
-const { request } = require('express')
 
 const path = require('path')
 const swaggerUi = require("swagger-ui-express")
@@ -43,13 +38,7 @@ MongoClient.connect(url,(err,db)=>{
     const dbo = db.db(db_name)
 
 
-    let u_counter;
-    let initial_u_counter;
-
     dbo.collection('globals').find({}).toArray((err,result)=>{
-
-        u_counter = result[0].userid
-        initial_u_counter = u_counter
 
         //get complete user details from id
         app.get('/users/:user_id',async (req,res)=>{
@@ -75,8 +64,7 @@ MongoClient.connect(url,(err,db)=>{
 
             //only owner
             const user_id = String(req.params.user_id)
-            //var p = req.body.password
-            //var pc = req.body.passwordConformation
+            const p = req.body.password
             const g = (req.body.gender)
             const s = (req.body.SocialLink)
             dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
@@ -85,7 +73,7 @@ MongoClient.connect(url,(err,db)=>{
                         if (result.length==1)
                         {
                             const u_obj={
-                            //password:(p==undefined)?result[0].password:p,
+                                password:(p==undefined)?result[0].password:p,
                                 gender:g,
                                 SocialLink:s
                             }

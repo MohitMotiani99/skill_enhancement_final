@@ -65,7 +65,7 @@ paths:
     post:
       tags:
         - "comments"
-      summary: "Add a new Comment for a Particular Question"
+      summary: "Add a new Comment for a Particular Answer"
       parameters:
         - $ref: "#/components/parameters/token"
         - name: "id"
