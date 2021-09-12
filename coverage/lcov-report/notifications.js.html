@@ -272,21 +272,7 @@
 <a name='L213'></a><a href='#L213'>213</a>
 <a name='L214'></a><a href='#L214'>214</a>
 <a name='L215'></a><a href='#L215'>215</a>
-<a name='L216'></a><a href='#L216'>216</a>
-<a name='L217'></a><a href='#L217'>217</a>
-<a name='L218'></a><a href='#L218'>218</a>
-<a name='L219'></a><a href='#L219'>219</a>
-<a name='L220'></a><a href='#L220'>220</a>
-<a name='L221'></a><a href='#L221'>221</a>
-<a name='L222'></a><a href='#L222'>222</a>
-<a name='L223'></a><a href='#L223'>223</a>
-<a name='L224'></a><a href='#L224'>224</a>
-<a name='L225'></a><a href='#L225'>225</a>
-<a name='L226'></a><a href='#L226'>226</a>
-<a name='L227'></a><a href='#L227'>227</a>
-<a name='L228'></a><a href='#L228'>228</a>
-<a name='L229'></a><a href='#L229'>229</a>
-<a name='L230'></a><a href='#L230'>230</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L216'></a><a href='#L216'>216</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -337,27 +323,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -369,7 +344,6 @@
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -425,7 +399,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -484,7 +457,6 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -539,7 +511,7 @@ const fs = require('fs')
 const jsyaml = require('js-yaml');
 const file_path = path.join(__dirname,'..','swagger','notificationSwagger.yaml')
 const spec = fs.readFileSync(file_path, 'utf8');
-swaggerDocument = jsyaml.load(spec);
+const swaggerDocument = jsyaml.load(spec);
 app.use(
     '/swgr',
     swaggerUi.serve, 
@@ -562,33 +534,22 @@ const validate_user = require('./authorize')
 &nbsp;
 MongoClient.connect(url,(err,db)=&gt;{
     <span class="missing-if-branch" title="if path not taken" >I</span>if(err)<span class="cstat-no" title="statement not covered" >throw err</span>
-    dbo = db.db(db_name)
+    const dbo = db.db(db_name)
 &nbsp;
-    //console.log('Motification Database Connected')
 &nbsp;
     //retrieves the notification counter(n_num) 
     dbo.collection('globals').find({}).toArray((err,result)=&gt;{
-        //console.log(result)
         q_counter = result[0].q_num
         initial_q_counter = q_counter
 &nbsp;
         n_counter = result[0].n_num
         initial_n_counter=n_counter
 &nbsp;
-        //console.log(n_counter)
-&nbsp;
-&nbsp;
         //to update the notification counter back to the colletion 'globals'
         async function cleanup(){
             dbo.collection('globals').updateOne({'n_num':initial_n_counter},{$set:{'n_num':n_counter}},(err,result)=&gt;{
-            //console.log('Server Closed')
-            //process.exit(1)
-&nbsp;
             })
         }
-&nbsp;
-        // process.on('exit',cleanup)
-        // process.on('SIGINT',cleanup)
 &nbsp;
 &nbsp;
         //api to get all unread notifications for a particular user
@@ -599,7 +560,6 @@ MongoClient.connect(url,(err,db)=&gt;{
             if(req.params.User_Id.length&lt;=5)
                 User_Id = parseInt(User_Id)
         
-            //console.log(User_Id)
             if(token == null || token == undefined){
                 res.send('Not Logged In')
             }
@@ -654,7 +614,6 @@ MongoClient.connect(url,(err,db)=&gt;{
                                 dbo.collection(col_noti).updateOne({'UserId':User_Id,'Id':noti_id},{$set:{'Status':'read'}},(err,result)=&gt;{
                                     <span class="missing-if-branch" title="if path not taken" >I</span>if(err)
 <span class="cstat-no" title="statement not covered" >                                        throw err</span>
-                                    //console.log(result)
                                     res.redirect(`/User/${User_Id}/notifs`)
                                 })
                             }
@@ -714,7 +673,6 @@ MongoClient.connect(url,(err,db)=&gt;{
             <span class="missing-if-branch" title="else path not taken" >E</span>if(req.params.User_Id.length&lt;=5)
                 User_Id = parseInt(User_Id)
 &nbsp;
-            //console.log('hi from noti')
             if(token == null || token == undefined){
                 res.send('Not Logged In')
             }
@@ -751,7 +709,7 @@ module.exports = app</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Sep 12 2021 13:09:51 GMT+0530 (India Standard Time)
+                at Sun Sep 12 2021 14:32:54 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>

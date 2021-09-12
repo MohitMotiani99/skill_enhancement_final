@@ -105,20 +105,7 @@
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -126,23 +113,16 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -154,23 +134,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -187,23 +161,16 @@ module.exports = {
         const token = req.headers['x-access-token'];
         const user_Id = String(req.params.user_id);
         <span class="missing-if-branch" title="else path not taken" >E</span>if (token == undefined || token == null || token.length &lt;5) {
-            //console.log(token.length);
             next();
         }
-        // if(token.length&lt;=5) next()
         // Check if token is undefined
         else <span class="cstat-no" title="statement not covered" >if (typeof token !== 'undefined') {</span>
             const response = <span class="cstat-no" title="statement not covered" >await fetch(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${token}`);</span>
             const user = <span class="cstat-no" title="statement not covered" >await response.json();</span>
-            //console.log(user)
 <span class="cstat-no" title="statement not covered" >            if ([user.error]=='invalid_token'){<span class="cstat-no" title="statement not covered" >res.sendStatus(403);<span class="cstat-no" title="statement not covered" >r</span>eturn;}</span></span>
             const userid = <span class="cstat-no" title="statement not covered" >user.user_id;</span>
-            //console.log(userid)
 <span class="cstat-no" title="statement not covered" >            dbo.collection('users').findOne({'Id': userid },<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{<span class="cstat-no" title="statement not covered" >if(result==null) {<span class="cstat-no" title="statement not covered" >res.send('User Not Found');<span class="cstat-no" title="statement not covered" >r</span>eturn}</span></span></span>
-                //console.log(user_Id)
-                //console.log(result.Id)
 <span class="cstat-no" title="statement not covered" >                if(result.Id == user_Id &amp;&amp; result.Id){ </span>
-                    //console.log(result.Id);
 <span class="cstat-no" title="statement not covered" >                    next(); </span>}
                 else <span class="cstat-no" title="statement not covered" >if(err) {<span class="cstat-no" title="statement not covered" >res.sendStatus(403);}</span></span>
             })
@@ -214,19 +181,14 @@ module.exports = {
     verifyToken: <span class="fstat-no" title="function not covered" >as</span>ync function (req, res, next) {
     // Get auth header value
         const token = <span class="cstat-no" title="statement not covered" >req.headers['x-access-token'];</span>
-        //const user_id = String(req.params.user_id);
         // Check if bearer is undefined
 <span class="cstat-no" title="statement not covered" >        if (typeof token !== 'undefined') {</span>
             const response = <span class="cstat-no" title="statement not covered" >await fetch(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${token}`);</span>
             const user = <span class="cstat-no" title="statement not covered" >await response.json();</span>
-            //console.log(user.error)
 <span class="cstat-no" title="statement not covered" >            if ([user.error]=='invalid_token'){<span class="cstat-no" title="statement not covered" >res.sendStatus(403);<span class="cstat-no" title="statement not covered" >r</span>eturn;}</span></span>
             const userid = <span class="cstat-no" title="statement not covered" >user.user_id;</span>
-            //console.log(user.user_id)
 <span class="cstat-no" title="statement not covered" >            dbo.collection('users').findOne({'Id': userid },<span class="fstat-no" title="function not covered" >(e</span>rr,result)=&gt;{<span class="cstat-no" title="statement not covered" >if(result==null) {<span class="cstat-no" title="statement not covered" >res.send('User Not Found');<span class="cstat-no" title="statement not covered" >r</span>eturn}</span></span></span>
-                //console.log(result)
 <span class="cstat-no" title="statement not covered" >                if(result.Id == userid){ </span>
-                    //console.log(result.Id); 
 <span class="cstat-no" title="statement not covered" >                    next(); </span>}
 &nbsp;
                 else <span class="cstat-no" title="statement not covered" >if(err) {    </span>
@@ -236,7 +198,6 @@ module.exports = {
 &nbsp;
 &nbsp;
     validate_user: <span class="fstat-no" title="function not covered" >fu</span>nction (token,user_obj){
-        //return jwt.verify(token)
 <span class="cstat-no" title="statement not covered" >        return true</span>
     },
 }
@@ -247,7 +208,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Sep 12 2021 13:09:51 GMT+0530 (India Standard Time)
+                at Sun Sep 12 2021 14:32:54 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>

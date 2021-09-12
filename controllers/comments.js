@@ -48,8 +48,7 @@ MongoClient.connect(url,function(err,db){
         initial_commentId = commentId
     
         async function cleanup(){
-            dbo.collection('globals').updateOne({'c_num':initial_commentId},{$set:{'c_num':commentId}},(err,result)=>{
-            })
+            dbo.collection('globals').updateOne({'c_num':initial_commentId},{$set:{'c_num':commentId}})
         }
     
         //Get comments on the posts identified by a comment id

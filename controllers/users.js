@@ -53,13 +53,6 @@ MongoClient.connect(url,(err,db)=>{
         u_counter = result[0].userid
         initial_u_counter = u_counter
 
-
-        function cleanup(){
-            dbo.collection('globals').updateOne({'userid':initial_u_counter},{$set:{'userid':u_counter}},(err,result)=>{
-
-            })
-        }
-
         //get complete user details from id
         app.get('/users/:user_id',async (req,res)=>{
         

@@ -48,8 +48,7 @@ MongoClient.connect(url,(err,db)=>{
 
         //cleanup function to updatee post counter on server close to the collection 'globals'
         function cleanup(){
-            dbo.collection('globals').updateOne({'q_num':initial_q_counter},{$set:{'q_num':q_counter}},(err,result)=>{
-            })
+            dbo.collection('globals').updateOne({'q_num':initial_q_counter},{$set:{'q_num':q_counter}})
         }
 
         //get all answer obects

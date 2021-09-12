@@ -53,9 +53,7 @@ MongoClient.connect(url,(err,db)=>{
 
         //persists the q_counter in the globals collection server close
         async function cleanup(){
-            dbo.collection('globals').updateOne({'q_num':initial_q_counter},{$set:{'q_num':q_counter}},(err,result)=>{
-
-            });
+            dbo.collection('globals').updateOne({'q_num':initial_q_counter},{$set:{'q_num':q_counter}})
         }
 
     

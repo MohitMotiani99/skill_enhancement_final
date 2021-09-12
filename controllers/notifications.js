@@ -58,8 +58,7 @@ MongoClient.connect(url,(err,db)=>{
 
         //to update the notification counter back to the colletion 'globals'
         async function cleanup(){
-            dbo.collection('globals').updateOne({'n_num':initial_n_counter},{$set:{'n_num':n_counter}},(err,result)=>{
-            })
+            dbo.collection('globals').updateOne({'n_num':initial_n_counter},{$set:{'n_num':n_counter}})
         }
 
 
