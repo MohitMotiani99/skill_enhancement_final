@@ -7,20 +7,16 @@ var bodyParser = require("body-parser")
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static("public"))
-//var cors = require('cors')
-//var app = express()
+var cors = require('cors')
+app.use(cors())
 const { verifyAuth } = require('./pauthorize')
 const { verifyToken } = require('./pauthorize')
 
 app.use(bodyParser.urlencoded({
     extended:true
 }));
-// var server = app.listen(5050,()=>{
-//     console.log(' Server Started')
-// })
 
 const MongoClient = require('mongodb').MongoClient
-//var url = 'mongodb://127.0.0.1:27017'
 const url = 'mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority'
 const db_name = 'skillenhancement'
 const col_name_q = 'questionAnswer'
@@ -35,7 +31,7 @@ const fs = require('fs')
 const jsyaml = require('js-yaml');
 const file_path = path.join(__dirname,'..','swagger','userSwagger.yaml')
 const spec = fs.readFileSync(file_path, 'utf8');
-swaggerDocument = jsyaml.load(spec);
+const swaggerDocument = jsyaml.load(spec);
 app.use(
     '/swgr',
     swaggerUi.serve, 
@@ -46,7 +42,7 @@ require('dotenv').config()
 
 MongoClient.connect(url,(err,db)=>{
     if(err)throw err
-    dbo = db.db(db_name)
+    const dbo = db.db(db_name)
 
 
     let u_counter;
@@ -60,14 +56,9 @@ MongoClient.connect(url,(err,db)=>{
 
         function cleanup(){
             dbo.collection('globals').updateOne({'userid':initial_u_counter},{$set:{'userid':u_counter}},(err,result)=>{
-            //console.log('Server Closed')
-                process.exit(1)
 
             })
         }
-
-        process.on('exit',cleanup)
-        process.on('SIGINT',cleanup)
 
         //get complete user details from id
         app.get('/users/:user_id',async (req,res)=>{
@@ -88,48 +79,6 @@ MongoClient.connect(url,(err,db)=>{
         })
 
 
-        //post complete user details 
-        // app.post('/api/signup', (req,res)=>{
-
-        //     const p = req.body.password
-        //     //var pc = req.body.passwordConformation
-        //     const Id = u_counter 
-        //     const un = req.body.username 
-        //     const e = req.body.email 
-        //     const g = req.body.gender 
-
-        //     dbo.collection('user').find({'username':un}).toArray((err,result)=>{
-        //     // console.log(result.length)
-        //         if (result.length==0)
-        //         {
-        //             const u_obj={
-        //                 Id:Number(u_counter),
-        //                 username:un,
-        //                 token:"abc",
-        //                 displayName:"None",
-        //                 firstName:"None",
-        //                 lastName:"None",
-        //                 password:"None",
-        //                 grade:0,
-        //                 email:e,
-        //                 gender:g,
-        //                 socialLink:'None',
-        //                 image:"https://secure.gravatar.com/avatar/6123d8d55f9cc322bc7ef0f0?s=90&d=ide...",
-        //                 CreationDate:Date()
-        //             }
-
-        //             dbo.collection('users').insertOne(u_obj,(err,result)=>{
-        //                 if(err) throw err
-        //                 res.send("User " +un +" is added succesfully")
-        //                 u_counter+=1;
-        //             })                    
-        //         }
-        //         else{
-        //             res.send('Username already Exists')
-        //         }
-        //     })
-        // })
-
         // edit user profile
         app.patch('/users/:user_id/editprofile', verifyAuth, (req,res)=>{
 
@@ -137,7 +86,6 @@ MongoClient.connect(url,(err,db)=>{
             const user_id = String(req.params.user_id)
             //var p = req.body.password
             //var pc = req.body.passwordConformation
-            //var e = req.body.image
             const g = (req.body.gender)
             const s = (req.body.SocialLink)
             dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{

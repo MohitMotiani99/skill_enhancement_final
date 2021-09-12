@@ -22,7 +22,7 @@ const fs = require('fs')
 const jsyaml = require('js-yaml');
 const file_path = path.join(__dirname,'..','swagger','notificationSwagger.yaml')
 const spec = fs.readFileSync(file_path, 'utf8');
-swaggerDocument = jsyaml.load(spec);
+const swaggerDocument = jsyaml.load(spec);
 app.use(
     '/swgr',
     swaggerUi.serve, 
@@ -45,33 +45,22 @@ const validate_user = require('./authorize')
 
 MongoClient.connect(url,(err,db)=>{
     if(err)throw err
-    dbo = db.db(db_name)
+    const dbo = db.db(db_name)
 
-    //console.log('Motification Database Connected')
 
     //retrieves the notification counter(n_num) 
     dbo.collection('globals').find({}).toArray((err,result)=>{
-        //console.log(result)
         q_counter = result[0].q_num
         initial_q_counter = q_counter
 
         n_counter = result[0].n_num
         initial_n_counter=n_counter
 
-        //console.log(n_counter)
-
-
         //to update the notification counter back to the colletion 'globals'
         async function cleanup(){
             dbo.collection('globals').updateOne({'n_num':initial_n_counter},{$set:{'n_num':n_counter}},(err,result)=>{
-            //console.log('Server Closed')
-            //process.exit(1)
-
             })
         }
-
-        // process.on('exit',cleanup)
-        // process.on('SIGINT',cleanup)
 
 
         //api to get all unread notifications for a particular user
@@ -82,7 +71,6 @@ MongoClient.connect(url,(err,db)=>{
             if(req.params.User_Id.length<=5)
                 User_Id = parseInt(User_Id)
         
-            //console.log(User_Id)
             if(token == null || token == undefined){
                 res.send('Not Logged In')
             }
@@ -137,7 +125,6 @@ MongoClient.connect(url,(err,db)=>{
                                 dbo.collection(col_noti).updateOne({'UserId':User_Id,'Id':noti_id},{$set:{'Status':'read'}},(err,result)=>{
                                     if(err)
                                         throw err
-                                    //console.log(result)
                                     res.redirect(`/User/${User_Id}/notifs`)
                                 })
                             }
@@ -197,7 +184,6 @@ MongoClient.connect(url,(err,db)=>{
             if(req.params.User_Id.length<=5)
                 User_Id = parseInt(User_Id)
 
-            //console.log('hi from noti')
             if(token == null || token == undefined){
                 res.send('Not Logged In')
             }

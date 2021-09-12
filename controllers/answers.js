@@ -12,7 +12,7 @@ const fs = require('fs')
 const jsyaml = require('js-yaml');
 const file_path = path.join(__dirname,'..','swagger','answerSwagger.yaml')
 const spec = fs.readFileSync(file_path, 'utf8');
-swaggerDocument = jsyaml.load(spec);
+const swaggerDocument = jsyaml.load(spec);
 app.use(
     '/swgr',
     swaggerUi.serve, 
@@ -36,7 +36,7 @@ const request = require('request')
 
 MongoClient.connect(url,(err,db)=>{
     if(err)throw err
-    dbo = db.db(db_name)
+    const dbo = db.db(db_name)
 
     let q_counter;
     let initial_q_counter
