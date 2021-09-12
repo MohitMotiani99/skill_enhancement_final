@@ -5,10 +5,6 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 const cors = require('cors')
 app.use(cors())
-// var server = app.listen(8088,()=>{
-//     console.log('Answer Controller Started')
-
-// })
 
 const path = require('path')
 const swaggerUi = require("swagger-ui-express")
@@ -42,31 +38,19 @@ MongoClient.connect(url,(err,db)=>{
     if(err)throw err
     dbo = db.db(db_name)
 
-    //console.log('sep Database Connected')
-
     let q_counter;
     let initial_q_counter
 
     //connecting to globals collection to fetch the next post id
     dbo.collection('globals').find({}).toArray((err,result)=>{
-        // console.log(result)
         q_counter = result[0].q_num
         initial_q_counter = q_counter
-
-        // console.log(q_counter)
 
         //cleanup function to updatee post counter on server close to the collection 'globals'
         function cleanup(){
             dbo.collection('globals').updateOne({'q_num':initial_q_counter},{$set:{'q_num':q_counter}},(err,result)=>{
-                //console.log('Server Closed')
-                //process.exit(1)
-
             })
         }
-
-        // process.on('exit',cleanup)
-        // process.on('SIGINT',cleanup)
-
 
         //get all answer obects
         app.get('/answers',(req,res)=>{
@@ -86,7 +70,6 @@ MongoClient.connect(url,(err,db)=>{
                     const answer = result[0]
                     dbo.collection(col_name_q).updateOne({'PostTypeId':2,'Id':answer_id},{$inc:{'ViewCount':1}},(err,result)=>{
                         if(err) throw err
-                        // console.log(result)
 
                         answer.ViewCount+=1
                         res.send(answer)
@@ -94,7 +77,6 @@ MongoClient.connect(url,(err,db)=>{
                 
                 }
                 else{
-                //res.render('invalid_answer.jade')
                     res.send('Invalid Answer ID')
                 }
             })
@@ -137,12 +119,10 @@ MongoClient.connect(url,(err,db)=>{
                                         {
                                             dbo.collection(col_name_q).updateOne({'PostTypeId':1,'Id':question_id},{$set:{'AcceptedAnswerId':answer_id}},(err,result)=>{
                                                 if(err) throw err
-                                                // console.log(result)
 
                                                 //after updation sending notification to the owner of the answer which got accepted
                                                 new Promise((resolve,reject)=>{
                                                     if(ActionUserId != OwnerUserId){
-                                                        // console.log('inside noti call')
                                                         request.post({
                                                             headers:{'content-type':'application/json',
                                                                 'x-access-token':token},
@@ -153,7 +133,6 @@ MongoClient.connect(url,(err,db)=>{
                                                             })
                                                         },(err,response)=>{
                                                             if(err) throw err
-                                                            // console.log(response.body)
                                                     
                                                         })
                                                     }
@@ -171,20 +150,17 @@ MongoClient.connect(url,(err,db)=>{
     
                                     }
                                     else{
-                                        //res.render('invalid_answer.jade')
                                         res.send('Invalid Answer ID')        
                                     }
                                 })
     
                             }
                             else{
-                                //res.render('invalid_answer.jade')
                                 res.send('Invalid Answer ID')
                             }
                         })
                     }
                     else{
-                        //res.render('invalid_user.jade')
                         res.send('Invalid User')
                     }
                 })
@@ -230,7 +206,6 @@ MongoClient.connect(url,(err,db)=>{
                                         {
                                             dbo.collection(col_name_q).updateOne({'PostTypeId':1,'Id':question_id},{$set:{'AcceptedAnswerId':-1}},(err,result)=>{
                                                 if(err) throw err
-                                                // console.log(result)
                                                 res.redirect(`/answers/${answer_id}`)
                                             })
                                         }
@@ -238,20 +213,17 @@ MongoClient.connect(url,(err,db)=>{
                                             res.send('This is not an accepted answer')
                                     }
                                     else{
-                                        //res.render('invalid_answer.jade')
                                         res.send('Invalid Question ID')        
                                     }
                                 })
     
                             }
                             else{
-                                //res.render('invalid_answer.jade')
                                 res.send('Invalid Answer ID')
                             }
                         })
                     }
                     else{
-                        //res.render('invalid_user.jade')
                         res.send('Invalid User')
                     }
                 })
@@ -293,25 +265,21 @@ MongoClient.connect(url,(err,db)=>{
                                         else{
                                             dbo.collection(col_name_q).deleteOne({'PostTypeId':2,'Id':answer_id},(err,result)=>{
                                                 if(err) throw err
-                                                // console.log(result)
                                                 res.redirect(`http://${process.env.HOST}:8089/questions/${question_id}`)
                                             })
                                         }
                                     }   
                                     else{
-                                        //res.render('invalid_answer.jade')
                                         res.send('Invalid Question ID')         
                                     } 
                                 })
                             }
                             else{
-                                //res.render('invalid_answer.jade')
                                 res.send('Invalid Answer ID')
                             }
                         })
                     }
                     else{
-                        //res.render('invalid_user.jade')
                         res.send('Invalid User')
                     }
                 })
@@ -333,7 +301,6 @@ MongoClient.connect(url,(err,db)=>{
             },(err,response)=>{
                 if(err)
                     throw err
-                // console.log(response.body)
                 if(response.body=='Success'){
                     res.redirect(`/answers/${answer_id}`)
                 }
@@ -358,7 +325,6 @@ MongoClient.connect(url,(err,db)=>{
             },(err,response)=>{
                 if(err)
                     throw err
-                // console.log(response.body)
                 if(response.body=='Success'){
                     res.redirect(`/answers/${answer_id}`)
                 }
@@ -383,7 +349,6 @@ MongoClient.connect(url,(err,db)=>{
             },(err,response)=>{
                 if(err)
                     throw err
-                // console.log(response.body)
                 if(response.body=='Success'){
                     res.redirect(`/answers/${answer_id}`)
                 }

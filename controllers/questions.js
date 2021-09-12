@@ -41,7 +41,6 @@ MongoClient.connect(url,(err,db)=>{
     if(err)throw err;
     const dbo = db.db(db_name);
 
-    //console.log('sep Database Connected')
 
     let q_counter;
     let initial_q_counter;
