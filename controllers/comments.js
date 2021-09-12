@@ -39,9 +39,6 @@ const request = require('request')
 const validate_user = require('./authorize')
 const get_token = require('./authorize')
 
-// app.listen(8075,function(){
-//     console.log("Server started")
-// })
 
 MongoClient.connect(url,function(err,db){
     if(err) throw err
@@ -49,51 +46,12 @@ MongoClient.connect(url,function(err,db){
     dbo.collection(collection).find({}).toArray(function(err,result){
         commentId = result[0]["c_num"]
         initial_commentId = commentId
-        //console.log(commentId)
     
         async function cleanup(){
             dbo.collection('globals').updateOne({'c_num':initial_commentId},{$set:{'c_num':commentId}},(err,result)=>{
-                //console.log('Server Closed')
-                //process.exit(1)
-    
             })
         }
     
-        // process.on('exit',cleanup)
-        // process.on('SIGINT',cleanup)
-    
-
-        //Get comments on the posts (question or answer) identified by a set of ids
-        // app.get(["/questions/:ids/comments","/answers/:ids/comments"],(req,res)=>{
-        //     const ids = JSON.parse(req.params["ids"])
-        //     let comments
-
-        //     // eslint-disable-next-line no-use-before-define
-        //     run().then(()=>{
-        //         //console.log(comment)
-        //         comments = comment
-        //         comment=[]
-        //         res.send(comments)
-        //     })
-
-        //     async function run(){
-        //         ids.forEach(id=>{
-        //             dbo.collection(commentCollection).find({"PostId":id}).toArray(function(err,result){
-        //                 if (err) 
-        //                     throw err
-        //                 else if (result.length == 0){
-        //                     comment = ["Invalid Comment Id"]
-        //                 }
-        //                 else {
-        //                     result.forEach(ele=>{
-        //                         comment.push(ele)
-        //                     })
-        //                 }
-        //             })
-        //         })
-        //     }
-        // })
-
         //Get comments on the posts identified by a comment id
         app.get('/comments/:id',(req,res)=>{
             const id = Number(req.params["id"])
@@ -106,7 +64,6 @@ MongoClient.connect(url,function(err,db){
         //Get comments on the posts (question or answer) identified by a set of ids
         app.get(["/questions/:id/comments","/answers/:id/comments"],(req,res)=>{
             const id = Number(req.params["id"])
-            // console.log(id)
             dbo.collection(commentCollection).find({PostId:id}).toArray(function(err,result){
                 if (err) throw err
                 else res.send(result)
@@ -142,12 +99,9 @@ MongoClient.connect(url,function(err,db){
                                     questionOwner = result[0].OwnerUserId
                                     dbo.collection(commentCollection).insertOne(commentObj,function(err,result){
                                         if (err) throw err
-                                        //console.log(result)
-
                                         //Notification
                                         new Promise((resolve,reject)=>{
                                             if(User.Id != questionOwner){
-                                                // console.log('Comment Notification')
                                                 request.post({
                                                     headers:{'content-type':'application/json',
                                                         'x-access-token':token},
@@ -158,7 +112,6 @@ MongoClient.connect(url,function(err,db){
                                                     })
                                                 },(err,response)=>{
                                                     if(err) throw err
-                                                    // console.log(response.body)
                                                 })
                                             }
                                             resolve()
@@ -296,7 +249,6 @@ MongoClient.connect(url,function(err,db){
         //Get the comments posted by the users identified id
         app.get(["/users/:id/comments"],(req,res)=>{
             const id = Number(req.params["id"])
-            // console.log(id)
             dbo.collection(userCollection).find({'Id':id}).toArray((err,result)=>{
                 if(result.length==1){
                     dbo.collection(commentCollection).find({UserId:id}).toArray(function(err,result){
