@@ -46,11 +46,6 @@ MongoClient.connect(url,(err,db)=>{
         q_counter = result[0].q_num
         initial_q_counter = q_counter
 
-        //cleanup function to updatee post counter on server close to the collection 'globals'
-        function cleanup(){
-            dbo.collection('globals').updateOne({'q_num':initial_q_counter},{$set:{'q_num':q_counter}})
-        }
-
         //get all answer obects
         app.get('/answers',(req,res)=>{
             dbo.collection(col_name_q).find({'PostTypeId':2}).toArray((err,result)=>{
@@ -321,30 +316,6 @@ MongoClient.connect(url,(err,db)=>{
                     'x-access-token':token
                 },
                 url:`http://${process.env.HOST}:8089/questions/${answer_id}/${vote}`,
-            },(err,response)=>{
-                if(err)
-                    throw err
-                if(response.body=='Success'){
-                    res.redirect(`/answers/${answer_id}`)
-                }
-                else
-                    res.send(response.body)
-            })
-        
-        })
-
-        //api to undo vote up or down a answer ,calls the question undo vote api as the schema & process are same
-        app.get('/answers/:answer_id/:vote/undo',(req,res)=>{
-            const answer_id = parseInt(req.params.answer_id)
-            const vote = req.params.vote
-            const token = req.headers['x-access-token']
-
-            request.get({
-                headers:{
-                    'content-type':'application/json',
-                    'x-access-token':token
-                },
-                url:`http://${process.env.HOST}:8089/questions/${answer_id}/${vote}/undo`,
             },(err,response)=>{
                 if(err)
                     throw err

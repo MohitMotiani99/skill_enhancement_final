@@ -44,8 +44,8 @@ MongoClient.connect(url,function(err,db){
     if(err) throw err
     const dbo=db.db(mydb)
     dbo.collection(collection).find({}).toArray(function(err,result){
-        commentId = result[0]["c_num"]
-        initial_commentId = commentId
+        let commentId = result[0]["c_num"]
+        const initial_commentId = commentId
     
         async function cleanup(){
             dbo.collection('globals').updateOne({'c_num':initial_commentId},{$set:{'c_num':commentId}})
@@ -90,7 +90,6 @@ MongoClient.connect(url,function(err,db){
                                         "Score":0,
                                         "Text":req.body.body,
                                         "CreationDate": Date.now(),
-                                        "Score":0,
                                         "UserDisplayName": User.username,
                                         "UserId":Number(User.Id)
                                     }

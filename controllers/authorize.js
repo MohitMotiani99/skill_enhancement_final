@@ -8,7 +8,6 @@ module.exports = function get_token(user){
 
 //verifies the Google OAuth Token
 module.exports = function validate_user(token,user_obj){
-    //return jwt.verify(token)
 
     if(token.length<=5)
         return true

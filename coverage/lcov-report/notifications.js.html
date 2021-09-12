@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.38% </span>
+                <span class="strong">91.92% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>97/105</span>
+                <span class='fraction'>91/99</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>17/17</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.27% </span>
+                <span class="strong">92.86% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>97/104</span>
+                <span class='fraction'>91/98</span>
             </div>
         
             
@@ -262,17 +262,7 @@
 <a name='L203'></a><a href='#L203'>203</a>
 <a name='L204'></a><a href='#L204'>204</a>
 <a name='L205'></a><a href='#L205'>205</a>
-<a name='L206'></a><a href='#L206'>206</a>
-<a name='L207'></a><a href='#L207'>207</a>
-<a name='L208'></a><a href='#L208'>208</a>
-<a name='L209'></a><a href='#L209'>209</a>
-<a name='L210'></a><a href='#L210'>210</a>
-<a name='L211'></a><a href='#L211'>211</a>
-<a name='L212'></a><a href='#L212'>212</a>
-<a name='L213'></a><a href='#L213'>213</a>
-<a name='L214'></a><a href='#L214'>214</a>
-<a name='L215'></a><a href='#L215'>215</a>
-<a name='L216'></a><a href='#L216'>216</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L206'></a><a href='#L206'>206</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -324,8 +314,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -333,7 +321,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -352,8 +339,6 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -389,8 +374,6 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -431,8 +414,6 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -465,7 +446,6 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -539,16 +519,13 @@ MongoClient.connect(url,(err,db)=&gt;{
 &nbsp;
     //retrieves the notification counter(n_num) 
     dbo.collection('globals').find({}).toArray((err,result)=&gt;{
-        q_counter = result[0].q_num
-        initial_q_counter = q_counter
 &nbsp;
-        n_counter = result[0].n_num
-        initial_n_counter=n_counter
+        let n_counter = result[0].n_num
+        const initial_n_counter=n_counter
 &nbsp;
         //to update the notification counter back to the colletion 'globals'
         async function cleanup(){
-            dbo.collection('globals').updateOne({'n_num':initial_n_counter},{$set:{'n_num':n_counter}},(err,result)=&gt;{
-            })
+            dbo.collection('globals').updateOne({'n_num':initial_n_counter},{$set:{'n_num':n_counter}})
         }
 &nbsp;
 &nbsp;
@@ -567,8 +544,6 @@ MongoClient.connect(url,(err,db)=&gt;{
                 dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=&gt;{
 &nbsp;
                     if(result.length == 1 &amp;&amp; (uv =await validate_user(token,result[0])) &amp;&amp; User_Id==result[0].Id){
-                        const User = result[0]
-&nbsp;
 &nbsp;
                         dbo.collection(col_noti).find({'UserId':User_Id,'Status':'unread'}).toArray((err,result)=&gt;{
                             <span class="missing-if-branch" title="if path not taken" >I</span>if(err)
@@ -604,8 +579,6 @@ MongoClient.connect(url,(err,db)=&gt;{
                 dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=&gt;{
 &nbsp;
                     if(result.length == 1 &amp;&amp; (uv =await validate_user(token,result[0])) &amp;&amp; User_Id==result[0].Id){
-                        const User = result[0]
-&nbsp;
 &nbsp;
                         dbo.collection(col_noti).find({'UserId':User_Id,'Id':noti_id}).toArray((err,result)=&gt;{
                             <span class="missing-if-branch" title="if path not taken" >I</span>if(err)
@@ -646,8 +619,6 @@ MongoClient.connect(url,(err,db)=&gt;{
                 dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=&gt;{
 &nbsp;
                     if(result.length == 1 &amp;&amp; (uv =await validate_user(token,result[0])) &amp;&amp; User_Id==result[0].Id){
-                        const User = result[0]
-&nbsp;
 &nbsp;
                         dbo.collection(col_noti).updateMany({'UserId':User_Id,'Status':'unread'},{$set:{'Status':'read'}},(err,result)=&gt;{
                             <span class="missing-if-branch" title="if path not taken" >I</span>if(err)
@@ -680,7 +651,6 @@ MongoClient.connect(url,(err,db)=&gt;{
                 dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=&gt;{
 &nbsp;
                     if(result.length == 1 &amp;&amp; (uv =await validate_user(token,result[0]))){
-                        const User = result[0]
                         const Body = req.body.Body
 &nbsp;
                         dbo.collection(col_noti).insertOne({'Id':n_counter++,'Body':Body,'UserId':User_Id,'PostId':PostId,'Status':'unread'},async (err,result)=&gt;{
@@ -709,7 +679,7 @@ module.exports = app</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Sep 12 2021 14:32:54 GMT+0530 (India Standard Time)
+                at Sun Sep 12 2021 18:17:54 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>

@@ -186,55 +186,6 @@ test('GET /questions/:question_id/:vote DOWNVOTE',async ()=>{
         })
 })
 
-test('GET /questions/:question_id/:vote/undo UPVOTE UNDO',async ()=>{
-
-    const question_id = 9999
-    const vote = 'upvote'
-
-    let query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
-    const preAPI = query_res[0]
-
-    await supertest(app)
-        .get(`/questions/${question_id}/${vote}/undo`)
-        .set({'x-access-token':'t2'})
-        .expect(302)
-        .then(async (res)=>{
-            //console.log(res.text)
-            //console.log(res.body)
-            query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
-            const postAPI = query_res[0]
-            //let preAPI = postAPI
-            //console.log(preAPI)
-            preAPI['Score']-=1
-            //console.log(postAPI)
-            compare(preAPI,postAPI)
-        })
-})
-
-test('GET /questions/:question_id/:vote/undo DOWNVOTE UNDO',async ()=>{
-
-    const question_id = 9999
-    const vote = 'downvote'
-
-    let query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
-    const preAPI = query_res[0]
-
-    await supertest(app)
-        .get(`/questions/${question_id}/${vote}/undo`)
-        .set({'x-access-token':'t2'})
-        .expect(302)
-        .then(async (res)=>{
-            //console.log(res.text)
-            //console.log(res.body)
-            query_res = await dbo.collection(col_name_q).find({'Id':question_id,'PostTypeId':1}).toArray()
-            const postAPI = query_res[0]
-            //let preAPI = postAPI
-            //console.log(preAPI)
-            preAPI['Score']+=1
-            //console.log(postAPI)
-            compare(preAPI,postAPI)
-        })
-})
 
 test('POST /questions/add  NOT LOGGED IN', async () => {
     const question={

@@ -50,11 +50,9 @@ MongoClient.connect(url,(err,db)=>{
 
     //retrieves the notification counter(n_num) 
     dbo.collection('globals').find({}).toArray((err,result)=>{
-        q_counter = result[0].q_num
-        initial_q_counter = q_counter
 
-        n_counter = result[0].n_num
-        initial_n_counter=n_counter
+        let n_counter = result[0].n_num
+        const initial_n_counter=n_counter
 
         //to update the notification counter back to the colletion 'globals'
         async function cleanup(){
@@ -77,8 +75,6 @@ MongoClient.connect(url,(err,db)=>{
                 dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=>{
 
                     if(result.length == 1 && (uv =await validate_user(token,result[0])) && User_Id==result[0].Id){
-                        const User = result[0]
-
 
                         dbo.collection(col_noti).find({'UserId':User_Id,'Status':'unread'}).toArray((err,result)=>{
                             if(err)
@@ -114,8 +110,6 @@ MongoClient.connect(url,(err,db)=>{
                 dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=>{
 
                     if(result.length == 1 && (uv =await validate_user(token,result[0])) && User_Id==result[0].Id){
-                        const User = result[0]
-
 
                         dbo.collection(col_noti).find({'UserId':User_Id,'Id':noti_id}).toArray((err,result)=>{
                             if(err)
@@ -156,8 +150,6 @@ MongoClient.connect(url,(err,db)=>{
                 dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=>{
 
                     if(result.length == 1 && (uv =await validate_user(token,result[0])) && User_Id==result[0].Id){
-                        const User = result[0]
-
 
                         dbo.collection(col_noti).updateMany({'UserId':User_Id,'Status':'unread'},{$set:{'Status':'read'}},(err,result)=>{
                             if(err)
@@ -190,7 +182,6 @@ MongoClient.connect(url,(err,db)=>{
                 dbo.collection(col_name_u).find({'token':token}).toArray(async (err,result)=>{
 
                     if(result.length == 1 && (uv =await validate_user(token,result[0]))){
-                        const User = result[0]
                         const Body = req.body.Body
 
                         dbo.collection(col_noti).insertOne({'Id':n_counter++,'Body':Body,'UserId':User_Id,'PostId':PostId,'Status':'unread'},async (err,result)=>{

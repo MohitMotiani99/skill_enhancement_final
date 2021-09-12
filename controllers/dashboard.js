@@ -7,7 +7,6 @@ const app = express()
 const bodyparser = require("body-parser")
 var cors=require ('cors')
 const url="mongodb+srv://pradyumnakedilaya:secret123%23@cluster0.vlavb.mongodb.net/skillenhancement?retryWrites=true&w=majority"
-var cors = require('cors')
 const mydb="skillenhancement"
 const collection="questionAnswer"
 const collection2="users"
@@ -27,7 +26,7 @@ const fs = require('fs')
 const jsyaml = require('js-yaml');
 const file_path = path.join(__dirname,'..','swagger','dashboardSwagger.yaml')
 const spec = fs.readFileSync(file_path, 'utf8');
-swaggerDocument = jsyaml.load(spec);
+const swaggerDocument = jsyaml.load(spec);
 app.use(
     '/swgr',
     swaggerUi.serve, 
@@ -39,7 +38,7 @@ require('dotenv').config()
 MongoClient.connect(url,function(err,db){
     if(err)
         throw err
-    dbo=db.db(mydb)
+    const dbo=db.db(mydb)
     
     //Returns all questions and answers from database
     app.post('/mainpage2',(req,res)=>{
@@ -58,7 +57,6 @@ MongoClient.connect(url,function(err,db){
     app.post('/searchstring',(req,res)=>{
         const search_string = req.body.search_string.toLowerCase()
         const search_words = new Set(search_string.split(' '))
-        const promise = Promise.resolve()
         const stop_words = ["i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"]
 
         new Promise((resolve,reject)=>{
@@ -156,7 +154,6 @@ MongoClient.connect(url,function(err,db){
         const data = req.body
         const q_set = new Set()
         new Promise((resolve,reject)=>{
-            const Tags = data.Tags
             resolve()
         }).then(()=>{
             request.get({
@@ -232,7 +229,6 @@ MongoClient.connect(url,function(err,db){
     //Return user details for all the users with the given search name
     app.post('/searchcusts',(req,res)=>{
         const search_name = req.body.search_name.toLowerCase()
-        const ans =[]
         dbo.collection(collection2).find({}).toArray((err,result)=>{
             res.send(result.filter((u)=>{
                 return u.username.toLowerCase().indexOf(search_name)>=0}))

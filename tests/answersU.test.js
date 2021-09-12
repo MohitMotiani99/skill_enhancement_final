@@ -163,45 +163,6 @@ test('GET /answers/:answer_id/:vote DOWNVOTE',async ()=>{
         })
 })
 
-test('GET /answers/:answer_id/:vote/undo UPVOTE UNDO',async ()=>{
-
-    const answer_id = 9998
-    const vote = 'upvote'
-
-    let query_res = await dbo.collection(col_name_q).find({'Id':answer_id,'PostTypeId':2}).toArray()
-    const preAPI = query_res[0]
-
-    await supertest(app)
-        .get(`/answers/${answer_id}/${vote}/undo`)
-        .set({'x-access-token':'t2'})
-        .expect(302)
-        .then(async (res)=>{
-            query_res = await dbo.collection(col_name_q).find({'Id':answer_id,'PostTypeId':2}).toArray()
-            const postAPI = query_res[0]
-            preAPI['Score']-=1
-            compare(preAPI,postAPI)
-        })
-})
-
-test('GET /answers/:answer_id/:vote/undo DOWNVOTE UNDO',async ()=>{
-
-    const answer_id = 9998
-    const vote = 'downvote'
-
-    let query_res = await dbo.collection(col_name_q).find({'Id':answer_id,'PostTypeId':2}).toArray()
-    const preAPI = query_res[0]
-
-    await supertest(app)
-        .get(`/answers/${answer_id}/${vote}/undo`)
-        .set({'x-access-token':'t2'})
-        .expect(302)
-        .then(async (res)=>{
-            query_res = await dbo.collection(col_name_q).find({'Id':answer_id,'PostTypeId':2}).toArray()
-            const postAPI = query_res[0]
-            preAPI['Score']+=1
-            compare(preAPI,postAPI)
-        })
-})
 
 /**
  * 

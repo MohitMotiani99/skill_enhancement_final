@@ -1,9 +1,7 @@
 /* eslint-disable no-var */
 var express = require('express')
 var bodyParser = require('body-parser')
-var express=require('express')
 const app = express()
-var bodyParser = require("body-parser")
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static("public"))
