@@ -40,15 +40,7 @@ MongoClient.connect(url,function(err,db){
     if(err)
         throw err
     dbo=db.db(mydb)
-    //console.log('sep Database Connected')
     
-    app.post('/login',(req,res)=>{
-
-    })
-    app.post('/register',(req,res)=>{
-
-    })
-
     //Returns all questions and answers from database
     app.post('/mainpage2',(req,res)=>{
         dbo.collection(collection).find({'PostTypeId':1}).toArray((err,result)=>{
@@ -65,15 +57,12 @@ MongoClient.connect(url,function(err,db){
     //Return relevent questions and answers - Approach1
     app.post('/searchstring',(req,res)=>{
         const search_string = req.body.search_string.toLowerCase()
-        //console.log(search_string)
         const search_words = new Set(search_string.split(' '))
         const promise = Promise.resolve()
         const stop_words = ["i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"]
 
         new Promise((resolve,reject)=>{
             stop_words.forEach(sw=>search_words.delete(sw))
-            //console.log('set is ')
-            //console.log(search_words)
             if(search_words.size==0)
                 res.send('No Context in the Search Phrase')
             else
@@ -88,12 +77,10 @@ MongoClient.connect(url,function(err,db){
                 if(err) throw err
                 new Promise((resolve,reject)=>{
                     search_words.forEach(word => {
-                        //console.log(word)
                         JSON.parse(body).filter((question) => {return (question.Title.toLowerCase().indexOf(word) >= 0 || question.Body.toLowerCase().indexOf(word) >= 0)}).map((question) => {q_set.add(JSON.stringify(question))})
                     })
                     resolve()
                 }).then(()=>{
-                    //console.log(q_set)
   
                     new Promise((resolve,reject)=>{
                         request.get({
@@ -108,13 +95,10 @@ MongoClient.connect(url,function(err,db){
                         })
                 
                     }).then(()=>{
-                        //console.log(a_set)
-  
                         const ans ={
                             'questions':Array.from(q_set).map((question)=>JSON.parse(question)).sort((q1,q2)=>q2.ViewCount-q1.ViewCount),
                             'answers':Array.from(a_set).map((answer)=>JSON.parse(answer)).sort((a1,a2)=>a2.ViewCount-a1.ViewCount)
                         }
-                        //console.log(ans)
                         res.send(ans)
                     }) 
                 })
@@ -127,13 +111,11 @@ MongoClient.connect(url,function(err,db){
         const search_string = req.body.search_string
         new Promise((resolve,reject)=>{
             dbo.collection(collection).createIndex({'Title':'text','Body':'text'},(err,result)=>{
-                //console.log(result)
                 resolve()
             })  
         }).then(()=>{
             dbo.collection(collection).find({$text:{$search:search_string}}).toArray((err,result)=>{
                 if(err) throw err
-                //console.log(result)
                 const ans={
                     'questions':[],
                     'answers':[]
@@ -165,8 +147,6 @@ MongoClient.connect(url,function(err,db){
                 'search_string':data.Title+" "+data.Body
             })},(err,response)=>{
             if(err) throw err
-            // console.log(response.body)
-            // console.log(typeof response.body)
             res.send(JSON.parse(response.body).questions)
         })
     })
@@ -186,17 +166,13 @@ MongoClient.connect(url,function(err,db){
                 if(err) throw err
                 new Promise((resolve,reject)=>{
                     data.Tags.forEach(word => {
-                        // console.log(word)
                         JSON.parse(body).filter((question) => {return question.Tags.indexOf(word.toLowerCase())>-1}).map((question) => {q_set.add(JSON.stringify(question))})
                     })
                     resolve()
                 }).then(()=>{
-                    // console.log(q_set)
-  
                     const ans ={
                         'questions':Array.from(q_set).map((question)=>JSON.parse(question)).sort((q1,q2)=>q2.ViewCount-q1.ViewCount),
                     }
-                    // console.log(ans)
                     res.send(ans)
 
                 })
@@ -235,8 +211,7 @@ MongoClient.connect(url,function(err,db){
                 else if(type == 'asc')
                     questions.sort((q1,q2)=>q1[base] - q2[base])
 
-                // console.log(questions)
-          
+
                 resolve()
             }).then(()=>{
                 res.send(questions)
