@@ -267,7 +267,7 @@ MongoClient.connect(url,(err,db)=>{
                             dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
                                 if(result.length == 1)
                                 {
-                                    console.log(result[0])
+                                    //console.log(result[0])
                                     res.json(result[0])
                                 }
                                 else
@@ -282,7 +282,7 @@ MongoClient.connect(url,(err,db)=>{
                             dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
                                 if(result.length == 1)
                                 {
-                                    console.log(result[0])
+                                    //console.log(result[0])
                                     res.json(result[0])
                                 }
                                 else
@@ -302,3 +302,9 @@ MongoClient.connect(url,(err,db)=>{
 
 module.exports = app
 
+/* 
+res.json({
+    token,
+    user_id
+})
+ */
