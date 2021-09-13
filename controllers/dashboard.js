@@ -41,7 +41,7 @@ MongoClient.connect(url,function(err,db){
     const dbo=db.db(mydb)
     
     //Returns all questions and answers from database
-    app.post('/mainpage2',(req,res)=>{
+    app.get('/mainpage2',(req,res)=>{
         dbo.collection(collection).find({'PostTypeId':1}).toArray((err,result)=>{
             const ans = {
                 'questions':result
@@ -110,7 +110,7 @@ MongoClient.connect(url,function(err,db){
         new Promise((resolve,reject)=>{
             dbo.collection(collection).createIndex({'Title':'text','Body':'text'},(err,result)=>{
                 resolve()
-            })  
+            })
         }).then(()=>{
             dbo.collection(collection).find({$text:{$search:search_string}}).toArray((err,result)=>{
                 if(err) throw err
@@ -135,18 +135,13 @@ MongoClient.connect(url,function(err,db){
         
     })
   
-    //Returns suggested questions based on the content viewed by user
     app.post('/suggested',(req,res)=>{
-        const data = req.body 
-        request.post({
-            headers:{'content-type':'application/json'},
-            url:`http://${process.env.HOST}:3300/searchposts`,
-            body:JSON.stringify({
-                'search_string':data.Title+" "+data.Body
-            })},(err,response)=>{
-            if(err) throw err
+        var data = req.body 
+        search_input=data.Title+" "+data.Body  
+        request(`http://localhost:3300/searchpost/${search_input}`, (error, response, body)=>{
+            if(error) throw err
             res.send(JSON.parse(response.body).questions)
-        })
+        }); 
     })
 
     //Returns all questions which match the input tag
@@ -171,18 +166,13 @@ MongoClient.connect(url,function(err,db){
                     })
                     resolve()
                 }).then(()=>{
-                    console.log(q_set)
-    
                     var ans ={
                         'questions':Array.from(q_set).map((question)=>JSON.parse(question)).sort((q1,q2)=>q2.ViewCount-q1.ViewCount),
                     }
-                    console.log(ans)
                     res.send(ans)
-  
                 })
             })
         })
-  
     })
   
     /*SORT API  
@@ -214,8 +204,6 @@ MongoClient.connect(url,function(err,db){
                     questions.sort((q1,q2)=>q2[base] - q1[base])
                 else if(type == 'asc')
                     questions.sort((q1,q2)=>q1[base] - q2[base])
-
-
                 resolve()
             }).then(()=>{
                 res.send(questions)
@@ -240,7 +228,7 @@ MongoClient.connect(url,function(err,db){
             res.send(result.filter((u)=>{
                 return u.username.toLowerCase().indexOf(search_name)>=0}))
         })
-    })   
+    })
 })
 
 module.exports = app
