@@ -108,72 +108,94 @@ MongoClient.connect(url,function(err,db){
     app.get('/searchpost/:search_string',(req,res)=>{
         var search_string = req.params.search_string
         new Promise((resolve,reject)=>{
-            dbo.collection(collection).createIndex({'Title':'text','Body':'text'},(err,result)=>{
-                resolve()
-            })
+          dbo.collection(collection).createIndex({'Title':'text','Body':'text'},(err,result)=>{
+            resolve()
+          })  
         }).then(()=>{
-            dbo.collection(collection).find({$text:{$search:search_string}}).toArray((err,result)=>{
-                if(err) throw err
-                var ans={
-                    'questions':[],
-                    'answers':[]
-                }
-                new Promise((resolve,reject)=>{
-                    result.forEach((p)=>{
-                        if(p.PostTypeId==1)
-                            ans.questions.push(p)
-                        else
-                            ans.answers.push(p)
-                    })
-                    resolve()
-                }).then(()=>{
-                    res.send(ans)
+          dbo.collection(collection).find({$text:{$search:search_string}}).toArray((err,result)=>{
+            if(err) throw err
+            var ans={
+              'questions':[],
+              'answers':[]
+            }
+            new Promise((resolve,reject)=>{
+                result.forEach((p)=>{
+                  if(p.PostTypeId==1)
+                  ans.questions.push(p)
+                  else
+                  ans.answers.push(p)
                 })
-            
+                resolve()
+            }).then(()=>{
+                if (ans)
+                {
+                    res.send(ans)
+                }
+                else
+                {
+                    res.send("No results found")
+                }
             })
+            
+          })
         })
         
-    })
+      })
   
+    //Returns suggested questions based on the content viewed by user
     app.post('/suggested',(req,res)=>{
         var data = req.body 
-        search_input=data.Title+" "+data.Body  
+        console.log("DATA")
+        console.log(data)
+        search_input=data.Title+" "+data.Body
         request(`http://localhost:3300/searchpost/${search_input}`, (error, response, body)=>{
-            if(error) throw err
-            res.send(JSON.parse(response.body).questions)
+        if(error) console.log(error)
+        console.log(body);
+        res.send(JSON.parse(response.body).questions)
         }); 
-    })
-
+        })
+  
     //Returns all questions which match the input tag
     app.get('/searchTags/:tag',(req,res)=>{
         var data = req.params.tag
         var q_set = new Set()
         new Promise((resolve,reject)=>{
-            var Tags = []
-            //Tags=(data.Tags).split(',')
-            Tags=data.split(" ")
-            resolve()
-        }).then(()=>{
-            request.get({
-                headers:{'content-type':'application/json'},
-                url:`http://${process.env.HOST}:8089/questions`
-            },(err,response,body)=>{
-                if(err) throw err
-                new Promise((resolve,reject)=>{
-                    data.split(" ").forEach(word => {
-                        console.log(word)
-                        JSON.parse(body).filter((question) => {return question.Tags.indexOf(word.toLowerCase())>-1}).map((question) => {console.log('Hi');q_set.add(JSON.stringify(question))})
-                    })
-                    resolve()
-                }).then(()=>{
-                    var ans ={
-                        'questions':Array.from(q_set).map((question)=>JSON.parse(question)).sort((q1,q2)=>q2.ViewCount-q1.ViewCount),
-                    }
-                    res.send(ans)
-                })
+        var Tags = []
+        //Tags=(data.Tags).split(',')
+        Tags=data.split(" ")
+        resolve()
+      }).then(()=>{
+        request.get({
+          headers:{'content-type':'application/json'},
+          url:`http://${process.env.HOST}:8089/questions`
+          },(err,response,body)=>{
+          if(err) throw err
+            new Promise((resolve,reject)=>{
+              data.split(" ").forEach(word => {
+                console.log(word)
+                JSON.parse(body).filter((question) => {return question.Tags.indexOf(word.toLowerCase())>-1}).map((question) => {console.log('Hi');q_set.add(JSON.stringify(question))})
+              })
+              resolve()
+            }).then(()=>{
+              console.log(q_set)
+    
+              var ans ={
+                'questions':Array.from(q_set).map((question)=>JSON.parse(question)).sort((q1,q2)=>q2.ViewCount-q1.ViewCount),
+              }
+              console.log(ans)
+              if (ans)
+              {
+                  res.send(ans)
+              }
+              else 
+              {
+                res.send(ans)
+              }             
+  
             })
-        })
-    })
+          })
+        })  
+      })
   
     /*SORT API  
     Sort based on parameters:
@@ -204,6 +226,8 @@ MongoClient.connect(url,function(err,db){
                     questions.sort((q1,q2)=>q2[base] - q1[base])
                 else if(type == 'asc')
                     questions.sort((q1,q2)=>q1[base] - q2[base])
+
+
                 resolve()
             }).then(()=>{
                 res.send(questions)
@@ -222,13 +246,14 @@ MongoClient.connect(url,function(err,db){
     })
 
     //Return user details for all the users with the given search name
-    app.post('/searchcusts',(req,res)=>{
-        const search_name = req.body.search_name.toLowerCase()
+    app.post('/searchcusts/:name',(req,res)=>{
+        var search_name = req.params.name.toLowerCase()
+        var ans =[]
         dbo.collection(collection2).find({}).toArray((err,result)=>{
-            res.send(result.filter((u)=>{
-                return u.username.toLowerCase().indexOf(search_name)>=0}))
+          res.send(result.filter((u)=>{
+            return u.displayName.toLowerCase().indexOf(search_name)>=0}))
         })
-    })
+    })      
 })
 
 module.exports = app
