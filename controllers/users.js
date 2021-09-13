@@ -223,6 +223,80 @@ MongoClient.connect(url,(err,db)=>{
             })
         })
 
+        app.post('/api/googlelogin', (req,res)=>{
+            const {tokenId} = req.body
+        
+        
+            client.verifyIdToken({idToken: tokenId, audience: "457453379813-1ei0s3u553o1elucdfbmhj6c8v6cknt7.apps.googleusercontent.com"}).then(response =>{
+                const {email_verified, name, email, sub, given_name, family_name, picture} = response.payload;
+        
+                console.log(response.payload);
+                const user_id=sub;
+                console.log(user_id);
+        
+                if (email_verified){
+                    dbo.collection('users').find({'Id':user_id}).toArray((err,result) => {
+                        if(err)
+                        {
+                            console.log('pradyumna you have an error')
+                            return res.status(400).json({
+                                error: "This user doesn't exist, signup first"
+                            })
+                        }
+                        else if (result.length==0)
+                        {
+                            const u_obj={
+                                Id: user_id,
+                                username: email,
+                                displayName: name,
+                                firstName: given_name,
+                                lastName: family_name,
+                                image: picture,
+                                token: tokenId,
+                                LastLogin: Date(),
+                                gender:'Unspecified',
+                                socialLink:'None',
+                                grade:0,
+                                CreationDate:Date()  
+                            }
+        
+                            dbo.collection('users').insertOne(u_obj,(err,result)=>{
+                                if(err) throw err
+                                res.send("User " +email +" is added succesfully")
+                            })
+                            dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
+                                if(result.length == 1)
+                                {
+                                    console.log(result[0])
+                                    res.json(result[0])
+                                }
+                                else
+                                {
+                                    res.send('Invalid User')
+                                }
+                            })
+                        }
+                        else if (result.length == 1)
+                        {
+                            console.log('pradyumna success!, user exists')
+                            dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
+                                if(result.length == 1)
+                                {
+                                    console.log(result[0])
+                                    res.json(result[0])
+                                }
+                                else
+                                {
+                                    res.send('Invalid User')
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        })
+        
+
     })
 })
 
