@@ -250,10 +250,47 @@ MongoClient.connect(url,function(err,db){
         var search_name = req.params.name.toLowerCase()
         var ans =[]
         dbo.collection(collection2).find({}).toArray((err,result)=>{
-          res.send(result.filter((u)=>{             
-            return u.displayName.toLowerCase().indexOf(search_name)>=0}))
+          new Promise((resolve,reject)=>{
+          result.filter((u)=>{
+            var qcount=0
+            var anscount=0
+            console.log(u.displayName.toLowerCase())
+            if (u.displayName.toLowerCase().indexOf(search_name)>=0)
+            {
+              var user={}
+              user["name"]=u.displayName
+              console.log(user)
+              request(`http://localhost:5050/users/${u.Id}/totalquestions`,(error, response, body)=>{
+              if(error) console.log(error)
+              console.log(response.body);
+              new Promise((resolve,reject)=>{
+                user["qcount"]=response.body
+                console.log(user)
+                resolve()
+              })
+              .then(()=>{
+                request(`http://localhost:5050/users/${u.Id}/totalanswers`,(error, response, body)=>{
+                if(error) console.log(error)
+                console.log(response.body);
+                user["anscount"]=response.body
+                console.log(user)
+                ans.push(user)
+                console.log(ans)
+                })
+              })
+          });         
+          }
+          })
+          console.log("Before")
+          resolve()
+          console.log("After")
+          }) 
+          .then(()=>{
+            console.log("Hii")
+            res.send(ans)
+          })
         })
-    })      
+    })     
 })
 
 module.exports = app
