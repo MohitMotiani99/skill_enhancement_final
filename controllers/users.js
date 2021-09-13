@@ -226,8 +226,9 @@ MongoClient.connect(url,(err,db)=>{
         })
 
         app.post('/api/googlelogin', (req,res)=>{
+            const {accessToken} = req.body
+            console.log(accessToken)
             const {tokenId} = req.body
-        
         
             client.verifyIdToken({idToken: tokenId, audience: "457453379813-1ei0s3u553o1elucdfbmhj6c8v6cknt7.apps.googleusercontent.com"}).then(response =>{
                 const {email_verified, name, email, sub, given_name, family_name, picture} = response.payload;
@@ -235,6 +236,8 @@ MongoClient.connect(url,(err,db)=>{
                 console.log(response.payload);
                 const user_id=sub;
                 console.log(user_id);
+                //console.log(tokenId)
+                console.log(accessToken)
         
                 if (email_verified){
                     dbo.collection('users').find({'Id':user_id}).toArray((err,result) => {
@@ -254,7 +257,7 @@ MongoClient.connect(url,(err,db)=>{
                                 firstName: given_name,
                                 lastName: family_name,
                                 image: picture,
-                                token: tokenId,
+                                token: accessToken,
                                 LastLogin: Date(),
                                 gender:'Unspecified',
                                 socialLink:'None',
@@ -280,18 +283,20 @@ MongoClient.connect(url,(err,db)=>{
                         }
                         else if (result.length == 1)
                         {
-                            console.log('pradyumna success!, user exists')
-                            dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
-                                if(result.length == 1)
-                                {
-                                    //console.log(result[0])
-                                    res.json(result[0])
-                                }
-                                else
-                                {
-                                    res.send('Invalid User')
-                                }
+                            console.log('pradyumna success!, user exists')     
+                            console.log(accessToken)
+                           
+                            const u_obj={
+                                token: accessToken,
+                                LastLogin: Date()
+                            }
+                            dbo.collection('users').updateOne({"Id":String(user_id)},{$set:u_obj},(err,result)=>{
+                                if (err) throw err
+                                else{console.log('success')}              
                             })
+                            res.json(result[0])
+                                
+                            
                         }
                     })
                 }
