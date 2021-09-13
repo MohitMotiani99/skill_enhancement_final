@@ -246,11 +246,11 @@ MongoClient.connect(url,function(err,db){
     })
 
     //Return user details for all the users with the given search name
-    app.post('/searchcusts/:name',(req,res)=>{
+    app.get('/searchcusts/:name',(req,res)=>{
         var search_name = req.params.name.toLowerCase()
         var ans =[]
         dbo.collection(collection2).find({}).toArray((err,result)=>{
-          res.send(result.filter((u)=>{
+          res.send(result.filter((u)=>{             
             return u.displayName.toLowerCase().indexOf(search_name)>=0}))
         })
     })      
