@@ -26,23 +26,28 @@ app.use(
     swaggerUi.serve, 
     swaggerUi.setup(swaggerDocument)
 );
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+});
 
 require('dotenv').config()
 
 let commentId
+// eslint-disable-next-line prefer-const
 let user
+let validation
 
 const request = require('request')
 const validate_user = require('./authorize')
 const get_token = require('./authorize')
-
 
 MongoClient.connect(url,function(err,db){
     if(err) throw err
     const dbo=db.db(mydb)
     dbo.collection(collection).find({}).toArray(function(err,result){
         commentId = result[0]["c_num"]
-        const initial_commentId = commentId
+        initial_commentId = commentId
     
         async function cleanup(){
             dbo.collection('globals').updateOne({'c_num':initial_commentId},{$set:{'c_num':commentId}})
@@ -87,6 +92,7 @@ MongoClient.connect(url,function(err,db){
                                         "Score":0,
                                         "Text":req.body.body,
                                         "CreationDate": Date.now(),
+                                        "Score":0,
                                         "UserDisplayName": User.username,
                                         "UserId":Number(User.Id)
                                     }

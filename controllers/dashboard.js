@@ -105,8 +105,8 @@ MongoClient.connect(url,function(err,db){
     })
 
     //Returns questions and answers relevent to search sentence. (MongodB Text search)
-    app.post('/searchposts',(req,res)=>{
-        const search_string = req.body.search_string
+    app.get('/searchpost/:search_string',(req,res)=>{
+        var search_string = req.params.search_string
         new Promise((resolve,reject)=>{
             dbo.collection(collection).createIndex({'Title':'text','Body':'text'},(err,result)=>{
                 resolve()
@@ -114,7 +114,7 @@ MongoClient.connect(url,function(err,db){
         }).then(()=>{
             dbo.collection(collection).find({$text:{$search:search_string}}).toArray((err,result)=>{
                 if(err) throw err
-                const ans={
+                var ans={
                     'questions':[],
                     'answers':[]
                 }
@@ -129,12 +129,12 @@ MongoClient.connect(url,function(err,db){
                 }).then(()=>{
                     res.send(ans)
                 })
-          
+            
             })
         })
-      
+        
     })
-
+  
     //Returns suggested questions based on the content viewed by user
     app.post('/suggested',(req,res)=>{
         const data = req.body 
@@ -150,10 +150,13 @@ MongoClient.connect(url,function(err,db){
     })
 
     //Returns all questions which match the input tag
-    app.post('/searchTags',(req,res)=>{
-        const data = req.body
-        const q_set = new Set()
+    app.get('/searchTags/:tag',(req,res)=>{
+        var data = req.params.tag
+        var q_set = new Set()
         new Promise((resolve,reject)=>{
+            var Tags = []
+            //Tags=(data.Tags).split(',')
+            Tags=data.split(" ")
             resolve()
         }).then(()=>{
             request.get({
@@ -162,22 +165,26 @@ MongoClient.connect(url,function(err,db){
             },(err,response,body)=>{
                 if(err) throw err
                 new Promise((resolve,reject)=>{
-                    data.Tags.forEach(word => {
-                        JSON.parse(body).filter((question) => {return question.Tags.indexOf(word.toLowerCase())>-1}).map((question) => {q_set.add(JSON.stringify(question))})
+                    data.split(" ").forEach(word => {
+                        console.log(word)
+                        JSON.parse(body).filter((question) => {return question.Tags.indexOf(word.toLowerCase())>-1}).map((question) => {console.log('Hi');q_set.add(JSON.stringify(question))})
                     })
                     resolve()
                 }).then(()=>{
-                    const ans ={
+                    console.log(q_set)
+    
+                    var ans ={
                         'questions':Array.from(q_set).map((question)=>JSON.parse(question)).sort((q1,q2)=>q2.ViewCount-q1.ViewCount),
                     }
+                    console.log(ans)
                     res.send(ans)
-
+  
                 })
             })
         })
-
+  
     })
-
+  
     /*SORT API  
     Sort based on parameters:
       ->Score
