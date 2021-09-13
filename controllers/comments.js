@@ -150,10 +150,7 @@ MongoClient.connect(url,function(err,db){
                                         if(result[0].ClosedDate!=null)res.send('Post is Already Closed')
                                         else{
                                             await dbo.collection(commentCollection).updateOne({"Id":id},{$set:{"Text":req.body.body,"CreationDate":Date.now()}})
-                                            if(result[0].PostTypeId==1)
-                                                res.redirect(`/questions/${result[0].Id}/comments`)
-                                            else if(result[0].PostTypeId==2)
-                                                res.redirect(`/answers/${result[0].Id}/comments`)
+                                            res.send("Comment Edited")
                                         }
                                     }
                                     else res.send('Invalid Post Id')
@@ -210,7 +207,7 @@ MongoClient.connect(url,function(err,db){
                                 const score = result[0]["Score"]
                                 dbo.collection(commentCollection).updateOne({"Id":Number(id)},{$set:{"Score":score+1}},(err,result)=>{
                                     if(err) throw err
-                                    res.redirect(`/comments/${id}`)
+                                    res.send("Reaction on Comment is captured")
                                 })
                             }
                             else res.send('Invalid Comment Id')
@@ -236,7 +233,7 @@ MongoClient.connect(url,function(err,db){
                                 const score = result[0]["Score"]
                                 dbo.collection(commentCollection).updateOne({"Id":Number(id)},{$set:{"Score":score-1}},(err,result)=>{
                                     if(err) throw err
-                                    res.redirect(`/comments/${id}`)
+                                    res.send("Reaction on Comment is captured")
                                 })
                             }
                             else res.send('Invalid Comment Id')
