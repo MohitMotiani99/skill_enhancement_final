@@ -150,7 +150,7 @@ MongoClient.connect(url,function(err,db){
         // console.log("DATA")
         // console.log(data)
         search_input=data.Title+" "+data.Body
-        request(`http://localhost:3300/searchpost/${search_input}`, (error, response, body)=>{
+        request(`http://${process.env.HOST}:3300/searchpost/${search_input}`, (error, response, body)=>{
             if(error) console.log(error)
             // console.log(body);
             res.send(JSON.parse(response.body).questions)
@@ -249,9 +249,9 @@ MongoClient.connect(url,function(err,db){
 
     //Return user details for all the users with the given search name
     app.get('/searchcusts/:name',async (req,res)=>{
-        var search_name = req.params.name
+        var search_name = req.params.name.toLowerCase()
         var ans = await dbo.collection(collection2).find().toArray()
-        res.send(ans.filter(u=>{return u.displayName.indexOf(search_name)>=0}))
+        res.send(ans.filter(u=>{return u.displayName.toLowerCase().indexOf(search_name)>=0}))
         
     })     
 })

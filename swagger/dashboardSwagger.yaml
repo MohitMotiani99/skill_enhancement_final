@@ -21,7 +21,7 @@ tags:
     description: "Everything About Dashboard"
 paths:
   /mainpage2:
-    post:
+    get:
       tags:
         - "dashboard"
       summary: "Get All Posts"
@@ -34,7 +34,7 @@ paths:
               questions:
                 $ref: "#/definitions/question"
               answers:
-                $ref: "#definitions/answer"
+                $ref: "#/definitions/answer"
     
   /searchstring:
     post:
@@ -64,23 +64,17 @@ paths:
               answers:
                 $ref: "#definitions/answer"
     
-  /searchposts:
-    post:
+  /searchpost/{search_string}:
+    get:
       tags:
         - "dashboard"
       summary: "Search for a Post(MongoDB Text Search)"
       parameters:
-        - name: "body"
-          in: "body"
+        - name: "search_string"
+          in: "path"
           required: true
           description: "String to Search"
-          schema:
-            type: "object"
-            required:
-              - "search_string"
-            properties:
-              search_string:
-                type: "string"
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -90,7 +84,7 @@ paths:
               questions:
                 $ref: "#/definitions/question"
               answers:
-                $ref: "#definitions/answer"
+                $ref: "#/definitions/answer"
     
   /suggested:
     post:
@@ -120,25 +114,17 @@ paths:
             items:
               type: "#/definitions/question"
     
-  /searchTags:
-    post:
+  /searchTags/{tag}:
+    get:
       tags:
         - "dashboard"
       summary: "Search for a Single or Multiple Tags"
       parameters:
-        - name: "body"
-          in: "body"
+        - name: "tag"
+          in: "path"
           required: true
           description: "Tags to Search"
-          schema:
-            type: "object"
-            required:
-              - "Tags"
-            properties:
-              Tags:
-                type: "array"
-                items:
-                  type: "string"
+          type: "string"
       responses:
         "200":
           description: "OK"
