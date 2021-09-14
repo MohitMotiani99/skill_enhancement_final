@@ -33,7 +33,6 @@ app.use((req, res, next) => {
 
 require('dotenv').config()
 
-let commentId
 // eslint-disable-next-line prefer-const
 let user
 let validation
@@ -46,12 +45,6 @@ MongoClient.connect(url,function(err,db){
     if(err) throw err
     const dbo=db.db(mydb)
     dbo.collection(collection).find({}).toArray(function(err,result){
-        commentId = result[0]["c_num"]
-        initial_commentId = commentId
-    
-        async function cleanup(){
-            dbo.collection('globals').updateOne({'c_num':initial_commentId},{$set:{'c_num':commentId}})
-        }
     
         //Get comments on the posts identified by a comment id
         app.get('/comments/:id',(req,res)=>{
@@ -86,17 +79,20 @@ MongoClient.connect(url,function(err,db){
                             if(result.length==1){
                                 if(result[0].ClosedDate!=null) res.send('Post is Already Closed')
                                 else{
+
+                                    const query_res = await dbo.collection('globals').find().toArray()
+                                    let commentId = query_res[0].c_num
                                     const commentObj={
                                         "Id": commentId++,
                                         "PostId": id,
                                         "Score":0,
                                         "Text":req.body.body,
                                         "CreationDate": Date.now(),
-                                        "Score":0,
                                         "UserDisplayName": User.username,
                                         "UserId":Number(User.Id)
                                     }
-                                    await cleanup()
+                                    await dbo.collection('globals').updateOne({},{$set:{'c_num':commentId}})
+
                                     questionOwner = result[0].OwnerUserId
                                     dbo.collection(commentCollection).insertOne(commentObj,function(err,result){
                                         if (err) throw err

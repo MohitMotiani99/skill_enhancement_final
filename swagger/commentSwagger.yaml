@@ -113,7 +113,7 @@ paths:
         "200":
           description: "OK"
           schema:
-            $ref: "#/definitions/comment"
+            type: "string"
   
   /comments/{id}/delete:
     delete:
@@ -147,7 +147,7 @@ paths:
         "200":
           description: "OK"
           schema:
-            $ref: "#/definitions/comment"
+            type: "string"
   
   /users/{id}/comments:
     get:

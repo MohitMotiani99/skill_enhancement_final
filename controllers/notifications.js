@@ -51,14 +51,6 @@ MongoClient.connect(url,(err,db)=>{
     //retrieves the notification counter(n_num) 
     dbo.collection('globals').find({}).toArray((err,result)=>{
 
-        let n_counter = result[0].n_num
-        const initial_n_counter=n_counter
-
-        //to update the notification counter back to the colletion 'globals'
-        async function cleanup(){
-            dbo.collection('globals').updateOne({'n_num':initial_n_counter},{$set:{'n_num':n_counter}})
-        }
-
 
         //api to get all unread notifications for a particular user
         app.get('/User/:User_Id/notifs',(req,res)=>{
@@ -184,10 +176,13 @@ MongoClient.connect(url,(err,db)=>{
                     if(result.length == 1 && (uv =await validate_user(token,result[0]))){
                         const Body = req.body.Body
 
+                        const query_res = await dbo.collection('globals').find().toArray()
+                        let n_counter = query_res[0].n_num
+
                         dbo.collection(col_noti).insertOne({'Id':n_counter++,'Body':Body,'UserId':User_Id,'PostId':PostId,'Status':'unread'},async (err,result)=>{
                             if(err)
                                 throw err
-                            await cleanup()
+                            await dbo.collection('globals').updateOne({},{$set:{'n_num':n_counter}})
                             res.send('Pushed')
                         })
 

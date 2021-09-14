@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.61% </span>
+                <span class="strong">83.65% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>133/161</span>
+                <span class='fraction'>133/159</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.95% </span>
+                <span class="strong">74.36% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>59/82</span>
+                <span class='fraction'>58/78</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.73% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>126/142</span>
+                <span class='fraction'>126/140</span>
             </div>
         
             
@@ -316,10 +316,7 @@
 <a name='L257'></a><a href='#L257'>257</a>
 <a name='L258'></a><a href='#L258'>258</a>
 <a name='L259'></a><a href='#L259'>259</a>
-<a name='L260'></a><a href='#L260'>260</a>
-<a name='L261'></a><a href='#L261'>261</a>
-<a name='L262'></a><a href='#L262'>262</a>
-<a name='L263'></a><a href='#L263'>263</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
+<a name='L260'></a><a href='#L260'>260</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
@@ -347,30 +344,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">26x</span>
+<span class="cline-any cline-yes">26x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
@@ -405,6 +397,9 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -414,7 +409,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -469,9 +466,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -609,12 +603,14 @@ app.use(
     swaggerUi.serve, 
     swaggerUi.setup(swaggerDocument)
 );
+app.use((req, res, next) =&gt; {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+});
 &nbsp;
 require('dotenv').config()
 &nbsp;
-let commentId
 // eslint-disable-next-line prefer-const
-let comment = []
 let user
 let validation
 &nbsp;
@@ -622,17 +618,10 @@ const request = require('request')
 const validate_user = require('./authorize')
 const get_token = require('./authorize')
 &nbsp;
-&nbsp;
 MongoClient.connect(url,function(err,db){
     <span class="missing-if-branch" title="if path not taken" >I</span>if(err) <span class="cstat-no" title="statement not covered" >throw err</span>
     const dbo=db.db(mydb)
     dbo.collection(collection).find({}).toArray(function(err,result){
-        let commentId = result[0]["c_num"]
-        const initial_commentId = commentId
-    
-        async function cleanup(){
-            dbo.collection('globals').updateOne({'c_num':initial_commentId},{$set:{'c_num':commentId}})
-        }
     
         //Get comments on the posts identified by a comment id
         app.get('/comments/:id',(req,res)=&gt;{
@@ -667,16 +656,21 @@ MongoClient.connect(url,function(err,db){
                             if(result.length==1){
                                 if(result[0].ClosedDate!=null) res.send('Post is Already Closed')
                                 else{
+&nbsp;
+                                    const query_res = await dbo.collection('globals').find().toArray()
+                                    let commentId = query_res[0].c_num
                                     const commentObj={
                                         "Id": commentId++,
                                         "PostId": id,
                                         "Score":0,
                                         "Text":req.body.body,
                                         "CreationDate": Date.now(),
+                                        "Score":0,
                                         "UserDisplayName": User.username,
                                         "UserId":Number(User.Id)
                                     }
-                                    await cleanup()
+                                    await dbo.collection('globals').updateOne({},{$set:{'c_num':commentId}})
+&nbsp;
                                     questionOwner = result[0].OwnerUserId
                                     dbo.collection(commentCollection).insertOne(commentObj,function(err,result){
                                         <span class="missing-if-branch" title="if path not taken" >I</span>if (err) <span class="cstat-no" title="statement not covered" >throw err</span>
@@ -730,10 +724,7 @@ MongoClient.connect(url,function(err,db){
                                         if(result[0].ClosedDate!=null)res.send('Post is Already Closed')
                                         else{
                                             await dbo.collection(commentCollection).updateOne({"Id":id},{$set:{"Text":req.body.body,"CreationDate":Date.now()}})
-                                            <span class="missing-if-branch" title="else path not taken" >E</span>if(result[0].PostTypeId==1)
-                                                res.redirect(`/questions/${result[0].Id}/comments`)
-                                            else <span class="cstat-no" title="statement not covered" >if(result[0].PostTypeId==2)</span>
-<span class="cstat-no" title="statement not covered" >                                                res.redirect(`/answers/${result[0].Id}/comments`)</span>
+                                            res.send("Comment Edited")
                                         }
                                     }
                                     else <span class="cstat-no" title="statement not covered" >res.send('Invalid Post Id')</span>
@@ -790,7 +781,7 @@ MongoClient.connect(url,function(err,db){
                                 const score = result[0]["Score"]
                                 dbo.collection(commentCollection).updateOne({"Id":Number(id)},{$set:{"Score":score+1}},(err,result)=&gt;{
                                     <span class="missing-if-branch" title="if path not taken" >I</span>if(err) <span class="cstat-no" title="statement not covered" >throw err</span>
-                                    res.redirect(`/comments/${id}`)
+                                    res.send("Reaction on Comment is captured")
                                 })
                             }
                             else res.send('Invalid Comment Id')
@@ -816,7 +807,7 @@ MongoClient.connect(url,function(err,db){
                                 const score = result[0]["Score"]
                                 dbo.collection(commentCollection).updateOne({"Id":Number(id)},{$set:{"Score":score-1}},(err,result)=&gt;{
                                     <span class="missing-if-branch" title="if path not taken" >I</span>if(err) <span class="cstat-no" title="statement not covered" >throw err</span>
-                                    res.redirect(`/comments/${id}`)
+                                    res.send("Reaction on Comment is captured")
                                 })
                             }
                             else <span class="cstat-no" title="statement not covered" >res.send('Invalid Comment Id')</span>
@@ -850,7 +841,7 @@ module.exports = app</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Sep 12 2021 18:17:54 GMT+0530 (India Standard Time)
+                at Tue Sep 14 2021 02:02:30 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>

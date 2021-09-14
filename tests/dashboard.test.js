@@ -28,8 +28,9 @@ afterAll(async ()=>{
     await connection.close()
 })
 
+
 test('GET /mainpage2 ',async () => {
-    await supertest(app).post('/mainpage2')
+    await supertest(app).get('/mainpage2')
         .expect(200)
         .then(async (res)=>{
             const questions = await dbo.collection(col_name_q).find({'PostTypeId':1}).toArray()
@@ -54,17 +55,15 @@ test('POST /searchstring ',async () => {
         })
 })
 
-test('POST /searchposts ',async () => {
-    const search_obj={
-        search_string:"c++ mongo"
-    }
-    await supertest(app).post('/searchposts')
-        .send(search_obj)
+test('GET /searchpost/:search_string ',async () => {
+    
+    const search_string = "c++ mongo"
+    await supertest(app).get(`/searchpost/${search_string}`)
         .expect(200)
         .then(async (res)=>{
             const recieved = res.body
 
-            const posts = await dbo.collection(col_name_q).find({$text:{$search:search_obj.search_string}}).toArray()
+            const posts = await dbo.collection(col_name_q).find({$text:{$search:search_string}}).toArray()
             const questions = posts.filter(p=>{return p.PostTypeId==1})
             const answers = posts.filter(p=>{return p.PostTypeId==2})
 
@@ -148,19 +147,16 @@ test('GET /trending ',async () => {
         })
 })
 
-test('POST /searchcusts ',async () => {
-    const search_obj={
-        search_name:'mohit'
-    }
-    await supertest(app).post('/searchcusts')
-        .send(search_obj)
+test('GET /searchcusts/:name ',async () => {
+    const name='pradyumn'
+    
+    await supertest(app).get(`/searchcusts/${name}`)
         .expect(200)
         .then(async (res)=>{
-            const recieved = res.body
+            const recieved = res.body.filter(u=>{return u.displayName})
 
             const users = await dbo.collection(col_name_u).find().toArray()
-            const result = users.filter(u=>{return u.username.indexOf(search_obj.search_name)>=0})
-
-            expect(JSON.stringify(res.body)).toEqual(JSON.stringify(result))
+            const expected = users.filter(u=>{return u.displayName.indexOf(name)>=0}).map(u=>{return u.displayName})
+            expect(JSON.stringify(recieved)).toEqual(JSON.stringify(expected))
         })
 })

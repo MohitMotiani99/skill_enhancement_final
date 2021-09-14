@@ -12,7 +12,7 @@ const fs = require('fs')
 const jsyaml = require('js-yaml');
 const file_path = path.join(__dirname,'..','swagger','answerSwagger.yaml')
 const spec = fs.readFileSync(file_path, 'utf8');
-const swaggerDocument = jsyaml.load(spec);
+swaggerDocument = jsyaml.load(spec);
 app.use(
     '/swgr',
     swaggerUi.serve, 
@@ -38,13 +38,9 @@ MongoClient.connect(url,(err,db)=>{
     if(err)throw err
     const dbo = db.db(db_name)
 
-    let q_counter;
-    let initial_q_counter
 
     //connecting to globals collection to fetch the next post id
     dbo.collection('globals').find({}).toArray((err,result)=>{
-        q_counter = result[0].q_num
-        initial_q_counter = q_counter
 
         //get all answer obects
         app.get('/answers',(req,res)=>{

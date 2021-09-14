@@ -41,8 +41,22 @@ MongoClient.connect(url,(err,db)=>{
     if(err)throw err;
     const dbo = db.db(db_name);
 
+
+    let q_counter;
+    let initial_q_counter;
+
     //fetching the q_num(post_counter) to generate unique ids 
     dbo.collection('globals').find({}).toArray((err,result)=>{
+        q_counter = result[0].q_num;
+        initial_q_counter = q_counter;
+
+
+        //persists the q_counter in the globals collection server close
+        async function cleanup(){
+            dbo.collection('globals').updateOne({'q_num':initial_q_counter},{$set:{'q_num':q_counter}})
+        }
+
+    
         //api to get a specific question by id
         app.get('/questions/:question_id',(req,res)=>{
             const question_id = parseInt(req.params.question_id);
@@ -97,9 +111,6 @@ MongoClient.connect(url,(err,db)=>{
                     //token existence check and validation
                     if(result.length==1 && (uv =await validate_user(token,result[0]))){
 
-                        const query_res = await dbo.collection('globals').find().toArray()
-                        let q_counter = query_res[0].q_num
-
                         const q_obj={
                             Id:q_counter++,
                             PostTypeId:1,
@@ -114,7 +125,7 @@ MongoClient.connect(url,(err,db)=>{
                             ClosedDate:null
                         };
 
-                        await dbo.collection('globals').updateOne({},{$set:{'q_num':q_counter}})
+                        await cleanup();
                     
                         dbo.collection(col_name_q).insertOne(q_obj,(err,result)=>{
                             if(err) throw err;
@@ -516,8 +527,6 @@ MongoClient.connect(url,(err,db)=>{
 
                                     const OwnerUserId = result[0].OwnerUserId;
 
-                                    const query_res = await dbo.collection('globals').find().toArray()
-                                    let q_counter = query_res[0].q_num
                                     const a_obj={
                                         'Id':q_counter++,
                                         'PostTypeId':2,
@@ -529,7 +538,7 @@ MongoClient.connect(url,(err,db)=>{
                                         'OwnerUserId':User.Id,
                                     };
 
-                                    await dbo.collection('globals').updateOne({},{$set:{'q_num':q_counter}})
+                                    await cleanup();
 
                                     dbo.collection(col_name_q).insertOne(a_obj,(err,result)=>{
                                         if(err) throw err;

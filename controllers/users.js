@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-console */
 const express = require('express')
 const bodyParser = require('body-parser')
 const {OAuth2Client} = require('google-auth-library')
