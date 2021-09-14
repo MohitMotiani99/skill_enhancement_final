@@ -129,7 +129,11 @@ MongoClient.connect(url,function(err,db){
                     })
                     resolve()
                 }).then(()=>{
-                    res.send(ans)
+                    // eslint-disable-next-line sonarjs/prefer-object-literal
+                    const final_ans={}
+                    final_ans.questions = ans.questions.sort((q1,q2)=>q2.ViewCount-q1.ViewCount)
+                    final_ans.answers = ans.answers.sort((a1,a2)=>a2.ViewCount-a1.ViewCount)
+                    res.send(final_ans)
                 })
             
             })
