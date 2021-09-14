@@ -194,6 +194,7 @@ MongoClient.connect(url,function(err,db){
             const token = req.headers['x-access-token']
             const id = Number(req.params["id"])
             if (token == null) res.send("Not Logged In")
+            //console.log('Commit')
             else{
                 dbo.collection(userCollection).find({"token":token}).toArray(async function(err,result){
                     if (err) throw err
