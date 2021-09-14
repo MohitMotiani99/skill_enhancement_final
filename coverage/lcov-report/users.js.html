@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>25/50</span>
+                <span class='fraction'>24/48</span>
             </div>
         
             
@@ -375,7 +375,16 @@
 <a name='L316'></a><a href='#L316'>316</a>
 <a name='L317'></a><a href='#L317'>317</a>
 <a name='L318'></a><a href='#L318'>318</a>
-<a name='L319'></a><a href='#L319'>319</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -652,16 +661,21 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -673,7 +687,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -772,7 +790,7 @@ MongoClient.connect(url,(err,db)=&gt;{
                         <span class="missing-if-branch" title="else path not taken" >E</span>if (result.length==1)
                         {
                             const u_obj={
-                                password:(p==undefined)?result[0].password:<span class="branch-1 cbranch-no" title="branch not covered" >p,</span>
+                                //password:(p==undefined)?result[0].password:p,
                                 gender:g,
                                 SocialLink:s
                             }
@@ -912,7 +930,7 @@ MongoClient.connect(url,(err,db)=&gt;{
         
         })
 &nbsp;
-        app.get('/users' ,verifyAuth, (req,res)=&gt;{
+        app.get('/users' , (req,res)=&gt;{
             dbo.collection('users').find().toArray((err,result)=&gt;{
                 <span class="missing-if-branch" title="if path not taken" >I</span>if(err) <span class="cstat-no" title="statement not covered" >throw err</span>
                 <span class="missing-if-branch" title="else path not taken" >E</span>if(result.length &gt;= 1)
@@ -957,7 +975,7 @@ MongoClient.connect(url,(err,db)=&gt;{
                                 token: accessToken,
                                 LastLogin: Date(),
                                 gender:'Unspecified',
-                                socialLink:'None',
+                                SocialLink:'None',
                                 grade:0,
                                 CreationDate:Date()  
                             }
@@ -970,7 +988,12 @@ MongoClient.connect(url,(err,db)=&gt;{
 <span class="cstat-no" title="statement not covered" >                                if(result.length == 1)</span>
                                 {
                                     //console.log(result[0])
-<span class="cstat-no" title="statement not covered" >                                    res.json(result[0])</span>
+                                    //res.json(result[0])
+<span class="cstat-no" title="statement not covered" >                                    res.json({</span>
+                                        accessToken,
+                                        user_id
+                                    })
+                                    
                                 }
                                 else
                                 {
@@ -991,8 +1014,12 @@ MongoClient.connect(url,(err,db)=&gt;{
 <span class="cstat-no" title="statement not covered" >                                if (err) <span class="cstat-no" title="statement not covered" >throw err</span></span>
                                 else{<span class="cstat-no" title="statement not covered" >console.log('success')}              </span>
                             })
-<span class="cstat-no" title="statement not covered" >                            res.json(result[0])</span>
-                                
+                            //res.json(result[0])
+<span class="cstat-no" title="statement not covered" >                            res.json({</span>
+                                accessToken,
+                                user_id
+                            })
+                        
                             
                         }
                     })
@@ -1018,7 +1045,7 @@ res.json({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Sep 14 2021 15:31:18 GMT+0530 (India Standard Time)
+                at Tue Sep 14 2021 16:07:52 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>

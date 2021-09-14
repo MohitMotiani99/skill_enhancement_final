@@ -167,7 +167,7 @@ MongoClient.connect(url,function(err,db){
                 if(err) throw err
                 new Promise((resolve,reject)=>{
                     data.split(" ").forEach(word => {
-                        JSON.parse(body).filter((question) => {return question.Tags.indexOf(word.toLowerCase())>-1}).map((question) => {console.log('Hi');q_set.add(JSON.stringify(question))})
+                        JSON.parse(body).filter((question) => {return question.Tags.indexOf(word.toLowerCase())>-1}).map((question) => {q_set.add(JSON.stringify(question))})
                     })
                     resolve()
                 }).then(()=>{

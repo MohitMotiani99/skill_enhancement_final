@@ -160,3 +160,17 @@ test('GET /searchcusts/:name ',async () => {
             expect(JSON.stringify(recieved)).toEqual(JSON.stringify(expected))
         })
 })
+
+test('GET /searchTags/:tag', async () => {
+    const tag = "c++"
+
+    await supertest(app).get(`/searchTags/${tag}`)
+        .expect(200)
+        .then(async (res)=>{
+            const recieved = res.body
+
+            const questions = await dbo.collection(col_name_q).find({'PostTypeId':1}).sort({'ViewCount':-1}).toArray()
+            const expected = questions.filter(q=>{return q.Tags.indexOf(tag)>=0})
+            expect(JSON.stringify(recieved.questions)).toEqual(JSON.stringify(expected))
+        })
+})

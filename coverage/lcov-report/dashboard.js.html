@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.63% </span>
+                <span class="strong">89.4% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>118/152</span>
+                <span class='fraction'>135/151</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.14% </span>
+                <span class="strong">60.71% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>16/28</span>
+                <span class='fraction'>17/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.69% </span>
+                <span class="strong">87.93% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>41/58</span>
+                <span class='fraction'>51/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.38% </span>
+                <span class="strong">96.92% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>111/130</span>
+                <span class='fraction'>126/130</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -317,8 +317,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -452,28 +452,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">75x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -532,7 +532,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -691,29 +691,29 @@ MongoClient.connect(url,function(err,db){
     })
   
     //Returns all questions which match the input tag
-    app.get('/searchTags/:tag',<span class="fstat-no" title="function not covered" >(r</span>eq,res)=&gt;{
-        var data = <span class="cstat-no" title="statement not covered" >req.params.tag</span>
-        var q_set = <span class="cstat-no" title="statement not covered" >new Set()</span>
-<span class="cstat-no" title="statement not covered" >        new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve,reject)=&gt;{</span>
-            var Tags = <span class="cstat-no" title="statement not covered" >[]</span>
-<span class="cstat-no" title="statement not covered" >            Tags=data.split(" ")</span>
-<span class="cstat-no" title="statement not covered" >            resolve()</span>
-        }).then(<span class="fstat-no" title="function not covered" >()</span>=&gt;{
-<span class="cstat-no" title="statement not covered" >            request.get({</span>
+    app.get('/searchTags/:tag',(req,res)=&gt;{
+        var data = req.params.tag
+        var q_set = new Set()
+        new Promise((resolve,reject)=&gt;{
+            var Tags = []
+            Tags=data.split(" ")
+            resolve()
+        }).then(()=&gt;{
+            request.get({
                 headers:{'content-type':'application/json'},
                 url:`http://${process.env.HOST}:8089/questions`
-            },<span class="fstat-no" title="function not covered" >(e</span>rr,response,body)=&gt;{
-<span class="cstat-no" title="statement not covered" >                if(err) <span class="cstat-no" title="statement not covered" >throw err</span></span>
-<span class="cstat-no" title="statement not covered" >                new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve,reject)=&gt;{</span>
-<span class="cstat-no" title="statement not covered" >                    data.split(" ").forEach(<span class="fstat-no" title="function not covered" >wo</span>rd =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >                        JSON.parse(body).filter(<span class="fstat-no" title="function not covered" >(q</span>uestion) =&gt; {<span class="cstat-no" title="statement not covered" >return question.Tags.indexOf(word.toLowerCase())&gt;-1}</span>).map(<span class="fstat-no" title="function not covered" >(q</span>uestion) =&gt; {<span class="cstat-no" title="statement not covered" >console.log('Hi');<span class="cstat-no" title="statement not covered" >q</span>_set.add(JSON.stringify(question))}</span>)</span>
+            },(err,response,body)=&gt;{
+                <span class="missing-if-branch" title="if path not taken" >I</span>if(err) <span class="cstat-no" title="statement not covered" >throw err</span>
+                new Promise((resolve,reject)=&gt;{
+                    data.split(" ").forEach(word =&gt; {
+                        JSON.parse(body).filter((question) =&gt; {return question.Tags.indexOf(word.toLowerCase())&gt;-1}).map((question) =&gt; {q_set.add(JSON.stringify(question))})
                     })
-<span class="cstat-no" title="statement not covered" >                    resolve()</span>
-                }).then(<span class="fstat-no" title="function not covered" >()</span>=&gt;{
-                    var ans =<span class="cstat-no" title="statement not covered" >{</span>
-                        'questions':Array.from(q_set).map(<span class="fstat-no" title="function not covered" >(q</span>uestion)=&gt;<span class="cstat-no" title="statement not covered" >JSON.parse(question))</span>.sort(<span class="fstat-no" title="function not covered" >(q</span>1,q2)=&gt;<span class="cstat-no" title="statement not covered" >q2.ViewCount-q1.ViewCount)</span>,
+                    resolve()
+                }).then(()=&gt;{
+                    var ans ={
+                        'questions':Array.from(q_set).map((question)=&gt;JSON.parse(question)).sort(<span class="fstat-no" title="function not covered" >(q</span>1,q2)=&gt;<span class="cstat-no" title="statement not covered" >q2.ViewCount-q1.ViewCount)</span>,
                     }
-<span class="cstat-no" title="statement not covered" >                    res.send(ans)        </span>
+                    res.send(ans)        
   
                 })
             })
@@ -784,7 +784,7 @@ module.exports = app</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Sep 14 2021 15:31:18 GMT+0530 (India Standard Time)
+                at Tue Sep 14 2021 16:07:52 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>
