@@ -262,7 +262,7 @@ MongoClient.connect(url,(err,db)=>{
                                 token: accessToken,
                                 LastLogin: Date(),
                                 gender:'Unspecified',
-                                socialLink:'None',
+                                SocialLink:'None',
                                 grade:0,
                                 CreationDate:Date()  
                             }
