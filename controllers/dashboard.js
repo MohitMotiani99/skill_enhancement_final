@@ -129,14 +129,7 @@ MongoClient.connect(url,function(err,db){
                     })
                     resolve()
                 }).then(()=>{
-                    if (ans)
-                    {
-                        res.send(ans)
-                    }
-                    else
-                    {
-                        res.send("No results found")
-                    }
+                    res.send(ans)
                 })
             
             })
@@ -185,14 +178,7 @@ MongoClient.connect(url,function(err,db){
                         'questions':Array.from(q_set).map((question)=>JSON.parse(question)).sort((q1,q2)=>q2.ViewCount-q1.ViewCount),
                     }
                     console.log(ans)
-                    if (ans)
-                    {
-                        res.send(ans)
-                    }
-                    else 
-                    {
-                        res.send("No result found")
-                    }             
+                    res.send(ans)        
   
                 })
             })
@@ -248,12 +234,11 @@ MongoClient.connect(url,function(err,db){
     })
 
     //Return user details for all the users with the given search name
-    app.get('/searchcusts/:name',(req,res)=>{
+    app.get('/searchcusts/:name',async (req,res)=>{
         var search_name = req.params.name.toLowerCase()
-        dbo.collection(collection2).find({}).toArray((err,result)=>{
-          res.send(result.filter((u)=>{return u.displayName.toLowerCase().indexOf(search_name)>=0}))
-        })
-    })        
+        var ans = await dbo.collection(collection2).find({}).toArray()
+        res.send(ans.filter(u=>{return u.displayName.toLowerCase().indexOf(search_name)>=0}))
+    })   
 })
 
 module.exports = app
