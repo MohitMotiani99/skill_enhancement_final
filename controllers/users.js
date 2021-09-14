@@ -301,6 +301,7 @@ MongoClient.connect(url,(err,db)=>{
                                 if (err) throw err
                                 else{console.log('success')}              
                             })
+                            //res.json(result[0])
                             res.json({
                                 accessToken,
                                 user_id
