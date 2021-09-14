@@ -77,7 +77,7 @@ MongoClient.connect(url,(err,db)=>{
                         if (result.length==1)
                         {
                             const u_obj={
-                                password:(p==undefined)?result[0].password:p,
+                                //password:(p==undefined)?result[0].password:p,
                                 gender:g,
                                 SocialLink:s
                             }
@@ -217,7 +217,7 @@ MongoClient.connect(url,(err,db)=>{
         
         })
 
-        app.get('/users' ,verifyAuth, (req,res)=>{
+        app.get('/users' , (req,res)=>{
             dbo.collection('users').find().toArray((err,result)=>{
                 if(err) throw err
                 if(result.length >= 1)
