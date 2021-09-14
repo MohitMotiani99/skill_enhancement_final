@@ -191,7 +191,7 @@ MongoClient.connect(url,function(err,db){
                     }
                     else 
                     {
-                        res.send(ans)
+                        res.send("No result found")
                     }             
   
                 })
@@ -248,12 +248,12 @@ MongoClient.connect(url,function(err,db){
     })
 
     //Return user details for all the users with the given search name
-    app.get('/searchcusts/:name',async (req,res)=>{
-        var search_name = req.params.name
-        var ans = await dbo.collection(collection2).find().toArray()
-        res.send(ans.filter(u=>{return u.displayName.indexOf(search_name)>=0}))
-        
-    })     
+    app.get('/searchcusts/:name',(req,res)=>{
+        var search_name = req.params.name.toLowerCase()
+        dbo.collection(collection2).find({}).toArray((err,result)=>{
+          res.send(result.filter((u)=>{return u.displayName.toLowerCase().indexOf(search_name)>=0}))
+        })
+    })        
 })
 
 module.exports = app
