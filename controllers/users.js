@@ -69,6 +69,8 @@ MongoClient.connect(url,(err,db)=>{
             const user_id = String(req.params.user_id)
             const g = (req.body.gender)
             const s = (req.body.SocialLink)
+            const d = (req.body.displayName)
+            const u = (req.body.username)
             dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
                 if(result.length==1){
                     dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
@@ -76,8 +78,10 @@ MongoClient.connect(url,(err,db)=>{
                         {
                             const u_obj={
                                 //password:(p==undefined)?result[0].password:p,
-                                gender:g,
-                                SocialLink:s
+                                displayName:(d==undefined)?result[0].displayName:d,
+                                username:(u==undefined)?result[0].username:u,
+                                gender:(g==undefined)?result[0].gender:g,
+                                SocialLink:(s==undefined)?result[0].SocialLink:s,
                             }
                             dbo.collection('users').updateOne({"Id":String(user_id)},{$set:u_obj},(err,result)=>{
                                 res.redirect(`/users/${user_id}`)
@@ -235,6 +239,7 @@ MongoClient.connect(url,(err,db)=>{
         
                 console.log(response.payload);
                 const user_id=sub;
+                const Id=sub;
                 console.log(user_id);
                 //console.log(tokenId)
                 console.log(accessToken)
@@ -273,11 +278,12 @@ MongoClient.connect(url,(err,db)=>{
                             dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
                                 if(result.length == 1)
                                 {
-                                    res.json({
+                                    res.json(result[0])
+/*                                     res.json({
                                         accessToken,
-                                        user_id
+                                        Id
                                     })
-                                    
+ */                                    
                                 }
                                 else
                                 {
@@ -298,12 +304,12 @@ MongoClient.connect(url,(err,db)=>{
                                 if (err) throw err
                                 else{console.log('success')}              
                             })
-                            //res.json(result[0])
-                            res.json({
+                            res.json(result[0])
+/*                             res.json({
                                 accessToken,
-                                user_id
+                                Id
                             })
-                        
+ */                        
                             
                         }
                     })
