@@ -275,7 +275,12 @@ MongoClient.connect(url,(err,db)=>{
                                 if(result.length == 1)
                                 {
                                     //console.log(result[0])
-                                    res.json(result[0])
+                                    //res.json(result[0])
+                                    res.json({
+                                        accessToken,
+                                        user_id
+                                    })
+                                    
                                 }
                                 else
                                 {
@@ -296,8 +301,11 @@ MongoClient.connect(url,(err,db)=>{
                                 if (err) throw err
                                 else{console.log('success')}              
                             })
-                            res.json(result[0])
-                                
+                            res.json({
+                                accessToken,
+                                user_id
+                            })
+                        
                             
                         }
                     })
