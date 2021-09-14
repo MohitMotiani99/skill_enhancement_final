@@ -11,7 +11,6 @@ app.use(express.static("public"))
 const cors = require('cors')
 app.use(cors())
 const { verifyAuth } = require('./pauthorize')
-const { verifyToken } = require('./pauthorize')
 
 app.use(bodyParser.urlencoded({
     extended:true
@@ -68,7 +67,6 @@ MongoClient.connect(url,(err,db)=>{
 
             //only owner
             const user_id = String(req.params.user_id)
-            const p = req.body.password
             const g = (req.body.gender)
             const s = (req.body.SocialLink)
             dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
@@ -274,8 +272,6 @@ MongoClient.connect(url,(err,db)=>{
                             dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
                                 if(result.length == 1)
                                 {
-                                    //console.log(result[0])
-                                    //res.json(result[0])
                                     res.json({
                                         accessToken,
                                         user_id

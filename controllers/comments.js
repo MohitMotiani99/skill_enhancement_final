@@ -79,7 +79,7 @@ MongoClient.connect(url,function(err,db){
                             if(result.length==1){
                                 if(result[0].ClosedDate!=null) res.send('Post is Already Closed')
                                 else{
-
+                                    //console.log('changes')
                                     const query_res = await dbo.collection('globals').find().toArray()
                                     let commentId = query_res[0].c_num
                                     const commentObj={

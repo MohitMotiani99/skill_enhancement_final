@@ -144,7 +144,7 @@ MongoClient.connect(url,function(err,db){
     //Returns suggested questions based on the content viewed by user
     app.post('/suggested',(req,res)=>{
         var data = req.body 
-        search_input=data.Title+" "+data.Body
+        const search_input=data.Title+" "+data.Body
         request(`http://${process.env.HOST}:3300/searchpost/${search_input}`, (error, response, body)=>{
             if(error) console.log(error)
             res.send(JSON.parse(response.body).questions)
