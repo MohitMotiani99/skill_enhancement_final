@@ -84,7 +84,8 @@ MongoClient.connect(url,(err,db)=>{
                                 SocialLink:(s==undefined)?result[0].SocialLink:s,
                             }
                             dbo.collection('users').updateOne({"Id":String(user_id)},{$set:u_obj},(err,result)=>{
-                                res.redirect(`/users/${user_id}`)
+                                res.send(result);
+                                //res.redirect(`/users/${user_id}`)
         
                             })
                       
