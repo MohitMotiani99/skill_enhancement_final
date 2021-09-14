@@ -217,7 +217,7 @@ MongoClient.connect(url,(err,db)=>{
         
         })
 
-        app.get('/users' ,(req,res)=>{
+        app.get('/users' ,verifyAuth, (req,res)=>{
             dbo.collection('users').find().toArray((err,result)=>{
                 if(err) throw err
                 if(result.length >= 1)
