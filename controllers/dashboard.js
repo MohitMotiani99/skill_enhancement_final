@@ -140,12 +140,9 @@ MongoClient.connect(url,function(err,db){
     //Returns suggested questions based on the content viewed by user
     app.post('/suggested',(req,res)=>{
         var data = req.body 
-        // console.log("DATA")
-        // console.log(data)
         search_input=data.Title+" "+data.Body
         request(`http://localhost:3300/searchpost/${search_input}`, (error, response, body)=>{
             if(error) console.log(error)
-            // console.log(body);
             res.send(JSON.parse(response.body).questions)
         }); 
     })
@@ -156,7 +153,6 @@ MongoClient.connect(url,function(err,db){
         var q_set = new Set()
         new Promise((resolve,reject)=>{
             var Tags = []
-            //Tags=(data.Tags).split(',')
             Tags=data.split(" ")
             resolve()
         }).then(()=>{
@@ -167,17 +163,13 @@ MongoClient.connect(url,function(err,db){
                 if(err) throw err
                 new Promise((resolve,reject)=>{
                     data.split(" ").forEach(word => {
-                        console.log(word)
                         JSON.parse(body).filter((question) => {return question.Tags.indexOf(word.toLowerCase())>-1}).map((question) => {console.log('Hi');q_set.add(JSON.stringify(question))})
                     })
                     resolve()
                 }).then(()=>{
-                    console.log(q_set)
-    
                     var ans ={
                         'questions':Array.from(q_set).map((question)=>JSON.parse(question)).sort((q1,q2)=>q2.ViewCount-q1.ViewCount),
                     }
-                    console.log(ans)
                     res.send(ans)        
   
                 })
