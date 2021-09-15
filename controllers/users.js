@@ -280,11 +280,6 @@ MongoClient.connect(url,(err,db)=>{
                                 if(result.length == 1)
                                 {
                                     res.json(result[0])
-/*                                     res.json({
-                                        accessToken,
-                                        Id
-                                    })
- */                                    
                                 }
                                 else
                                 {
@@ -306,7 +301,7 @@ MongoClient.connect(url,(err,db)=>{
                                 else{console.log('success')}              
                             })
                             res.json(result[0])
-/*                             res.json({
+                            /*                             res.json({
                                 accessToken,
                                 Id
                             })
