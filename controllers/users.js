@@ -273,7 +273,7 @@ MongoClient.connect(url,(err,db)=>{
         
                             dbo.collection('users').insertOne(u_obj,(err,result)=>{
                                 if(err) throw err
-                                if (res){res.send("User " +email +" is added succesfully")}
+                                else if (result) {res.send("User " +email +" is added succesfully")}
                                 else {res.send('Invalid User')}
                             })
                             dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
