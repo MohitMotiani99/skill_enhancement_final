@@ -277,7 +277,6 @@ MongoClient.connect(url,(err,db)=>{
                                 //else {res.send('Invalid User')}
                             })
                             dbo.collection('users').find({'Id':user_id}).toArray((err,result)=>{
-                                // eslint-disable-next-line sonarjs/no-gratuitous-expressions
                                 if(true)
                                 {
                                     res.send(u_obj)
@@ -323,8 +322,8 @@ MongoClient.connect(url,(err,db)=>{
                 }
             })
         })
-        
 
+        
     })
 })
 
