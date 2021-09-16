@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1631685089326" clover="3.2.0">
-  <project timestamp="1631685089326" name="All files">
-    <metrics statements="1022" coveredstatements="901" conditionals="546" coveredconditionals="380" methods="259" coveredmethods="231" elements="1827" coveredelements="1512" complexity="0" loc="1022" ncloc="1022" packages="1" files="8" classes="8"/>
+<coverage generated="1631763932465" clover="3.2.0">
+  <project timestamp="1631763932465" name="All files">
+    <metrics statements="1022" coveredstatements="902" conditionals="546" coveredconditionals="381" methods="259" coveredmethods="234" elements="1827" coveredelements="1517" complexity="0" loc="1022" ncloc="1022" packages="1" files="8" classes="8"/>
     <file name="answers.js" path="C:\Users\d976640\Documents\skillenhance_OAuth\controllers\answers.js">
       <metrics statements="143" coveredstatements="138" conditionals="86" coveredconditionals="69" methods="29" coveredmethods="27"/>
       <line num="1" count="3" type="stmt"/>
@@ -362,7 +362,7 @@
       <line num="343" count="3" type="stmt"/>
     </file>
     <file name="dashboard.js" path="C:\Users\d976640\Documents\skillenhance_OAuth\controllers\dashboard.js">
-      <metrics statements="130" coveredstatements="126" conditionals="28" coveredconditionals="17" methods="58" coveredmethods="51"/>
+      <metrics statements="130" coveredstatements="127" conditionals="28" coveredconditionals="18" methods="58" coveredmethods="54"/>
       <line num="5" count="1" type="stmt"/>
       <line num="6" count="1" type="stmt"/>
       <line num="7" count="1" type="stmt"/>
@@ -415,16 +415,16 @@
       <line num="77" count="1" type="cond" truecount="1" falsecount="1"/>
       <line num="78" count="1" type="stmt"/>
       <line num="79" count="1" type="stmt"/>
-      <line num="80" count="74" type="cond" truecount="2" falsecount="0"/>
+      <line num="80" count="10" type="cond" truecount="2" falsecount="0"/>
       <line num="82" count="1" type="stmt"/>
       <line num="85" count="1" type="stmt"/>
       <line num="86" count="1" type="stmt"/>
       <line num="90" count="1" type="cond" truecount="1" falsecount="1"/>
       <line num="91" count="1" type="stmt"/>
-      <line num="92" count="33" type="stmt"/>
+      <line num="92" count="9" type="stmt"/>
       <line num="94" count="1" type="stmt"/>
       <line num="98" count="1" type="stmt"/>
-      <line num="99" count="1" type="stmt"/>
+      <line num="99" count="4" type="stmt"/>
       <line num="100" count="0" type="stmt"/>
       <line num="102" count="1" type="stmt"/>
       <line num="110" count="1" type="stmt"/>
@@ -437,12 +437,12 @@
       <line num="119" count="1" type="stmt"/>
       <line num="123" count="1" type="stmt"/>
       <line num="124" count="1" type="stmt"/>
-      <line num="125" count="1" type="cond" truecount="1" falsecount="1"/>
-      <line num="126" count="1" type="stmt"/>
-      <line num="128" count="0" type="stmt"/>
+      <line num="125" count="5" type="cond" truecount="2" falsecount="0"/>
+      <line num="126" count="4" type="stmt"/>
+      <line num="128" count="1" type="stmt"/>
       <line num="130" count="1" type="stmt"/>
       <line num="133" count="1" type="stmt"/>
-      <line num="134" count="1" type="stmt"/>
+      <line num="134" count="6" type="stmt"/>
       <line num="135" count="1" type="stmt"/>
       <line num="136" count="1" type="stmt"/>
       <line num="145" count="1" type="stmt"/>
@@ -462,10 +462,10 @@
       <line num="167" count="1" type="cond" truecount="1" falsecount="1"/>
       <line num="168" count="1" type="stmt"/>
       <line num="169" count="1" type="stmt"/>
-      <line num="170" count="74" type="stmt"/>
+      <line num="170" count="10" type="stmt"/>
       <line num="172" count="1" type="stmt"/>
       <line num="174" count="1" type="stmt"/>
-      <line num="175" count="1" type="stmt"/>
+      <line num="175" count="4" type="stmt"/>
       <line num="177" count="1" type="stmt"/>
       <line num="193" count="1" type="stmt"/>
       <line num="194" count="4" type="stmt"/>
@@ -480,9 +480,9 @@
       <line num="207" count="4" type="cond" truecount="1" falsecount="1"/>
       <line num="208" count="4" type="stmt"/>
       <line num="209" count="4" type="cond" truecount="2" falsecount="0"/>
-      <line num="210" count="210" type="stmt"/>
+      <line num="210" count="22" type="stmt"/>
       <line num="211" count="3" type="cond" truecount="1" falsecount="1"/>
-      <line num="212" count="549" type="stmt"/>
+      <line num="212" count="69" type="stmt"/>
       <line num="215" count="4" type="stmt"/>
       <line num="217" count="4" type="stmt"/>
       <line num="223" count="1" type="stmt"/>
@@ -491,7 +491,7 @@
       <line num="233" count="1" type="stmt"/>
       <line num="234" count="1" type="stmt"/>
       <line num="235" count="1" type="stmt"/>
-      <line num="236" count="8" type="stmt"/>
+      <line num="236" count="10" type="stmt"/>
       <line num="241" count="1" type="stmt"/>
     </file>
     <file name="notifications.js" path="C:\Users\d976640\Documents\skillenhance_OAuth\controllers\notifications.js">
@@ -715,7 +715,7 @@
       <line num="217" count="6" type="stmt"/>
       <line num="218" count="6" type="cond" truecount="1" falsecount="1"/>
       <line num="219" count="6" type="stmt"/>
-      <line num="228" count="5" type="cond" truecount="1" falsecount="1"/>
+      <line num="228" count="6" type="cond" truecount="1" falsecount="1"/>
       <line num="232" count="6" type="stmt"/>
       <line num="235" count="6" type="cond" truecount="1" falsecount="1"/>
       <line num="236" count="6" type="stmt"/>
@@ -1037,16 +1037,16 @@
       <line num="279" count="0" type="stmt"/>
       <line num="280" count="0" type="cond" truecount="0" falsecount="2"/>
       <line num="282" count="0" type="stmt"/>
-      <line num="291" count="0" type="stmt"/>
-      <line num="295" count="0" type="cond" truecount="0" falsecount="2"/>
-      <line num="297" count="0" type="stmt"/>
-      <line num="298" count="0" type="stmt"/>
-      <line num="300" count="0" type="stmt"/>
-      <line num="304" count="0" type="stmt"/>
-      <line num="305" count="0" type="cond" truecount="0" falsecount="2"/>
-      <line num="306" count="0" type="stmt"/>
-      <line num="308" count="0" type="stmt"/>
-      <line num="325" count="1" type="stmt"/>
+      <line num="286" count="0" type="stmt"/>
+      <line num="290" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="292" count="0" type="stmt"/>
+      <line num="293" count="0" type="stmt"/>
+      <line num="295" count="0" type="stmt"/>
+      <line num="299" count="0" type="stmt"/>
+      <line num="300" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="301" count="0" type="stmt"/>
+      <line num="303" count="0" type="stmt"/>
+      <line num="320" count="1" type="stmt"/>
     </file>
   </project>
 </coverage>
