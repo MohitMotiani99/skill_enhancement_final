@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-gratuitous-expressions */
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
 const express = require('express')
